@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import FNF from '../FNF';
+import FNF from '../../FNF';
 import { useNavigate, useParams } from 'react-router-dom';
-import Sidebar1 from './Sidebar1';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
+import { Button, Flex } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
-const EventInfoWrapper = () => {
+const EventModifier = () => {
   const { eventId } = useParams();
   const [eventInfo, setEventInfo] = useState(null);
   const [eventExists, setEventExists] = useState(false);
@@ -33,7 +33,7 @@ const EventInfoWrapper = () => {
     }, MAX_TIMEOUT);
   
     axios
-      .get(`http://localhost:8000/SCP/Eventmodify.php?email=${email}&EventId=${eventId}`)
+      .get(`http://192.168.157.250:8000/SCP/Eventmodify.php?email=${email}&EventId=${eventId}`)
       .then(response => {
         clearTimeout(timeoutId); // Clear the timeout since response was received
         const data = response.data;
@@ -80,7 +80,7 @@ const EventInfoWrapper = () => {
     setIsModified(true);
   };
   const handleSubmit = () => {
-    axios.post('http://localhost:8000/SCP/modifyevent.php', {limit,lastDate,status,eventId,email},)
+    axios.post('http://192.168.157.250:8000/SCP/modifyevent.php', {limit,lastDate,status,eventId,email},)
       .then(response => {
         if (response.data.success) {
           window.confirm('successfully updated');
@@ -113,11 +113,7 @@ const EventInfoWrapper = () => {
   }
   return (
     <>
-      <div className='row'>
-        <div className='sidebar1 col-2'>
-          <Sidebar1 />
-        </div>
-        <div className='col-10 float-end'>
+      <div className='h-100'>
           <div className='p-5 m-5 bg-warning rounded-3 bg-opacity-25'>
             {formData && (
               <>
@@ -170,21 +166,18 @@ const EventInfoWrapper = () => {
               onChange={handleLastDateChange}
               min={eventInfo.IntervalTime}
             />
+            
           </div>
-
           <div className='w-100'>
-            <input
-              className='btn bg-warning bg-opacity-25 float-end mx-5'
-              type='submit'
-              value="Modify"
-              disabled={!isModified}
-              onClick={handleSubmit}
-            />
+             <Flex  justify={'flex-end'} >
+        <Button type="primary" className='mt-2 m-5' disabled={!isModified}
+              onClick={handleSubmit}>Modify</Button>
+      </Flex>
           </div>
+          
         </div>
-      </div>
     </>
   );
 };
 
-export default EventInfoWrapper;
+export default EventModifier;

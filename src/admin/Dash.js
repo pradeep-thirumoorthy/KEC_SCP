@@ -3,20 +3,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Doughnut from './doughnut';
 import LineChart from './Linechart';
-import Sidebar1 from './Sidebar1.js';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { ShimmerThumbnail, ShimmerTitle } from 'react-shimmer-effects';
-
+import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const MAX_TIMEOUT = 10000;
 
-const Admindash = () => {
+const Dash = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [adminData, setAdminData] = useState({});
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false); // New state variable
-
+  const navigate=useNavigate();
   const Email = Cookies.get('AdminEmail');
   const linec = {
     height: '300px',
@@ -32,7 +31,7 @@ const Admindash = () => {
       const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
       const email = bytes.toString(CryptoJS.enc.Utf8);
 
-      axios.post('http://localhost:8000/SCP/dash.php', `email=${encodeURIComponent(email)}`)
+      axios.post('http://192.168.157.250:8000/SCP/dash.php', `email=${encodeURIComponent(email)}`)
         .then(response => {
           const data = response.data;
           if (data) {
@@ -64,32 +63,13 @@ const Admindash = () => {
   if (isLoading) {
     return (
       <>
-        <div className='row'>
-          <div className='sidebar1 col-2'>
-            <Sidebar1 />
-          </div>
-          <div className='right col-10 row'>
-            <div className='col-12 mt-1'><ShimmerThumbnail height={100} /></div>
-            <ShimmerTitle />
-            <div className='col-8'><ShimmerThumbnail /></div>
-            <div className='col-4'><ShimmerThumbnail /></div>
-            <ShimmerTitle />
-            <div className='col-12'><ShimmerThumbnail /></div>
-            <ShimmerTitle />
-            <div className='col-12'><ShimmerThumbnail /></div>
-          </div>
-        </div>
+          none
       </>
     );
   }
 
   return (
     <>
-      <div className='row'>
-        <div className='sidebar1 col-2'>
-          <Sidebar1 />
-        </div>
-        <div className='right col-10 float-end'>
           {showTimeoutMessage && !isDataLoaded ? (
             <div className="alert alert-danger" role="alert">
               Unable to fetch data. Please check your connection and try again.
@@ -107,7 +87,9 @@ const Admindash = () => {
               <div className="content row">
                 <div className="row row-gap-5" data-bs-spy="scroll" data-bs-target="#home-collapse" data-bs-offset="0">
                   <h1 id="overview">Overview</h1>
-                  <div className="col-lg-7  bg-light mx-3 mb-3" style={linec}><LineChart /></div>
+                  
+                  <div className="col-lg-7  bg-light mx-3 mb-3" style={linec}><LineChart />
+                  </div>
                   <div className="col-lg-4  bg-light mb-3 mx-3 text-center" style={douc}><Doughnut />
                     <script src="bar-chart.js"></script>
                   </div>
@@ -120,10 +102,8 @@ const Admindash = () => {
               </div>
             </>
           )}
-        </div>
-      </div>
     </>
   );
 };
 
-export default Admindash;
+export default Dash;

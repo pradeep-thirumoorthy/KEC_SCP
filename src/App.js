@@ -6,38 +6,22 @@ import FNF from './FNF';
 import Home from './Home';
 import About from './About';
 import Contact from './Contact';
-import EventInfoWrapper from './student/EventInfoWrapper';
-import NewEntry from './NewEntry';
 
-import Login from './admin/Login.js';
-  import Admindash from "./admin/Dash";
-  import ForgAdmPass from './admin/ForgAdmPass';
-  import Complaintsview from './admin/Complainsview';
-  import CreatePost from './admin/CreatePost'
-  import EventFormCreation from './admin/EventFormCreate';
-  import IndividualDisplay from './admin/IndividualDisp';
-  import EventResponse from './admin/EventResponse';
-  import Events from './admin/Events';
-  import Updates from './admin/Updates';
-  import History from './admin/History';
-  import EventModify from'./admin/EventModify';
-  import PersonalInfo from './admin/PersonalInfo';
-  import Activity from './admin/Activity';
-  import FullEvents from './admin/EventFullView';
-  import Forward from './admin/MoreInfo';
-  import ActivityPanel from './admin/ActivityPanel';
 
-import StudentLogin from './student/StudentLogin';
-  import StudentDash from './student/StudentDash';
-  import Complaint from './student/Complaint';
-  import CompEntry from './student/CompEntry';
-  import ComplaintStatus from './student/ComplaintStatus';
-  import Histandtrends from './student/Histandtrends';
-  import EventForm from './student/EventForm';
-  import ForgetPass from './student/ForgetPass';
-  import StudentActivity from './student/StudentActivity';
+
+import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,IndividualDisplay,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+
+import {StudentLogin,StudentDash,Complaint,ComplaintEntry,ComplaintStatus, Histandtrends,EventForm,ForgetPass,StudentActivityPanel,StudentActivity} from './student/index';
+import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
+import Layout1 from './Layout';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import Layout2 from './Layout2';
+import { EventInfoWrapper, StudentHistory } from './student';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import Facultyview from './admin/Complaint/Facultyview';
+import checkEmail from './FacultyAccess';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -79,6 +63,17 @@ const App = () => {
       return <Navigate to={"/admin/login"} replace />;
     }
   };
+  const AccessFac = ({ element}) => {
+    
+  
+    if (checkEmail()) {
+      
+      return <>{element}</>;
+    } else {
+      return <FNF/>;
+    }
+  };
+  
   const RedirectToStudentLogin = ({ element}) => {
     const { isStudentAuthenticated } = useStudentAuth();
   
@@ -98,33 +93,50 @@ const App = () => {
             <Route path='/contact' element={isLoading ? <LoadingScreen />:<Contact/>}/>
             <Route path="/admin/Login" element={isLoading ? <LoadingScreen />:<Login />} />
                 <Route path="/admin/ForgetPass" element={isLoading ? <LoadingScreen />:<ForgAdmPass />}/>
-                <Route path="/admin/dashboard" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<NewEntry element={<Admindash />}/>}/>} />
-                <Route path="/admin/Complaints" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<Complaintsview />}/>} />} />
-                <Route path="/admin/Activity/post" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<CreatePost />}/>} />} />
-                <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<EventFormCreation />}/>} />} />
-                <Route path="/admin/Activity" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<Activity />} />} />} />
-                <Route path="/admin/IndividualDisplay" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<IndividualDisplay/>} />} />} />
-                <Route path="/admin/Events" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<Events/>} />}/>} />
-                <Route path="/admin/Updates" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<Updates/>}/>}/>}/>
-                <Route path="/admin/History" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<History/>}/>}/>}/>
-                <Route path="/admin/Events/eventInfo/:eventId/modify" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<EventModify />}/>}/>} />
-                <Route path="/admin/Events/eventInfo/:eventId/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<EventResponse />}/>}/>} />
-                <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<PersonalInfo />}/>}/>}/>
-                <Route path="/admin/Events/Fullview" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<FullEvents />}/>}/>} />
-                <Route path="/admin/Complaints/MoreInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<Forward />}/>}/>} />
-                <Route path="/admin/Activity/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<NewEntry element={<ActivityPanel />}/>}/>} />
+                <Route path="/admin/dashboard" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<Layout1 element={<Dash />}/>}/>}/>
+                <Route path="/admin/Complaints" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Complaintsview />}/>}/>} />
+                <Route path="/admin/Activity/post" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<CreatePost />}/>} />
+                <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventFormCreation />}/>}/>} />
+                <Route path="/admin/Activity" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Activity />}/>}/>} />
+                <Route path="/admin/IndividualDisplay" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<IndividualDisplay/>}/>} />} />
+                <Route path="/admin/Events" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Events/>}/>}/>} />
+                <Route path="/admin/Updates" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Updates/>}/>}/>}/>
+                <Route path="/admin/History" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<History/>}/>}/>}/>
+                <Route path="/admin/Events/eventInfo/:eventId/modify" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventModifier />}/>}/>}/>
+                <Route path="/admin/Events/eventInfo/:eventId/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Eventviewresp />}/>}/>}/>
+                <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo />}/>}/>}/>
+                <Route path="/admin/Events/Fullview" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FullEvents />}/>}/>}/>
+                <Route path="/admin/Complaints/MoreInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Forward />}/>}/>}/>
+                
+                <Route path="/admin/Complaints/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview />}/>}/>}/>} />
+                <Route path="/admin/Complaints/Faculty/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<FacultyInfo />}/>}/>}/>}/>
+                <Route path="/admin/Activity/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<ActivityPanel />}/>}/>}/>
 
 
                 <Route path='/student/login' element={isLoading ? <LoadingScreen />:<StudentLogin/>} />
                 <Route path='/student/ForgetPass' element={isLoading ? <LoadingScreen />:<ForgetPass/>}/>
-                  <Route path='/student/dashboard' element={isLoading ? <LoadingScreen />:<PrivateStudentRoute element={<StudentDash/>}/>}/>
-                  <Route path='/student/Complaint' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Complaint/>}/>}/>
-                  <Route path='/student/Complaint/ComplaintEntry' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<CompEntry/>}/>}/>
-                  <Route path='/student/ComplaintStatus' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<ComplaintStatus/>}/>}/>
-                  <Route path='/student/EventForm' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<EventForm/>}/>}/>
-                  <Route path='/student/Histandtrends' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Histandtrends/>}/>}/>
-                  <Route path='/student/Activity' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<StudentActivity/>}/>}/>
-                  <Route path="/student/Events/eventInfo/:eventId" element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<ActivityPanel/>}/>} />
+                  <Route path='/student/dashboard' element={isLoading ? <LoadingScreen />:<PrivateStudentRoute element={<Layout2 element={<StudentDash/>}/>}/>}/>
+                  <Route path='/student/Complaint' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Complaint/>}/>}/>}/>
+                  
+                  
+                  <Route path='/student/Complaint/Academic' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Academic/>}/>}/>}/>
+                  <Route path='/student/Complaint/Maintenance' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Maintenance/>}/>}/>}/>
+                  <Route path='/student/Complaint/Lab' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Lab/>}/>}/>}/>
+                  <Route path='/student/Complaint/Courses' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Courses/>}/>}/>}/>
+                  <Route path='/student/Complaint/Faculty' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Faculty/>}/>}/>}/>
+                  <Route path='/student/Complaint/Others' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Others/>}/>}/>}/>
+                  
+                  
+                  <Route path='/student/Complaint/ComplaintEntry' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<ComplaintEntry/>}/>}/>}/>
+                  <Route path='/student/ComplaintStatus' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<ComplaintStatus/>}/>}/>}/>
+                  <Route path='/student/EventForm' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<EventForm/>}/>}/>}/>
+                  <Route path='/student/Histandtrends' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Histandtrends/>}/>}/>}/>
+                  
+                  <Route path='/student/Activity' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivity/>}/>}/>}/>
+                  <Route path='/student/History' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentHistory/>}/>}/>}/>
+                  <Route path='/student/Activity/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivityPanel/>}/>}/>}/>
+                  <Route path='/student/History/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivityPanel/>}/>}/>}/>
+                  <Route path="/student/Events/eventInfo/:eventId" element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<EventInfoWrapper/>}/>}/>} />
                   
                 <Route path='*' element={<FNF/>}/>
               </Routes>
@@ -136,7 +148,7 @@ const App = () => {
   };
   const LoadingScreen = () => (
     <div className="loading w-100" >
-  <h3 className="my-auto">Loading...</h3>
+  <h3 className="flex-column my-auto"><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></h3>
 </div>
 
 

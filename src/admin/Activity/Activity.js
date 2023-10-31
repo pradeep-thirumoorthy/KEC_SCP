@@ -1,10 +1,12 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link,useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import Sidebar1 from './Sidebar1';
-const Complaintsview= () => {
+import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
+import {Table,Button,Space} from 'antd';
+const Activity= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -16,10 +18,9 @@ const Complaintsview= () => {
   //   return navigate('/forward');
   // }
 
-  const [info,setInfo]=useState('');
   const handleButtonClick=(rowData)=>
   {
-    navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
+    navigate('/admin/Activity/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
     fetchData();
@@ -28,9 +29,49 @@ const Complaintsview= () => {
     filterData();
   }, []);
  
-
+  const columns = [
+    {
+      title: 'Email',
+      dataIndex: 'Email',
+      key: 'Email',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'Type',
+      key: 'Type',
+    },
+    {
+      title: 'Date',
+      dataIndex: 'Date',
+      key: 'Date',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'Status',
+      key: 'Status'
+    },
+    {
+      title: 'Details',
+    key: 'Details',
+    render: (_, record) => (
+      <Space size="middle">
+        <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
+      </Space>
+    ),
+    }
+  ];
+  const mappedTableData = data
+  .map((item) => ({
+    key: item.id, // Assuming 'id' is the key in your data
+    Email: item.email,
+    Type: item.Type,
+    
+    Date: item.info1, // Assuming 'info1' is a property in your data
+    info: item,
+    Status: item.Status,
+  })).reverse();
   const fetchData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
+    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp2.php';
 
     axios.get(apiUrl,{Filter:'No'})
       .then((response) => {
@@ -42,17 +83,20 @@ const Complaintsview= () => {
         setLoading(false);
       });
   };
-
+  const Email = Cookies.get('AdminEmail');
+  const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
+  const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
+    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp2.php';
     const params = {
       Filter:'Yes',
       start_date: startDate,
       end_date: endDate,
+      email:email,
     };
     const hashValue = window.location.hash.replace('#', '');
     setSearch(hashValue);
-
+    
     axios.get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
@@ -64,12 +108,8 @@ const Complaintsview= () => {
       return (
         <>
         <div className='row'>
-                <div className='sidebar1 col-2 '>
-                  <Sidebar1/>
-                </div>
-                <div className='right col-10 float-end'>
                 <div className="App">
-      <h1>Fetched Data from MySQL:</h1>
+      <h1>Activity:</h1>
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
@@ -103,50 +143,14 @@ const Complaintsview= () => {
         <p>Loading...</p>
       ) : (
         <>
-        <div className='table-responsive'>
-          <table className="table table-striped table-responsive">
-            <thead>
-              <tr>
-                <th>Email id</th>
-                <th>Type</th>
-                <th>Subject</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data
-                .filter((item) => {
-                  return (
-                    search.toLowerCase() === '' ||
-                    Object.values(item).some((value) =>
-                      value !== null &&
-                      value.toString().toLowerCase().includes(search.toLowerCase())
-                    )
-                  );
-                })
-                .map((item) => (
-                  <tr className=' text-nowrap'>
-                    <td>{item.Email}</td>
-                    <td>{item.Type}</td>
-                    <td>{item.Subject}</td>
-                    <td>{item.Date}</td>
-                    <td>{item.Status}</td>
-                    <td><button className='btn btn-primary' onClick={() => handleButtonClick(item)}>More details</button></td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          </div>
         </>
       )}
       
     </div>
+    <Table columns={columns} scroll={{ x: 150 }} dataSource={mappedTableData}  bordered pagination={false}/>;
               </div>
-        </div>
         </>
       );
    }
-export default Complaintsview;
+export default Activity;
 

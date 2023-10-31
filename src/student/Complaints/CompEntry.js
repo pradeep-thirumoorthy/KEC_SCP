@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import Sidebar1 from './Sidebar1';
 
 const ComplaintEntry = () => {
   
@@ -29,11 +28,6 @@ const ComplaintEntry = () => {
   }, [isFormModified]);
   return (
     <>
-      <div className='row'>
-        <div className='sidebar1 col-2'>
-          <Sidebar1 />
-        </div>
-        <div className='right col-10'>
           <div className='row mx-3 my-3'>
             <div className='col-lg-4'>
               <label className='entry text-lg-center text-sm-start w-100 align-content-center h-100 mt-1'>Your Roll No</label>
@@ -95,8 +89,6 @@ const ComplaintEntry = () => {
               type='submit'
             />
           </div>
-        </div>
-      </div>
     </>
   );
 };

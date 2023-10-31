@@ -1,73 +1,94 @@
+import { Layout, theme } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
-import { useAuth } from './AuthContext';
+import { useAuth } from './admin/AuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
+import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
+import checkEmail from './FacultyAccess';
 import Card from 'react-bootstrap/Card';
-
-const Sidebar1 = () => {
+const {  Content, Sider } = Layout;
+const Layout1 = ({element}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { logout } = useAuth();
-    const [dropdownStates, setDropdownStates] = useState({}); // State for dropdown open/closed states
+    const [dropdownStates, setDropdownStates] = useState({});
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    useEffect(() => {
-        const foldersToCheck = [
-            '/admin/dashboard',
-            '/admin/Complaints',
-            '/admin/Events',
-            '/admin/Activity',
-            '/admin/History',
-            '/admin/PersonalInfo',
-            '/admin/createPost',
-        ];
-        const dropdownStatesUpdates = {};
+  // Update windowWidth when the window is resized
+  useEffect(() => {
+    const foldersToCheck = [
+        '/admin/dashboard',
+        '/admin/Complaints',
+        '/admin/Events',
+        '/admin/Activity',
+        '/admin/History',
+        '/admin/PersonalInfo',
+        '/admin/createPost',
+    ];
+    const dropdownStatesUpdates = {};
 
-        foldersToCheck.forEach((folder) => {
-            dropdownStatesUpdates[folder] = location.pathname.startsWith(folder);
-        });
+    foldersToCheck.forEach((folder) => {
+        dropdownStatesUpdates[folder] = location.pathname.startsWith(folder);
+    });
 
-        setDropdownStates(dropdownStatesUpdates);
-    }, [location]);
-
-    const handledirect = (link) => {
-        if (location.pathname === link) {
-            return;
-        } else {
-            navigate(link);
-        }
+    setDropdownStates(dropdownStatesUpdates);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
 
-    const handlelogout = () => {
-        logout();
-        
-        navigate("/admin/login");
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
+  }, [location]);
+  const handledirect = (link) => {
+    if (location.pathname === link) {
+        return;
+    } else {
+        navigate(link);
+    }
+};
 
-    const logo = {
-        width: '50px',
-        height: '50px',
-    };
+const handlelogout = () => {
+    logout();
+    
+    navigate("/admin/login");
+};
 
-    const sidebar = {
-        minWidth: '80px',
-        width: '16%',
-        height: '100%',
-        whiteSpace: 'nowrap',
-    };
-    const isEventPage = location.pathname.toLowerCase().includes('/admin/events');
-    const Email = Cookies.get("AdminEmail");
-    const secretKey = "admin-_?info";
-    const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-    const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
-    const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
+const logo = {
+    width: '50px',
+    height: '50px',
+};
+const isEventPage = location.pathname.toLowerCase().includes('/admin/events');
+const Email = Cookies.get("AdminEmail");
+const secretKey = "admin-_?info";
+const bytes = CryptoJS.AES.decrypt(Email, secretKey);
+const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
+const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 
-    return(
-        <div className="sidebar d-flex flex-column position-fixed flex-shrink-0 p-1 bg-dark border-end" style={sidebar}>
+
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+  const isWideLayout = windowWidth > 991;
+  return (
+    
+    <Layout>
+      <Sider theme='dark' style={{height:'100vh',position:'fixed',backgroundColor:'#212529',zIndex:'5'}}
+        breakpoint="lg"
+        collapsedWidth="0"
+        onBreakpoint={(broken) => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+        }}
+      >
+        <div style={{height:'100vh',display:'flex', flexDirection:'column',alignItems: 'flex-end'}}>
               <div className="text-white w-100 text-white text-center">
                   <a href="/" className="link-light text-decoration-none text-white text-center">
                       <span className=" fs-4 text-white">
@@ -75,8 +96,8 @@ const Sidebar1 = () => {
                       </span>
                   </a>
               </div>
-              <hr className="bg-white"></hr>
-              <ul className="sidebar_1 nav nav-pills flex-column mb-auto w-100">
+              <hr className="bg-white "></hr>
+              <ul className="nav nav-pills flex-column w-100">
                   <li className="nav-item w-100 " >
 
                   <Accordion className='bg-dark' activeKey={dropdownStates['/admin/dashboard'] ? 'dashboard' : null}>
@@ -89,7 +110,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse"
                                     aria-expanded="true"
                                 >
-                                    <FiPieChart size={25} /><div className="d-none d-md-block">Dash</div>
+                                    <FiPieChart size={25} />Dash
                                 </button>
                             <Accordion.Collapse eventKey="dashboard">
                                 
@@ -115,14 +136,15 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
-                                    <FiTrello size={25}/><div className="d-none d-md-block">Complaint</div>
+                                    <FiTrello size={25}/>Complaint
                                 </button>
                             
                             <Accordion.Collapse eventKey="complaints">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
                                         <li><a href="#overview"  className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        <li><a href="#updates"  className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
+                                        {(checkEmail())?<li><a href="/admin/Complaints/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</a></li>:<></>}
+                                        {(checkEmail())?<li><a href="/admin/Complaints/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</a></li>:<></>}
                                         <li><a href="/admin/Complaints/MoreInfo"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</a></li>
                                     </ul>
                                 
@@ -143,7 +165,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse2"
                                     aria-expanded="false"
                                 >
-                                    <FiFileText size={25} /><div className="d-none d-md-block">Events</div>
+                                    <FiFileText size={25} />Events
                                 </button>
                             
                             <Accordion.Collapse eventKey="events">
@@ -154,7 +176,12 @@ const Sidebar1 = () => {
                                             </li><li>
                                             <a href='/admin/Events/EventFormCreation' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/EventFormCreation' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Create</a>
                                             </li>
-                                        <li><a href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</a></li>
+                                            <li>
+                                                <span className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/modify')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Modify</span>
+                                            </li>
+                                            <li>
+                                            <span className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/response')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Response</span>
+                                            </li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -173,7 +200,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse3"
                                     aria-expanded="false"
                                 >
-                                    <FiCheckCircle  size={25}/><div className="d-none d-md-block">Activity</div>
+                                    <FiCheckCircle  size={25}/>Activity
                                 </button>
                             
                             <Accordion.Collapse eventKey="activity">
@@ -181,7 +208,7 @@ const Sidebar1 = () => {
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
                                         <li><a href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
                                         <li><a href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
-                                        <li><a href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</a></li>
+                                        <li><a href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</a></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -201,7 +228,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
-                                    <FiLayers  size={25}/><div className="d-none d-md-block">History</div>
+                                    <FiLayers  size={25}/>History
                                 </button>
                             
                             <Accordion.Collapse eventKey="history">
@@ -229,7 +256,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
-                                    <FiUser  size={25}/><div className="d-none d-md-block">Account</div>
+                                    <FiUser  size={25}/>Account
                                 </button>
                             
                             <Accordion.Collapse eventKey="PersonalInfo">
@@ -243,11 +270,10 @@ const Sidebar1 = () => {
                     </Accordion>
                 </li>
               </ul>
-              <hr></hr>
-                  <div className="dropdown text-center">
-                      <button className="btn bg-transparent text-center w-100 align-items-center link-light text-decoration-none" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                          <img src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3"></img>
-                          <strong className="text-white d-none d-md-block">{tenUsername}</strong>
+                  <div className="w-100 text-center mt-auto mb-5 mb-sm-0">
+                      <button className="btn bg-transparent text-center align-items-center link-light text-decoration-none" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src={he} alt="" width="32" height="32" className="rounded-circle border border-white border-3"></img>
+                          {tenUsername}
                         </button>
                       <ul className="w-100 dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                           <li><a className="dropdown-item" href="/">Home</a></li>
@@ -258,7 +284,27 @@ const Sidebar1 = () => {
                       </ul>
                   </div>
         </div>
-    );
-}
-export default Sidebar1;
+      </Sider>
+      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0' }}>
+        
+        <Content
+          style={{
+            margin: '0 6px 0',
+          }}
+        >
+          <div
+            style={{
+              minHeight: 360,
+              background: colorBgContainer,
+            }}
+          >
+            {element}
+          </div>
+        </Content>
+        
+      </Layout>
+    </Layout>
+  );
+};
+export default Layout1;
 

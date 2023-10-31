@@ -1,82 +1,94 @@
+import { Layout, theme } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiSlack, FiPlusSquare, FiLogOut } from 'react-icons/fi';
-import { useStudentAuth } from './StudentAuthContext';
+import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers,FiLogOut } from 'react-icons/fi';
+import { useStudentAuth } from './student/StudentAuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
+import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
+const {  Content, Sider } = Layout;
 
-const Sidebar1 = () => {
+const Layout2 = ({element}) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { studentLogout } = useStudentAuth();
-    const [dropdownStates, setDropdownStates] = useState({}); // State for dropdown open/closed states
+    const { logout } = useStudentAuth();
+    const [dropdownStates, setDropdownStates] = useState({});
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    useEffect(() => {
-        const foldersToCheck = [
-            '/student/dashboard',
-            '/student/Complaint',
-            '/student/ComplaintEntry',
-            '/student/EventForm',
-            '/student/Activity',
-            '/student/History',
-            '/student/Updates',
-            '/student/createPost',
-        ];
-        const dropdownStatesUpdates = {};
+  // Update windowWidth when the window is resized
+  useEffect(() => {
+    const foldersToCheck = [
+        '/student/dashboard',
+        '/student/Complaint',
+        '/student/ComplaintEntry',
+        '/student/EventForm',
+        '/student/Activity',
+        '/student/History',
+        '/student/Updates',
+        '/student/createPost',
+    ];
+    const dropdownStatesUpdates = {};
 
-        foldersToCheck.forEach((folder) => {
-            dropdownStatesUpdates[folder] = location.pathname.startsWith(folder);
-        });
+    foldersToCheck.forEach((folder) => {
+        dropdownStatesUpdates[folder] = location.pathname.startsWith(folder);
+    });
 
-        setDropdownStates(dropdownStatesUpdates);
-    }, [location]);
-
-    const handledirect = (link) => {
-        if (location.pathname === '/student/Complaint/ComplaintEntry') {
-          const confirmLeave = window.confirm(
-            "You have unsaved changes. Are you sure you want to leave?"
-          );
-      
-          if (confirmLeave) {
-            navigate(link);
-          }
-        } else {
-          navigate(link);
-        }
-      };
-      
-
-    const handlelogout = () => {
-        studentLogout();
-        navigate("/student/login");
+    setDropdownStates(dropdownStatesUpdates);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
 
-    const logo = {
-        width: '50px',
-        height: '50px',
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
+  }, [location]);
+  const handledirect = (link) => {
+    if (location.pathname === link) {
+        return;
+    } else {
+        navigate(link);
+    }
+};
 
-    const sidebar = {
-        minWidth: '80px',
-        width: '16%',
-        height: '100%',
-        whiteSpace: 'nowrap',
-        zIndex:"1",
-    };
+const handlelogout = () => {
+    logout();
     
-    // Decrypt and truncate username
-    const Email = Cookies.get("StudentEmail");
-    const secretKey = "student-_?info";
-    const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-    const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
-    const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
+    navigate("/student/login");
+};
 
-    return(
-        <div className="sidebar d-flex flex-column position-fixed flex-shrink-0 p-1 bg-dark border-end" style={sidebar}>
+const logo = {
+    width: '50px',
+    height: '50px',
+};
+const Email = Cookies.get("StudentEmail");
+const secretKey = "student-_?info";
+const bytes = CryptoJS.AES.decrypt(Email, secretKey);
+const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
+const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
+
+
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+  const isWideLayout = windowWidth > 991;
+  return (
+    
+    <Layout>
+      <Sider theme='dark' style={{height:'100vh',position:'fixed',backgroundColor:'#212529',zIndex:'5'}}
+        breakpoint="lg"
+        collapsedWidth="0"
+        onBreakpoint={(broken) => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+        }}
+      >
+        <div style={{height:'100vh',display:'flex', flexDirection:'column',alignItems: 'flex-end'}}>
               <div className="text-white w-100 text-white text-center">
                   <a href="/" className="link-light text-decoration-none text-white text-center">
                       <span className=" fs-4 text-white">
@@ -98,7 +110,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse"
                                     aria-expanded="true"
                                 >
-                                    <FiPieChart size={25} /><div className='d-none d-md-block'>Dashboard</div>
+                                    <FiPieChart size={25} /><div className=''>Dashboard</div>
                                 </button>
                             <Accordion.Collapse eventKey="dashboard">
                                 
@@ -124,21 +136,18 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
-                                    <FiTrello size={25}/><div className='d-none d-md-block'>Complaints</div>
+                                    <FiTrello size={25}/><div className=''>Complaints</div>
                                 </button>
                             
                             <Accordion.Collapse eventKey="complaints">
                                 
-                                    <ul className="btn-toggle-nav list-unstyled small d-block list-group">
-                                        <li>
-                                            <a href="#overview"  className="link-light text-white-50 w-100 btn px-0 px-lg-0">Overview</a>
-                                        </li>
-                                        <li>
-                                            <a href="#updates"  className="link-light text-white-50 w-100 btn px-0 px-lg-0">Updates</a>
-                                        </li>
-                                        <li>
-                                            <a href='/student/Events/ComplaintEntry' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Events/ComplaintEntry' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Issue Complaint</a>
-                                        </li>
+                                    <ul className="btn-toggle-nav list-unstyled pb-1 small d-block list-group w-100">
+                                    <li><a href='/student/Complaint/Academic' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Academic' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Academic</a></li>
+                                    <li><a href='/student/Complaint/Maintenance' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Maintenance' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Maintenance</a></li>
+                                    <li><a href='/student/Complaint/Lab' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Lab' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Lab</a></li>
+                                    <li><a href='/student/Complaint/Courses' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Courses' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Courses</a></li>
+                                    <li><a href='/student/Complaint/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Respective Faculty</a></li>
+                                    <li><a href='/student/Complaint/Others' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Others' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Others</a></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -158,7 +167,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse2"
                                     aria-expanded="false"
                                 >
-                                    <FiFileText size={25} /><div className='d-none d-md-block'>Eventform</div>
+                                    <FiFileText size={25} /><div className=''>Eventform</div>
                                 </button>
                             
                             <Accordion.Collapse eventKey="events">
@@ -187,7 +196,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse3"
                                     aria-expanded="false"
                                 >
-                                    <FiCheckCircle  size={25}/><div className='d-none d-md-block'>Activity</div>
+                                    <FiCheckCircle  size={25}/><div className=''>Activity</div>
                                 </button>
                             
                             <Accordion.Collapse eventKey="activity">
@@ -215,7 +224,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
-                                    <FiLayers  size={25}/><div className='d-none d-md-block'>History</div>
+                                    <FiLayers  size={25}/><div className=''>History</div>
                                 </button>
                             
                             <Accordion.Collapse eventKey="history">
@@ -230,8 +239,9 @@ const Sidebar1 = () => {
                         </Card>
                     </Accordion>
                 </li>
+
                 {/* Updates */}
-                <li className="nav-item w-100 " >
+                {/* <li className="nav-item w-100 " >
                     <Accordion className='bg-dark'activeKey={dropdownStates['/student/Updates'] ? 'updates' : null}>
                         <Card className=' border-0 bg-dark '>
                             
@@ -243,7 +253,7 @@ const Sidebar1 = () => {
                                     data-bs-target="#home-collapse5"
                                     aria-expanded="false"
                                 >
-                                    <FiSlack  size={25}/><div className='d-none d-md-block'>Updates</div>
+                                    <FiSlack  size={25}/><div className=''>Updates</div>
                                 </button>
                             
                             <Accordion.Collapse eventKey="updates">
@@ -257,19 +267,19 @@ const Sidebar1 = () => {
                             </Accordion.Collapse>
                         </Card>
                     </Accordion>
-                </li>
+                </li> */}
                 {/* createPost */}
-                <li className="nav-item w-100 " >
+                {/* <li className="nav-item w-100 " >
                     <button className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${location.pathname === '/student/createPost' ? 'bg-white text-dark diabled' : 'bg-white bg-opacity-25 text-white'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`} onClick={() => handledirect('/student/createPost')}>
-                        <FiPlusSquare  size={25}/><div className='d-none d-md-block'>Post</div>
+                        <FiPlusSquare  size={25}/><div className=''>Post</div>
                     </button>
-                </li>
+                </li> */}
               </ul>
               <hr></hr>
-                  <div className="dropdown text-center">
+                  <div className="w-100 text-center">
                       <button className="btn bg-transparent text-center w-100 align-items-center link-light text-decoration-none d-flex justify-content-center" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                           <img src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3"></img>
-                              <strong className="text-white d-none d-md-block">{tenUsername}</strong>
+                              {tenUsername}
                         </button>
                       <ul className="w-100 dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                           <li><a className="dropdown-item" href="/">Home</a></li>
@@ -280,7 +290,27 @@ const Sidebar1 = () => {
                       </ul>
                   </div>
         </div>
-    );
-}
-export default Sidebar1;
+      </Sider>
+      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0' }}>
+        
+        <Content
+          style={{
+            margin: '0 6px 0',
+          }}
+        >
+          <div
+            style={{
+              minHeight: 360,
+              background: colorBgContainer,
+            }}
+          >
+            {element}
+          </div>
+        </Content>
+        
+      </Layout>
+    </Layout>
+  );
+};
+export default Layout2;
 

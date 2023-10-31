@@ -1,8 +1,10 @@
+import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Result, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-
+import {useNavigate} from 'react-router-dom';
 const FNF = () => {
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate=useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -12,17 +14,23 @@ const FNF = () => {
       clearTimeout(timer);
     };
   }, []);
-
+  const back=()=>{
+    navigate(-1);
+  }
   return (
     <section className="fnf-container">
       {isLoading ? (
         <div className="loading">
-          <h3>Loading...</h3>
+          <h3><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></h3>
         </div>
       ) : (
         <div className="error-content">
-          <h1>404 Error</h1>
-          <h3>The Page Not Found</h3>
+          <Result
+    status="404"
+    title="404"
+    subTitle="Sorry, the page you visited does not exist."
+    extra={<Button type="primary" onClick={back}>Back Home</Button>}
+  />
         </div>
       )}
     </section>

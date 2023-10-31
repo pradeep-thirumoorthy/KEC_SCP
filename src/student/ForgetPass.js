@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { Button, Card, Col, Image, Input, Row } from 'antd';
+import log from '../images/4841115.jpg';
+import logo from '../images/kec.jpg'
+import  { LeftCircleOutlined } from '@ant-design/icons';
 const ForgetPass = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -20,9 +24,9 @@ const ForgetPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://localhost:8000/SCP/sendEmailStudent.php', {
+      .post('http://192.168.157.250:8000/SCP/sendEmailStudent.php', {
         to: email,
-        subject: 'Test Email',
+        subject: 'Forget password',
       })
       .then((response) => {
         setMessage(response.data.message);
@@ -94,7 +98,7 @@ const ForgetPass = () => {
         return false;
     }
     else{
-    axios.post('http://localhost:8000/SCP/ForgetStudentPass.php', { email: email, password: newPassword })
+    axios.post('http://192.168.157.250:8000/SCP/ForgetStudentPass.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {
@@ -114,22 +118,37 @@ const ForgetPass = () => {
       
     }
   };
-
+  const back=()=>{
+    navigate(-1);
+  }
   return (
-    <div className='wrapper bg-success bg-opacity-50 d-flex align-items-center justify-content-center w-100' >
-                <div className='login'>
+    
+    <Card hoverable className='m-lg-5 vh-100'>
+    <Row gutter={20} justify="center" className='w-100 ' align="middle">  
+                
+      <Col xs={24} lg={11}><Image src={log} preview={false}/>
+      <LeftCircleOutlined  style={{position:'inherit',fontSize:'30px'}} onClick={back}/></Col>
+      <Col xs={24} lg={11}>
+      <Col xs={24} className='text-center'>
+      
+        <Image src={logo} preview={false} height={50} width={50}/>
+        
       <h2>Student Forget Password</h2>
-      <form className='needs-validation' onSubmit={handleSubmit}>
-        <div className='form-group was-validated mb-2'>     
+      </Col>
+        <Row align={'middle'} justify={'end'} gutter={5} className='form-group was-validated'>
+                      <Col xs={17} sm={17}>
                         <label htmlFor='email' className='form-label'>Email Address</label>
-                        <input type='email' placeholder='Email' className='form-control' name='email' id='email' value={email}  onChange={handleEmailInputChange}  disabled={otpVerified} required></input>
+                        <Input type='email' placeholder='Email' className='form-control' name='email' id='email' value={email}  onChange={handleEmailInputChange}  disabled={otpVerified} required/>
                         <div className='invalid-feedback'>
                             Please enter the email
                         </div>
-                        <button type="button" className='btn btn-success w-50 mt-2' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
+                        </Col>
+                        <Col xs={7} sm={7}>
+                        <Button type='primary' size='large' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
                         {sendButtonStatus === 'loading' ? 'Loading...' : sendButtonStatus === 'sent' ? 'Resend OTP' : 'Send OTP'}
-                        </button>
-                    </div>
+                        </Button>
+                        </Col>
+                    </Row>
 
       
       {message &&<p className='text-danger'>{message}</p>}
@@ -138,40 +157,39 @@ const ForgetPass = () => {
         <div className='form-group was-validated mb-2'>
           
           <label htmlFor='OTP' className='form-label'>Enter OTP</label>
-          <input className='form-control' name='password' id='password' type="text" value={enteredOtp} onChange={handleOtpInputChange} required></input>
+          <Input className='form-control' name='password' id='password' type="text" value={enteredOtp} onChange={handleOtpInputChange} required/>
           <div className='invalid-feedback'>Please enter the OTP</div>
-          <button type="button" className='btn btn-success mt-2' onClick={verifyOtp}>Verify OTP</button>
+          <Button type="primary" className='mt-2' onClick={verifyOtp}>Verify OTP</Button>
         </div>
       )}
       {otpVerified && (
         <div>
-          <div className='form-group was-validated mb-2'>
+          <Row gutter={30} align={'middle'} justify={'center'}>
+          <Col xs={12} sm={12} className='form-group was-validated mb-2'>
                         <label htmlFor='password' className='form-label'>Password</label>
-                        <input className='form-control' name='password' id='password' type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required></input>
+                        <Input className='form-control' name='password' id='password' type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required/>
                         <div className='invalid-feedback'>
                             Please enter the Password
                         </div>
-          </div>
-          <div className='form-group was-validated mb-2'>
+          </Col>
+          <Col xs={12} sm={12} className='form-group was-validated mb-2'>
                         <label htmlFor='confirm password' className='form-label'>Confirm Password</label>
-                        <input className='form-control'type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required></input>
+                        <Input className='form-control'type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
                         <div className='invalid-feedback'>
                             Reenter Password
                         </div>
-                    </div>
-                    <div className='form-group form-check mb-2'>
-                       <input type='checkbox' className='form-check-input'></input>
-                        <label htmlFor='check' className='form-check-label'>Remember me</label>
-                    </div>
+                    </Col>
 
-          <input type="submit" value="Reset Password" className='btn btn-success w-100 mt-2'/>
+          
+          <Button type="primary" onClick={handleSubmit} className=' mt-2'>Reset</Button>
+          </Row>
         </div>
         
       )}
-      </form>
-    </div>
+      </Col>
     
-    </div>
+    </Row>
+    </Card>
   );
 };
 

@@ -24,14 +24,14 @@ export function StudentAuthProvider({ children }) {
     Cookies.remove('AdminEmail');
   };
 
-  const studentLogout = () => {
+  const logout = () => {
     setIsStudentAuthenticated(false);
     Cookies.remove('isStudentAuthenticated');
     Cookies.remove('StudentEmail');
   };
 
   return (
-    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, studentLogout }}>
+    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, logout }}>
       {children}
     </StudentAuthContext.Provider>
   );

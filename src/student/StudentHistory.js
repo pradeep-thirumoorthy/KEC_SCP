@@ -1,24 +1,47 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
+import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import { Radio,Table} from 'antd';
-const History= () => {
+import { Radio,Table,Space,Button, Input } from 'antd';
+
+const StudentHistory= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [search, setSearch] = useState('');
   const [Filter,setFilter]= useState('');
+  const navigate = useNavigate();
+  
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const handleButtonClick=(rowData)=>
+  {
+    navigate('/student/History/Panel', { state: { info: rowData ,Heading:'History'} });
+  };
   useEffect(() => {
     fetchData();
-    const hashValue = window.location.hash.replace('#', ''); // Remove the '#' character
-    setSearch(hashValue);
+    const hashValue = window.location.hash.replace('#', ''); // Get the hash value
+    const [value1, value2] = hashValue.split('=');
+    if(value2 !==''){
+      if(value2==='Sent'){
+        setFilter('Arrived');
+      }
+      else{
+    setFilter(value2);
+      }
+    }
+    console.log('Value 1:', value1);
+console.log('Value 2:', value2);
+    const filteredType = value1;
+    if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
+        Type: [filteredType],
+      });}
     filterData();
   }, []);
- 
   const columns = [
     {
       title: 'Email',
@@ -29,6 +52,36 @@ const History= () => {
       title: 'Type',
       dataIndex: 'Type',
       key: 'Type',
+      filters: [
+        {
+          text: 'Academic',
+          value: 'Academic',
+        },
+        {
+          text: 'Maintenance',
+          value: 'Maintenance',
+        },
+        {
+          text: 'Faculty',
+          value: 'Faculty',
+        },
+        {
+          text: 'Courses',
+          value: 'Courses',
+        },
+        {
+          text: 'Lab',
+          value: 'Lab',
+        },{
+          text: 'Others',
+          value: 'Others',
+        },
+      ],
+      filteredValue: filteredInfo.Type || null,
+      onFilter: (value, record) => record.Type.includes(value),
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Type' ? sortedInfo.order : null,
+      ellipsis: true,
     },
     {
       title: 'Date',
@@ -43,6 +96,15 @@ const History= () => {
       key: 'Status'
     });
   }
+  columns.push({
+    title: 'Details',
+    key: 'Details',
+    render: (_, record) => (
+      <Space size="middle">
+        <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
+      </Space>
+    ),
+  });
   const mappedTableData = data
   .filter((item) => {
     return (
@@ -60,11 +122,20 @@ const History= () => {
     Email: item.email,
     Type: item.Type,
     
-    Date: item.info1,
+    Date: item.info1, // Assuming 'info1' is a property in your data
+    info: item,
     Status: item.Status,
+    Details: 'More',
   })).reverse();
+
+// Assuming 'data', 'search', 'Filter' are variables defined elsewhere.
+
+
+// Now, mappedTableData contains the data in the format of Tabledata
+
+
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/History.php';
+    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentHistory.php';
 
     axios.get(apiUrl,{Filter:'No'})
       .then((response) => {
@@ -80,11 +151,11 @@ const History= () => {
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = Cookies.get('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
+  const Email = Cookies.get('StudentEmail');
+  const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/History.php';
+    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentHistory.php';
     const params = {
       Filter:'Yes',
       start_date: startDate,
@@ -92,7 +163,8 @@ const History= () => {
       email:email,
     };
     const hashValue = window.location.hash.replace('#', '');
-    setSearch(hashValue);
+    const [v1,v2]=hashValue.split('=');
+    setSearch(v1);
     
     axios.get(apiUrl, { params })
       .then((response) => {
@@ -110,28 +182,29 @@ const History= () => {
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
-        <input
+        <Input
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         /></div>
         <div>
         <label>End Date:</label>
-        <input
+        <Input
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         /></div>
-        <button className='filter' onClick={filterData}>Filter</button>
+        <Button className='filter' onClick={filterData}>Filter</Button>
       </div>
 
       <form>
-        <input
+        <Input
           className='my-3 form-control'
           type='search'
           placeholder='search name'
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          // onClick={fetchData}
         />
       </form>
 
@@ -139,7 +212,8 @@ const History= () => {
         <p>Loading...</p>
       ) : (
         <>
-        <Radio.Group onChange={onChange} defaultValue="">
+        
+        <Radio.Group  onChange={onChange} defaultValue={Filter}>
       <Radio.Button value="">All</Radio.Button>
       <Radio.Button value="Rejected">Rejected</Radio.Button>
       <Radio.Button value="Resolved">Resolved</Radio.Button>
@@ -148,11 +222,10 @@ const History= () => {
       )}
       
     </div>
-              
-    <Table columns={columns} dataSource={mappedTableData} scroll={{x:500}} bordered  pagination={false}/>;
               </div>
+              <Table columns={columns} dataSource={mappedTableData} bordered pagination={false}/>
         </>
       );
    }
-export default History;
+export default StudentHistory;
 

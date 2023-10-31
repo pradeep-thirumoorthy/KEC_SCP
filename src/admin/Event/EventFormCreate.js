@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {  FiPlusCircle, FiTrash2, FiX } from 'react-icons/fi';
-import Sidebar1 from './Sidebar1';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router';
@@ -8,6 +7,8 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import { Button, Flex, Input, Layout, Menu } from 'antd';
+import { Content, Header } from 'antd/es/layout/layout';
 const EventFormCreation = () => {
     const navigate = useNavigate();
     const [inputs, setInputs] = useState([]);
@@ -128,12 +129,12 @@ const EventFormCreation = () => {
                     <div key={optionIndex}>
                         {option.display && (
                             <div>
-                                <input
+                                <Input
                                     type={type}
                                     className='ms-3'
                                     disabled
                                 />
-                                <input
+                                <Input
                                     className='option ms-md-3 my-2 bg-transparent border-0 border-bottom w-75 border-dark'
                                     type='text'
                                     value={option.value}
@@ -179,7 +180,7 @@ const EventFormCreation = () => {
             console.log(email, formData, limit);
             const formdata = JSON.stringify(formData);
             console.log(formdata);
-            axios.post('http://localhost:8000/SCP/EventForm.php', { limit, formdata, email, option, title,lastDate })
+            axios.post('http://192.168.157.250:8000/SCP/EventForm.php', { limit, formdata, email, option, title,lastDate })
                 .then(response => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do
@@ -220,34 +221,39 @@ const EventFormCreation = () => {
 
     return (
         <div className='row'>
-            <div className='sidebar1 col-2 '>
-                <Sidebar1 />
-            </div>
             
-            <div className="right col-10 ms-1 ps-2 float-end row">
-            <div className=" bg-light row ">
-            <div className=' float-end position-fixed row bg-secondary py-3 text-light' style={{opacity:'100%'}}>
-                    <label className='col-lg-3 d-flex justify-content-center'>
-                        <span className='fs-5'>Limit:</span>
-                        <input className=' w-50' type='number' value={slimit} onChange={(e) => setlimit(e.target.value)} required max='100' min='1'/>
-                    </label>
-                    <label className='col-lg-4 d-flex justify-content-center'>
-                    <span className='fs-5'>Last Date:</span>
-                    <input className='w-50' type='date' value={lastDate} min={getTodayDate()} onChange={handleLastDateChange}/>
-                    </label>
-                    <label className='col-lg-4 text-center d-flex justify-content-center'>
-                        <button className='btn text-black rounded-3 bg-white' onClick={generateInput}>Generate Input</button>
-                    </label>
-                </div>
-                </div>
-                <form onSubmit={handleSubmit} className='col-12 float-end pt-5 mt-5 mt-lg-0'>
+            <div>
+            <div>
+            <Layout>
+      <Header className='bg-secondary'
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 1,
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Flex align='center' justify='space-evenly' className='w-100' gap="middle">
+                    <span>Limit:</span>
+                    <Input type='number' value={slimit} onChange={(e) => setlimit(e.target.value)} required max='100' min='1'/>
+                    <span style={{whiteSpace:'nowrap'}}>Last Date:</span>
+                    <Input type='date' value={lastDate} min={getTodayDate()} onChange={handleLastDateChange}/>
+                    <Button onClick={generateInput}>Generate Input</Button>
+                    
+        </Flex>
+                    
+      </Header>
+      <Content className="site-layout" style={{ padding: '0 50px' }}>
+        <form onSubmit={handleSubmit} className='col-12 float-end pt-5 mt-5 mt-lg-0'>
                     <h1 className='text-center mt-5'>Event Form Creation</h1>
                 <div className='px-5 pt-5 py-5 my-5 mx-lg-5 mx-sm-1 bg-info bg-opacity-10 rounded-3'>
                     <div className='form-group'>
                         <label className='form-label fs-3' htmlFor='title'>
                             Title
                         </label>
-                        <input
+                        <Input
                             type='text'
                             className='form-control fs-3 bg-transparent border-0 border-bottom border-dark rounded-0'
                             id='title'
@@ -269,7 +275,7 @@ const EventFormCreation = () => {
                 {inputs.map(input => (
                     <div key={input.key} className={`px-5 pt-5 py-5 my-5 mx-lg-5 mx-sm-1 bg-info bg-opacity-10 rounded-3 ${input.fading ? 'tag-fade-out' : ''}`}>
                         <div className='row'>
-                            <input
+                            <Input
                                 className='col-lg-6 text-start bg-transparent w-50 border-0 border-bottom border-dark form-control rounded-0'
                                 type='text' placeholder='Label'
                                 value={input.label}
@@ -310,8 +316,16 @@ const EventFormCreation = () => {
                         </div>
                     </div>
                 ))}
-                <div className='w-100'><input className='float-end btn bg-info bg-opacity-25 p-2 m-5' type='submit' value='publish' /></div>
+                <div className='w-100'>
+                <Flex  justify={'flex-end'} >
+                <Input style={{width:'100px'}} className='me-5' type='submit' value='publish' />
+      </Flex></div>
             </form>
+      </Content>
+      </Layout>
+            
+                </div>
+                
             </div>
             
         </div>
