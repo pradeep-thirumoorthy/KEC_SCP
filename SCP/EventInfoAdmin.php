@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: http://192.168.157.250:3000");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $email = mysqli_real_escape_string($conn, $email); // Sanitize input
 
-    $eventQuery = "SELECT Limits,Title,event_id,IntervalTime,Status FROM events WHERE Email = '$email'";
+    $eventQuery = "SELECT Limits,Title,event_id,IntervalTime,Status,Date FROM events WHERE Email = '$email'";
     $eventResult = mysqli_query($conn, $eventQuery);
 
     if ($eventResult) {

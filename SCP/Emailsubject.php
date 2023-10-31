@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $to = isset($data['to']) ? $data['to'] : '';
     $subject = isset($data['subject']) ? $data['subject'] : '';
-    
+    $message = isset($data['message']) ? $data['message'] :'';
     // Check if the email exists in the admin_login table
     $checkEmailQuery = "SELECT * FROM student_login WHERE email = '$to'";
     $result = mysqli_query($conn, $checkEmailQuery);
@@ -35,53 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_num_rows($result) > 0) {
         // Email exists in the database, proceed with sending the email
         $randomSixDigitNumber = rand(100000, 999999);
-        $message = '<html>
-        <head>
-        <style>
-          .container {
-            background-color: #F7F7F7;
-            border:2px solid black;
-            padding-bottom: 20px;
-            color:#F8F8F8;
-            font-family: "Gill Sans", sans-serif;
-            border-radius:10px;
-          }
-          .container hr{
-            margin-left:30px;
-            margin-right:30px;
-          }
-          .container .body{
-            padding-left:40px;
-            padding-right:40px;
-          }
-          .container .body p{
-            color:#343a40;
-          }
-          .container  h1{
-              text-align: center;
-              color:#19AFFF;
-          }
-          .container .body h2{
-              text-align: center;
-              color:black;
-          }
-  
-        </style>
-        </head>
-        <body>
-        <div class="container">
-          <h1>Student Email Verification</h1>
-          <hr/>
-          <div class="body">
-          <p>Hello <span>'.$to.'</span></p>
-          <p>This is a generated OTP to Reset Your Password</p>
-          <br/>
-          <p>Your Verfication code:</p>
-          <h2>'. $randomSixDigitNumber .'</h2>
-          </div>
-        </div>
-        </body>
-      </html>';
         
         try {
             $mail = new PHPMailer(true);
@@ -89,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'pradeept.21cse@kongu.edu';
-            $mail->Password = 'kogjgbycwmfsagda';
+            $mail->Password = 'ismnyvjwhparsfcr';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 

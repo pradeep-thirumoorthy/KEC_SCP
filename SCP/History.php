@@ -20,29 +20,29 @@ if (!$conn) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $startDate = $_GET['start_date'];
     $endDate = $_GET['end_date'];
-    $email=$_GET['email'];
+    $Forward_To=$_GET['email'];
     if (!empty($startDate) || !empty($endDate)) {
     
         if (empty($startDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 <= ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 <= ? AND Forward_To = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ss", $endDate, $email);
+            mysqli_stmt_bind_param($stmt, "ss", $endDate, $Forward_To);
         }
         elseif (empty($endDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 >= ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 >= ? AND Forward_To = ?  AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ss", $startDate, $email);
+            mysqli_stmt_bind_param($stmt, "ss", $startDate, $Forward_To);
         }
         else {
-            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND Forward_To = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $email);
+            mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $Forward_To);
         }
     }
     else{
-        $query = "SELECT * FROM complaints WHERE Forward_To = ? AND Status= 'Arrived'";
+        $query = "SELECT * FROM complaints WHERE Forward_To = ?  AND (Status='Rejected' OR Status='Resolved')";
         $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_bind_param($stmt, "s", $Forward_To);
     }
 
 

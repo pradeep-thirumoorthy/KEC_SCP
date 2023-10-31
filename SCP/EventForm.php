@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: http://192.168.157.250:3000");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -58,8 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        $query = "INSERT INTO events (event_id, Email, Limits, Formdata, IntervalTime, Title) VALUES (?, ?, ?, ?,?, ?)";
-   
+        
+        $query = "INSERT INTO events (event_id, Email, Limits, Formdata, IntervalTime, Title, Date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ssisss", $event_id, $email, $limit, $formdata, $lastDate,$title);
         if (mysqli_stmt_execute($stmt)) {

@@ -3,7 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
+header("Access-Control-Allow-Origin: http://192.168.157.250:3000"); // Replace with your React app's URL
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'pradeept.21cse@kongu.edu';
-            $mail->Password = 'kogjgbycwmfsagda';
+            $mail->Password = 'ismnyvjwhparsfcr';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 

@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subject = isset($data['subject']) ? $data['subject'] : '';
     
     // Check if the email exists in the admin_login table
-    $checkEmailQuery = "SELECT * FROM student_login WHERE email = '$to'";
+    $checkEmailQuery = "SELECT * FROM admin_login WHERE email = '$to'";
     $result = mysqli_query($conn, $checkEmailQuery);
     
     if (mysqli_num_rows($result) > 0) {
@@ -70,14 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </head>
         <body>
         <div class="container">
-          <h1>Student Email Verification</h1>
+          <h1>Forward Complaint Message</h1>
           <hr/>
           <div class="body">
           <p>Hello <span>'.$to.'</span></p>
-          <p>This is a generated OTP to Reset Your Password</p>
+          <p>Dear Faculty,I hope this message finds you well. I wanted to bring to your attention a concern regarding the recent assignment submission process in our course. Several students, including myself, have encountered difficulties in uploading our assignments on the online platform.
+          <br/>Name: Pradeep T<br/>
+          <br/>RollNo:21CSR141<br/>
+          <br/>Type:"Acadamic"<br/>
+          The issues we are facing include:<br/>
+          Difficulty in accessing the assignment submission portal.<br/>
           <br/>
-          <p>Your Verfication code:</p>
-          <h2>'. $randomSixDigitNumber .'</h2>
+          Your assistance in this matter would be greatly appreciated.
+          
+          Thank you for your attention, and I look forward to your response.</p>
           </div>
         </div>
         </body>
@@ -117,15 +123,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Email failed";
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-

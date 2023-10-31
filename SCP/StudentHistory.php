@@ -24,23 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($startDate) || !empty($endDate)) {
     
         if (empty($startDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 <= ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 <= ? AND email = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ss", $endDate, $email);
         }
         elseif (empty($endDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 >= ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 >= ? AND email = ?  AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ss", $startDate, $email);
         }
         else {
-            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND Forward_To = ? AND Status= 'Arrived'";
+            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND email = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $email);
         }
     }
     else{
-        $query = "SELECT * FROM complaints WHERE Forward_To = ? AND Status= 'Arrived'";
+        $query = "SELECT * FROM complaints WHERE email = ?  AND (Status='Rejected' OR Status='Resolved')";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "s", $email);
     }

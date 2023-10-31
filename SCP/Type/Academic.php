@@ -28,12 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($data['name']) ? $data['name'] : '';
     $rollno = isset($data['rollno']) ? $data['rollno'] : '';
     $email = isset($data['email']) ? $data['email'] : '';
-    $complainttype = isset($data['complainttype']) ? $data['complainttype'] : '';
     $description = isset($data['description']) ? $data['description'] : '';
+    $complainttype= "Academic";
     $department = isset($data['department']) ? $data['department'] : '';
     $Class = isset($data['Class']) ? $data['Class'] : '';
-    $Title = isset($data['Title']) ? $data['Title'] : '';
-    $Subject = isset($data['Subject']) ? $data['Subject'] : '';
     $Batch = isset($data['Batch']) ? $data['Batch'] : '';
     // Generate a unique 16-digit complaint ID
     do {
@@ -46,8 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } while (mysqli_num_rows($result) > 0);
 
-    if ($name === '' || $rollno === '' || $email === '' || $complainttype === '' || $description === '' || $department === '') {
-        echo json_encode(['success' => false, 'message' => 'Please fill in all required fields']);
+    if ($name === '' || $rollno === '' || $email === '' ||  $description === '' || $department === '') {
+      echo json_encode(['success' => false, 'message' => $name]);
+      echo json_encode(['success' => false, 'message' => $rollno]);
+      echo json_encode(['success' => false, 'message' => 'Please fill in all required fields']);
+        
         exit;
     }
 
@@ -55,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentTime = date('H:i:s');
 
     // Assuming $conn is your database connection
-    $query = "INSERT INTO complaints (Complaint_Id, Type, Description, Roll_No, email, Department, Status, Title, Name, Class, Forward_To,info1,info2,CreateTime,Batch)
-    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO complaints (Complaint_Id, Type, Description, Roll_No, email, Department, Status,  Name, Class, Forward_To,info1,info2,CreateTime,Batch)
+    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
 
     // Prepare the statement
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $complaintid=strval($complaintid);
     if ($stmt) {
         $Subjectquery = "SELECT Advisor1, Advisor2, Advisor3, HOD, Year_incharge FROM subject WHERE Batch = ? AND Class = ?";
-        $Subjectstmt = mysqli_prepare($conn, $Subjectquery); // Use $Subjectquery here
+        $Subjectstmt = mysqli_prepare($conn, $Subjectquery);
         mysqli_stmt_bind_param($Subjectstmt, "ss", $Batch, $Class);
         mysqli_stmt_execute($Subjectstmt);
         mysqli_stmt_store_result($Subjectstmt);
@@ -79,22 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_fetch($Subjectstmt);
         }
         $defaultStatus = 'Arrived';
-        $defaultForwardTo = '';
-        if($complainttype=='Academic'){
-            $defaultForwardTo = "pradeept.21cse@kongu.edu";
-        }
-        else if($complainttype=='Classroom Maintenance'){
-            $defaultForwardTo = $HOD;
-        }
-        else if($complainttype=='Lab'){
-            $defaultForwardTo = $Advisor2;
-        }
-        else if ($complainttype=='Subject'){
-            $defaultForwardTo = $Subject;
-            $Subjectname = isset($data['Subjectname']) ? $data['Subjectname'] : '';
-            $newTitle = "[".$Subjectname . "]:\n" . $Title;
-            $Title = $newTitle;
-        }
+        $defaultForwardTo = $Advisor1;
         $query_select_faculty_name = "SELECT Name FROM admin_info WHERE Email = ?";
         $stmt_select_faculty_name = mysqli_prepare($conn, $query_select_faculty_name);
         mysqli_stmt_bind_param($stmt_select_faculty_name, "s", $defaultForwardTo);
@@ -110,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $info2 = '[{"Forwarded":["' . $Faculty_Name . '","' . date('Y-m-d H:i:s') . '"]}]';
 
         // Bind parameters to the placeholders
-        mysqli_stmt_bind_param($stmt, "sssssssssssssss", $complaintid, $complainttype, $description, $rollno, $email, $department, $defaultStatus, $Title, $name, $Class, $defaultForwardTo, $currentDate, $info2,$currentTime,$Batch);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssss", $complaintid, $complainttype, $description, $rollno, $email, $department, $defaultStatus, $name, $Class, $defaultForwardTo, $currentDate, $info2, $currentTime, $Batch);
 
         // Execute the statement
         $result = mysqli_stmt_execute($stmt);
@@ -205,7 +191,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               <td>:</td>
                               <td>'.$rollno.'</td>
                           </tr>
-                          
                           <tr>
                               <td>Complaint Type</td>
                               <td>:</td>
@@ -232,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </body>
                 </html>'
             ];
-            include 'Emailcomplaint.php';
+            include './../Emailcomplaint.php';
             $emailSent1 = sendEmail($emailParams1['to'], $emailParams1['subject'], $emailParams1['message']);
             echo json_encode(['success' => true, 'complaint_id' => $complaintid]);
         } else {
