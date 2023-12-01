@@ -16,31 +16,24 @@ if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-// Endpoint to update the Roll in admin_info based on email
+// Endpoint to handle admin name retrieval
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    $email = isset($data['email']) ? $data['email'] : '';
-    $roll = isset($data['Roll']) ? $data['Roll'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
 
     if ($email === '') {
         echo json_encode(['error' => 'Email not provided']);
         exit;
     }
 
-    if ($roll === '') {
-        echo json_encode(['error' => 'Roll not provided']);
-        exit;
-    }
-
-    // Query to update the Roll in admin_info based on email
-    $query = "UPDATE admin_info SET Roll = '$roll' WHERE Email = '$email'";
+    // Query to fetch admin's Name based on the provided email
+    $query = "SELECT Name FROM admin_info WHERE Email = '$email'";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
-        echo json_encode(['response' => true]);
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode($row);
     } else {
-        echo json_encode(['response' => false]);
+        echo json_encode(['error' => 'Error querying database']);
     }
 }
 

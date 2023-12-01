@@ -184,8 +184,6 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="Faculty">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
-                                        
-                                        console
                                         <li><a href="/admin/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</a></li>
                                         <li><a href="/admin/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</a></li>
                                     </ul>
