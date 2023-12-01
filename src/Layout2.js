@@ -117,7 +117,8 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     <ul className="btn-toggle-nav list-unstyled pb-1 small d-block list-group w-100">
                                         <li><a href="#overview" className="link-light text-white-50 w-100 btn px-0 px-lg-0 ">Overview</a></li>
                                         <li><a href="#updates" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Updates</a></li>
-                                        <li><a href="#reports" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Reports</a></li>
+                                        <li><a href='/student/dashboard/Calendar' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/dashboard/Calendar' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Calendar</a></li>
+                                        
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -202,7 +203,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="activity">
                                 
                                     <ul className="btn-toggle-nav list-unstyled small d-block list-group">
-                                        <li><a href="#overview" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Overview</a></li>
+                                    <li><div href='/student/Activity/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
                                         <li><a href="#updates" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Updates</a></li>
                                         <li><a href="#reports" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Reports</a></li>
                                     </ul>
@@ -230,7 +231,8 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="history">
                                 
                                     <ul className="btn-toggle-nav list-unstyled small d-block list-group">
-                                        <li><a href="#overview" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Overview</a></li>
+                                        
+                                    <li><div href='/student/History/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/History/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
                                         <li><a href="#updates" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Updates</a></li>
                                         <li><a href="#reports" className="link-light text-white-50 w-100 btn px-0 px-lg-0">Reports</a></li>
                                     </ul>

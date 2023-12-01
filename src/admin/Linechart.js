@@ -11,7 +11,7 @@ const LineChartComponent = () => {
   const [complaintData, setComplaintData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/Linechart.php';
+    const apiUrl = 'http://localhost:8000/SCP/Linechart.php';
     const email = getEmailFromCookies();
 
     axios

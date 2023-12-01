@@ -31,8 +31,14 @@ const Maintenance = () => {
   const [Status,setStatus] = useState('Damaged');
   const [item2,setitem2] = useState('Fan');
   const generateDescription = () => {
-    let countDescription = count > 1 ? 's are' : 'is';
-    setDescription(`${count} ${item2} ${countDescription} ${Status}`);
+    if(item2==='Projector'){
+      setCount(1);
+      setDescription('Projector is damaged or malfunctioning');
+    }
+    else{
+    let countDescription = count > 1 ? 's are' : ' is';
+    setDescription(`${count} ${item2}${countDescription} ${Status}`);
+    }
   };
   const TreeData = [
     {
@@ -96,7 +102,7 @@ const Maintenance = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://192.168.157.250:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -135,7 +141,7 @@ const Maintenance = () => {
     }
     setLoading(true);
     axios
-      .post('http://192.168.157.250:8000/SCP/Type/Maintenance.php', {
+      .post('http://localhost:8000/SCP/Type/Maintenance.php', {
         name: name,
         rollno: rollno,
         email: email,
@@ -281,7 +287,7 @@ const Maintenance = () => {
         <div className='col-lg-6 col-sm-12 mx-5 my-3'  style={{width:'80%'}}>
           <div className='my-2'>
           <span className='mx-3'>Floor:</span>
-          <Select style={{ width: '60%' }} onChange={(e)=>{setFloor(e);setDescription_1();setDescription();if(category==='Restroom'){setDescription_1(Gender)}}} value={Floor}>
+          <Select style={{ width: '60%' }} onChange={(e)=>{setFloor(e);setDescription_1();if(category==='Restroom'){setDescription_1(Gender)}}} value={Floor}>
             <Option value='Ground Floor'>Ground Floor</Option>
             <Option value='First Floor'>First Floor</Option>
             <Option value='Second Floor'>Second Floor</Option>
@@ -373,7 +379,7 @@ const Maintenance = () => {
       
       <Flex wrap="wrap" gap="small">
   <Input type='number' min={1} max={10} disabled={item2==='Projector'} style={{width:'50px'}} value={count} onChange={(e)=>{setCount(e.target.value)}} />
-  <Select value={item2} onChange={(e)=>{setitem2(e);setStatus('Damaged')}} placeholder="select the statement">
+  <Select value={item2} onChange={(e)=>{setitem2(e);setStatus('Damaged');if(e==='Projector'){setCount(1)}}} placeholder="select the statement">
   <Option value={'Fan'}>Fan</Option>
   <Option value={'Light'}>Light</Option>
   <Option value={'Projector'}>Projector</Option>

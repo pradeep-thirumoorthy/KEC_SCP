@@ -7,10 +7,8 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import { Button, Card, Flex, Input, Layout, Select} from 'antd';
+import { Button, Flex, Input, Layout, Menu } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
-import { Title } from 'chart.js';
-import Reach from './Reach';
 const EventFormCreation = () => {
     const navigate = useNavigate();
     const [inputs, setInputs] = useState([]);
@@ -19,8 +17,6 @@ const EventFormCreation = () => {
     const [slimit,setlimit]=useState(1);
     const [generated] = useState(false);
     const [lastDate,setLastDate]=useState(getTodayDate);
-    
-    const [previewImage, setPreviewImage] = useState('');
     const generateInput = () => {
         const inputId = Date.now();
         const newInput = {
@@ -32,7 +28,6 @@ const EventFormCreation = () => {
         };
         setInputs([...inputs, newInput]);
     };
-    const [pfile,psetfile] = useState('');
     function getTodayDate() {
         const today = new Date();
         const year = today.getFullYear();
@@ -40,19 +35,7 @@ const EventFormCreation = () => {
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
       }
-      const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file.type.startsWith('image/')) {
-            // Set the file in state if it's an image
-            psetfile(file);
-            setPreviewImage(URL.createObjectURL(file));
-        } else {
-            alert('Please upload an image file.');
-        }
-    };
     useEffect(() => {
-        
-        console.log(JSON.stringify(pfile));
         if (!generated) {
             generateInput();
         }
@@ -73,6 +56,7 @@ const EventFormCreation = () => {
             window.removeEventListener('beforeunload', beforeUnloadHandler);
             window.removeEventListener('unload', unloadHandler);
           };
+          
     }, []);
 
     const handleLastDateChange = event => {
@@ -151,13 +135,13 @@ const EventFormCreation = () => {
                                     disabled
                                 />
                                 <Input
-                                    className='option ms-md-3 my-2  border-0 border-bottom w-75 border-dark'
+                                    className='option ms-md-3 my-2 bg-transparent border-0 border-bottom w-75 border-dark'
                                     type='text'
                                     value={option.value}
                                     onChange={(e) => updateOptionValue(input.key, optionIndex, e.target.value)} required
                                 />
                                 {optionIndex !== 0 && (
-                                    <button className='outline-0 border-0 ' onClick={() => deleteOption(input.key, optionIndex)}>
+                                    <button className='outline-0 border-0 bg-transparent' onClick={() => deleteOption(input.key, optionIndex)}>
                                         <FiX />
                                     </button>
                                 )}
@@ -169,17 +153,6 @@ const EventFormCreation = () => {
             return null;
         });
     };
-    const styles = {
-        tagFadeOut: {
-          opacity: 0,
-          transform: 'translateY(-20px)', // Adjust the value as needed for the upward motion
-          transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out', // Adding transform to the transition
-        },
-        
-        // Other styles
-      };
-      
-      
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -196,26 +169,18 @@ const EventFormCreation = () => {
                 };
             }),
         };
-        if (formData.inputs.length !== 0 && pfile !== '' && Title!=='' && description !=="") {
+        if (formData.inputs.length !== 0) {
             const limit = (slimit !== '') ? parseInt(slimit) : 1;
             console.log(formData);
             const Email = Cookies.get("AdminEmail");
             const secretKey = "admin-_?info";
             const bytes = CryptoJS.AES.decrypt(Email, secretKey);
             const email = bytes.toString(CryptoJS.enc.Utf8);
+            const option = "create";
             console.log(email, formData, limit);
             const formdata = JSON.stringify(formData);
-                        console.log(formdata);
-                        const finformData = new FormData();
-            finformData.append('limit', slimit);
-            finformData.append('formdata', JSON.stringify(inputs));
-            finformData.append('email', email);
-            finformData.append('option', 'create');
-            finformData.append('title', title);
-            finformData.append('formdata', formdata);
-            finformData.append('lastDate', lastDate);
-            finformData.append('pfile', pfile);
-            axios.post('http://localhost:8000/SCP/EventForm.php', finformData)
+            console.log(formdata);
+            axios.post('http://localhost:8000/SCP/EventForm.php', { limit, formdata, email, option, title,lastDate, })
                 .then(response => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do
@@ -239,15 +204,14 @@ const EventFormCreation = () => {
         }
     };
     const deletetag = (inputKey) => {
-        setInputs(prevInputs => {
-          const updatedInputs = prevInputs.map(input => {
+    setInputs(prevInputs =>
+        prevInputs.map(input => {
             if (input.key === inputKey) {
-              return { ...input, fading: true };
+                return { ...input, fading: true };
             }
             return input;
-          });
-          return updatedInputs;
-        });
+        })
+    );
 
     setTimeout(() => {
         setInputs(prevInputs => prevInputs.filter(input => input.key !== inputKey));
@@ -261,7 +225,7 @@ const EventFormCreation = () => {
             <div>
             <div>
             <Layout>
-      <div 
+      <Header className='bg-secondary'
         style={{
           position: 'sticky',
           top: 0,
@@ -271,27 +235,27 @@ const EventFormCreation = () => {
           alignItems: 'center',
         }}
       >
-        <div className='w-100'><Button className=' float-end' onClick={generateInput}>Generate Input</Button>
-                    </div>
+        <Flex align='center' justify='space-evenly' className='w-100' gap="middle">
+                    <span>Limit:</span>
+                    <Input type='number' value={slimit} onChange={(e) => setlimit(e.target.value)} required max='100' min='1'/>
+                    <span style={{whiteSpace:'nowrap'}}>Last Date:</span>
+                    <Input type='date' value={lastDate} min={getTodayDate()} onChange={handleLastDateChange}/>
+                    <Button onClick={generateInput}>Generate Input</Button>
                     
-      </div>
-      <Content className="site-layout ">
-        <form onSubmit={handleSubmit} className='col-12 float-end  mt-5 mt-lg-0'>
+        </Flex>
+                    
+      </Header>
+      <Content className="site-layout" style={{ padding: '0 50px' }}>
+        <form onSubmit={handleSubmit} className='col-12 float-end pt-5 mt-5 mt-lg-0'>
                     <h1 className='text-center mt-5'>Event Form Creation</h1>
-                <Card hoverable className='px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(${previewImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',}}>
-                
-                
-                <Input type='file' accept="image/*" onChange={handleFileChange}/>
+                <div className='px-5 pt-5 py-5 my-5 mx-lg-5 mx-sm-1 bg-info bg-opacity-10 rounded-3'>
                     <div className='form-group'>
                         <label className='form-label fs-3' htmlFor='title'>
                             Title
                         </label>
                         <Input
                             type='text'
-                            className='form-control '
+                            className='form-control fs-3 bg-transparent border-0 border-bottom border-dark rounded-0'
                             id='title'
                             value={title}
                             onChange={(e) => setTitle(e.target.value) } required
@@ -300,31 +264,19 @@ const EventFormCreation = () => {
                     <div className="form-outline">
                         <label htmlFor="description" className="form-label">Description</label>
                         <textarea
-                            className="form-control  border-dark"
+                            className="form-control bg-transparent border-dark"
                             id="description"
                             rows="2"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)} required
                         ></textarea>
                     </div>
-                    <Reach
-        slimit={slimit}
-        setlimit={setlimit}
-        lastDate={lastDate}
-        getTodayDate={getTodayDate}
-        handleLastDateChange={handleLastDateChange}
-      />
-                </Card>
-                {inputs.map((input, index) => (
-            <Card
-                key={index} // Using index as the key for dynamic rendering
-                style={input.fading ? styles.tagFadeOut : {}}
-                hoverable
-                className={`px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3 ${input.fading ? 'tag-fade-out' : ''}`}
-            >
+                </div>
+                {inputs.map(input => (
+                    <div key={input.key} className={`px-5 pt-5 py-5 my-5 mx-lg-5 mx-sm-1 bg-info bg-opacity-10 rounded-3 ${input.fading ? 'tag-fade-out' : ''}`}>
                         <div className='row'>
                             <Input
-                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                className='col-lg-6 text-start bg-transparent w-50 border-0 border-bottom border-dark form-control rounded-0'
                                 type='text' placeholder='Label'
                                 value={input.label}
                                 onChange={(e) =>
@@ -337,8 +289,8 @@ const EventFormCreation = () => {
                                 required
                             />
                             <div className='w-25'></div>
-                            <Select
-                                className="col-lg-6 text-start w-25 border-0 border-bottom border-dark form-control rounded-0"
+                            <select
+                                className="col-lg-6 text-start bg-transparent w-25 border-0 border-bottom border-dark form-control rounded-0"
                                 value={input.selectedType}
                                 onChange={(e) => handleSelectChange(e, input.key)}
                             >
@@ -348,7 +300,7 @@ const EventFormCreation = () => {
                                 <option value="date">Date</option>
                                 <option value="email">Email</option>
                                 <option value="radio">Radio options</option>
-                            </Select>
+                            </select>
                         </div>
                         <br />
                         <div className='col-lg-10'>
@@ -362,7 +314,7 @@ const EventFormCreation = () => {
                         <div className='float-end'>
                             <FiTrash2 color='dark'style={{cursor:"pointer"}} size={25} onClick={() => deletetag(input.key)} />
                         </div>
-                    </Card>
+                    </div>
                 ))}
                 <div className='w-100'>
                 <Flex  justify={'flex-end'} >
@@ -381,3 +333,54 @@ const EventFormCreation = () => {
 }
 
 export default EventFormCreation;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React from 'react';
+import { Carousel } from 'antd';
+const contentStyle = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
+};
+const App = () => (
+  <Carousel autoplay>
+    <div>
+      <h3 style={contentStyle}>1</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>2</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>3</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>4</h3>
+    </div>
+  </Carousel>
+);
+export default App;

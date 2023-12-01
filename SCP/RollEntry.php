@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 $host = 'localhost';
 $user = 'root';
 $password = '';
-$database = 'admin';
+$database = 'sgp';
 
 // Connect to the database
 $conn = mysqli_connect($host, $user, $password, $database);

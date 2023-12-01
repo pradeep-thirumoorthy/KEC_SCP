@@ -1,5 +1,4 @@
 import Complaint from "./Complaints/Complaint";
-import ComplaintEntry from "./Complaints/CompEntry";
 import ComplaintStatus from "./Complaints/ComplaintStatus";
 import EventForm from "./Events/EventForm";
 import ForgetPass from "./ForgetPass";
@@ -18,6 +17,8 @@ import Others from "./Complaints/Type/Others";
 import Lab from "./Complaints/Type/Lab";
 import Faculty from "./Complaints/Type/Faculty";
 import Courses from "./Complaints/Type/Courses";
-export {Complaint,ComplaintEntry,ComplaintStatus,EventForm,ForgetPass,Histandtrends,StudentActivity,StudentDash,StudentLogin,StudentHistory,EventInfoWrapper,StudentActivityPanel,
-    Academic,Maintenance,Others,Lab,Faculty,Courses
+
+import Nfcalendar from "./calendar";
+export {Complaint,ComplaintStatus,EventForm,ForgetPass,Histandtrends,StudentActivity,StudentDash,StudentLogin,StudentHistory,EventInfoWrapper,StudentActivityPanel,
+    Academic,Maintenance,Others,Lab,Faculty,Courses,Nfcalendar
 };

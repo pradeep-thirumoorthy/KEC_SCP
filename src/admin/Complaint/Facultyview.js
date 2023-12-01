@@ -14,24 +14,37 @@ const Facultyview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-
+  
+  const [adminData, setAdminData] = useState(null);
   const handleButtonClick = (rowData) => {
-    navigate('/admin/Complaints/Faculty/Panel', { state: { info: rowData } });
+    navigate('/admin/Faculty/Panel', { state: { info: rowData } });
   };
-
   useEffect(() => {
+    fetchAdminData();
     fetchData();
-    const hashValue = window.location.hash.replace('#', '');
-    const hashVal=hashValue.replace('%20',' ');
-    const filteredType = hashVal;
-    if(hashVal==='Maintenance'||hashVal==='Academic'||hashVal==='Lab'||hashVal==='Courses'||hashVal==='Faculty'||hashVal==='Others'){    setFilteredInfo({
-        Type: [filteredType],
-      });}
     filterData();
+    console.log(data)
+    
   }, []);
 
+  const fetchAdminData = () => {
+    
+    axios
+        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .then((response) => {
+          const data = response.data;
+          if (data) {
+            setAdminData(data);
+            console.log(JSON.stringify(data))
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching admin data:', error);
+        })
+  };
+
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp.php';
+    const apiUrl = 'http://localhost:8000/SCP/viewFacComp.php';
     // Your email retrieval logic here
     const email = getEmailFromCookies();
 
@@ -45,6 +58,7 @@ const Facultyview = () => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
+    
   };
 
   const getEmailFromCookies = () => {
@@ -60,15 +74,8 @@ const Facultyview = () => {
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
-  const clearFilters = () => {
-    setFilteredInfo({});
-  };
-  const clearAll = () => {
-    setFilteredInfo({});
-    setSortedInfo({});
-  };
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewFacComp.php';
+    const apiUrl = 'http://localhost:8000/SCP/viewFacComp.php';
     const params = {
       Filter: 'Yes',
       start_date: startDate,
@@ -88,25 +95,73 @@ const Facultyview = () => {
 
   const columns = [
     {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
+      title: 'Roll No',
+      dataIndex: 'Roll_No',
+      key: 'Roll_No',
       
     },
+    
     {
-        title: 'Faculty',
-        dataIndex: 'Subject_Data',
-        key: 'Subject_Data',
+      title: 'Faculty',
+      dataIndex: 'Faculty',
+      key: 'Faculty',
     },
+    {
+      title: 'Class',
+      dataIndex: 'Class',
+      key: 'Class',
+      filters: [
+        {
+          text: 'A',
+          value: 'A',
+        },
+        {
+          text: 'B',
+          value: 'B',
+        },{
+          text: 'C',
+          value: 'C',
+        },{
+          text: 'D',
+          value: 'D',
+        },
+      ],
+      filteredValue: filteredInfo.Class || null,
+      onFilter: (value, record) => record.Class.includes(value),
+      sorter: (a, b) => a.Class.length - b.Class.length,
+      sortOrder: sortedInfo.columnKey === 'Class' ? sortedInfo.order : null,
+      ellipsis: true,
+    },{
+      title: 'Batch',
+      dataIndex: 'Batch',
+      key: 'Batch',
+      filters: [
+        {
+          text: '2024',
+          value: '2024',
+        },
+        {
+          text: '2025',
+          value: '2025',
+        },{
+          text: '2026',
+          value: '2026',
+        },{
+          text: '2027',
+          value: '2027',
+        },
+      ],
+      filteredValue: filteredInfo.Batch || null,
+      onFilter: (value, record) => record.Batch.includes(value),
+      sorter: (a, b) => a.Batch.length - b.Batch.length,
+      sortOrder: sortedInfo.columnKey === 'Batch' ? sortedInfo.order : null,
+      ellipsis: true,
+    },
+    
     {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'Status',
-      key: 'Status',
     },
     {
       title: 'Details',
@@ -130,13 +185,13 @@ const Facultyview = () => {
             ))
         );
       }).map((item) => ({
-        key: item.id, // Assuming 'id' is the key in your data
-        Email: item.email,
-        Type: item.Type,
-        Subject_Data:JSON.parse(item.Subject_Data).FacultyName,
-        Date: item.info1, // Assuming 'info1' is a property in your data
+        key: item.id, 
+        Roll_No:item.Roll_No,
+        Class:item.Class,
+        Batch:JSON.stringify(item.Batch),
+        Faculty: item.FacultyName,
+        Date: item.info1,
         info: item,
-        Status: item.Status,
         Details: 'More',
       })).reverse()
     );
@@ -146,8 +201,10 @@ const Facultyview = () => {
     <>
       <div className="row">
         <div className="App">
-          <h1>Faculty:</h1>
+          <h1>Complaints:</h1>
           <div className="d-flex justify-content-around">
+          
+
             <div>
               <label>Start Date:</label>
               <Input
@@ -168,7 +225,6 @@ const Facultyview = () => {
               Filter
             </Button>
           </div>
-
           <form>
             <input
               className="my-3 form-control"
@@ -179,7 +235,7 @@ const Facultyview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table columns={columns} scroll={{ x: 150 }} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
+          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
         </div>
       </div>
     </>

@@ -22,11 +22,16 @@ const StudentHistory= () => {
   {
     navigate('/student/History/Panel', { state: { info: rowData ,Heading:'History'} });
   };
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  };
   useEffect(() => {
     fetchData();
     const hashValue = window.location.hash.replace('#', ''); // Get the hash value
     const [value1, value2] = hashValue.split('=');
-    if(value2 !==''){
+    if(value1!=='' && value1!==''){if(value2 !==''){
       if(value2==='Sent'){
         setFilter('Arrived');
       }
@@ -39,7 +44,7 @@ console.log('Value 2:', value2);
     const filteredType = value1;
     if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
         Type: [filteredType],
-      });}
+      });}}
     filterData();
   }, []);
   const columns = [
@@ -101,7 +106,7 @@ console.log('Value 2:', value2);
     key: 'Details',
     render: (_, record) => (
       <Space size="middle">
-        <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
+        <Button onClick={() => {handleButtonClick(record.info);console.log(record.info)}}>More details</Button>
       </Space>
     ),
   });
@@ -135,7 +140,7 @@ console.log('Value 2:', value2);
 
 
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentHistory.php';
+    const apiUrl = 'http://localhost:8000/SCP/StudentHistory.php';
 
     axios.get(apiUrl,{Filter:'No'})
       .then((response) => {
@@ -151,20 +156,18 @@ console.log('Value 2:', value2);
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = Cookies.get('StudentEmail');
+  const Email = sessionStorage.getItem('StudentEmail');
+  console.log(Email);
   const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentHistory.php';
+    const apiUrl = 'http://localhost:8000/SCP/StudentHistory.php';
     const params = {
       Filter:'Yes',
       start_date: startDate,
       end_date: endDate,
       email:email,
     };
-    const hashValue = window.location.hash.replace('#', '');
-    const [v1,v2]=hashValue.split('=');
-    setSearch(v1);
     
     axios.get(apiUrl, { params })
       .then((response) => {
@@ -223,7 +226,7 @@ console.log('Value 2:', value2);
       
     </div>
               </div>
-              <Table columns={columns} dataSource={mappedTableData} bordered pagination={false}/>
+              <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={mappedTableData} bordered pagination={false}/>
         </>
       );
    }

@@ -18,7 +18,7 @@ const Faculty = () => {
   const [subject, setSubject] = useState({});
   const [SubjectInfo, setSubjectInfo] = useState([]);
   const [Batch, setBatch] = useState(0);
-  const Email = Cookies.get('StudentEmail');
+  const Email = sessionStorage.getItem('StudentEmail');
   const secretKey = 'student-_?info';
   const bytes = CryptoJS.AES.decrypt(Email, secretKey);
   const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -84,7 +84,7 @@ const Faculty = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://192.168.157.250:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -123,7 +123,7 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://192.168.157.250:8000/SCP/Type/Lab.php', {
+      .post('http://localhost:8000/SCP/Type/Lab.php', {
         name: name,
         rollno: rollno,
         email: email,

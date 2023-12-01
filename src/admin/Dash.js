@@ -31,7 +31,7 @@ const Dash = () => {
       const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
       const email = bytes.toString(CryptoJS.enc.Utf8);
 
-      axios.post('http://192.168.157.250:8000/SCP/dash.php', `email=${encodeURIComponent(email)}`)
+      axios.post('http://localhost:8000/SCP/dash.php', `email=${encodeURIComponent(email)}`)
         .then(response => {
           const data = response.data;
           if (data) {

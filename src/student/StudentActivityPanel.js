@@ -30,7 +30,7 @@ const StudentActivityPanel = () => {
     {
       title: 'Accepted',
       content: 'Last-content',
-      disabled: (info.info3==='')?true:false,
+      disabled: (!(info.Status==='Accepted' ||info.Status ==='Resolved'))?true:false,
     },
     {
       title: 'Completed',

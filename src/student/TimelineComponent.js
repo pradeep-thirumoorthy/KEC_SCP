@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Timeline } from 'antd';
+import { Descriptions, Timeline } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,TagOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 
 const TimelineComponent = ({ current,info }) => {
   const [timelineData, setTimeData] = useState([]);
   const [Pending,setPending] = useState(false);
+  const [Extra,setExtra]=useState({});
   useEffect(() => {
-    if (current === 0) {
-        setTimeData([
-          {
-            label: <div className='mx-5'>{info.info1} {info.CreateTime}</div>,
-            children: <div className='mx-5'>Created a Complaint :<br/>
-            Name: {info.Name}<br/>
-            Type: {info.Type}<br/>
-            Description: {info.Description}
-            <br /><br /><br /><br /></div>,
-            dot: <TagOutlined  style={{ fontSize: '30px',color:'gold' }} />,
-          }]);
-        setPending(false);
-      }
+    console.log(info)
+    console.log(timelineData)
+  if(info){
+    if (info.Type === "Maintenance") {
+      const parsedExtra = JSON.parse(info.Extra);
+      setExtra(parsedExtra);
+    }
+  }
       if (current === 1) {
         const rawData = JSON.parse(info.info2)
   
@@ -56,7 +52,7 @@ const TimelineComponent = ({ current,info }) => {
       }
       if (current === 2) {
         const rawData = JSON.parse(info.info3);
-        if(info.info4===''){
+        if(info.info4==='[{}]'){
             setPending(true);
         }
         else{
@@ -89,13 +85,44 @@ const TimelineComponent = ({ current,info }) => {
   return (
     <>
     <div>
-      <Timeline style={{}} pending={Pending} pendingDot={<LoadingOutlined style={{fontSize: '20px'}}/>} mode={'left'}>
-        {timelineData.map((item, index) => (
-          <Timeline.Item key={index} label={item.label} dot={item.dot}>
-            {item.children}
-          </Timeline.Item>
-        ))}
-      </Timeline>
+      {(current===0)?<>
+        <Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{color:'black',fontStyle:'oblique'}} >
+            {(info.Type !== "Courses")?<><Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
+            <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
+            <Descriptions.Item label="Email">{info.email}</Descriptions.Item></>:<></>}
+            
+            <Descriptions.Item label="Type">{info.Type}</Descriptions.Item>
+            <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
+            
+            {(info.Type === "Courses")?<>
+            
+            <Descriptions.Item label="Courses">{info.Extra}</Descriptions.Item>
+            </>:<></>}
+
+            <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
+            <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>
+            <Descriptions.Item label="Date">{info.info1}</Descriptions.Item>
+            {(info.Type === "Maintenance")?<>
+            <Descriptions.Item label="Category">{Extra.category}</Descriptions.Item>
+            <Descriptions.Item label="Floor">{Extra.Floor}</Descriptions.Item>
+            <Descriptions.Item label={(Extra.category==='Other Area')?"Item":(Extra.category==='Restroom')?"Gender":(Extra.category ==='Classroom')?"Classroom":""}>{Extra.data}</Descriptions.Item>
+</>:<></>}
+            <Descriptions.Item label="Description">{info.Description}</Descriptions.Item>
+            
+          </Descriptions>
+
+      </>:<>{!(info.Status === 'Accepted' && current === 3 && timelineData==='') && (
+  <Timeline style={{}} pending={Pending} pendingDot={<LoadingOutlined style={{fontSize: '20px'}}/>} mode={'left'}>
+    {timelineData.map((item, index) => (
+      <Timeline.Item key={index} label={item.label} dot={item.dot}>
+        {item.children}
+      </Timeline.Item>
+    ))}
+  </Timeline>
+)}
+</>
+      }
+      
       </div>
     </>
   );

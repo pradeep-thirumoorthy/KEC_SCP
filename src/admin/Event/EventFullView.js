@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { FiCircle, FiPlusSquare } from 'react-icons/fi';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CopyToClipboard from '../CopyToClipboard';
 import { useNavigate } from 'react-router';
+import { EditOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Table, Button} from 'antd';
+import { Card, Flex, Image} from 'antd';
 const MAX_TIMEOUT = 10000;
 
 const FullEvents = () => {
@@ -33,7 +33,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://192.168.157.250:8000/SCP/EventInfoAdmin.php?email=${email}`)
+      axios.get(`http://localhost:8000/SCP/EventInfoAdmin.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -50,93 +50,38 @@ const FullEvents = () => {
     }
   }, [Email]);
 
-  const columns = [
-    {
-      title: 'S.no',
-      dataIndex: 'sno',
-      key: 'sno',
-    },
-    {
-      title: 'Limit',
-      dataIndex: 'Limits',
-      key: 'Limits',
-    },
-    {
-      
-      title: 'Start Date',
-      dataIndex: 'StartDate',
-      key: 'StartDate',
-      render: (text) => (text),
-    },
-    {
-      title: 'Last Date',
-      dataIndex: 'IntervalTime',
-      key: 'IntervalTime',
-      render: (text) => (text),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'Status',
-      key: 'Status',
-      render: (text, record) => (
-        <>
-          {record.Status === 'open' ? (
-            <FiCircle color='green' fill='green' />
-          ) : (
-            <FiCircle color='red' fill='red' />
-          )}
-          {text}
-        </>
-      ),
-    },
-    {
-      title: 'Student Link',
-      key: 'studentLink',
-      render: (_, record) => (
-        <CopyToClipboard
-          className="text-center w-100"
-          textToCopy={"http://192.168.157.250:3000/student/events/EventInfo/" + record.event_id}
-        ></CopyToClipboard>
-      ),
-    },
-    {
-      title: 'Modify',
-      key: 'modify',
-      render: (_, record) => (
-        <Button
-          type="link"
-          onClick={() => modify(record.event_id)}
-          style={{ cursor: "pointer" }}
-        >
-          Modify...
-        </Button>
-      ),
-    },
-    {
-      title: 'Response',
-      key: 'response',
-      render: (_, record) => (
-        <Button
-          type="link"
-          onClick={() => response(record.event_id)}
-          style={{ cursor: "pointer" }}
-        >
-          View
-        </Button>
-      ),
-    },
-  ];
 
-  const mappedTableData = EventData.map((item, index) => ({
-    key: index,
-    sno: index + 1,
-    
-    Limits: item.Limits,
-    StartDate:item.Date,
-    IntervalTime: item.IntervalTime,
-    Status: item.Status,
-    event_id: item.event_id, // Assuming 'event_id' is the key in your data
-  }));
+  const renderEventCards = () => {
+    return EventData.map((item) => (
+      <Card
+        style={{ width: 300 }}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/SCP/Upload/${item.event_id}.png`} />}
+        actions={[
+          <SettingOutlined key="setting" onClick={() => modify(item.event_id)} />,
+          <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
+          <CopyToClipboard
+            className="text-center w-100"
+            textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
+          />
+        ]}
+        hoverable
+        key={item.event_id}
+      >
+        <Card.Meta extra={
+          <CopyToClipboard
+            className="text-center w-100"
+            textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
+          />
+        }
+          title={item.Title}
+          description={<><p>Limit: {item.Limits}</p>
+          <p>Start Date: {item.Date}</p>
+          <p>Last Date: {item.IntervalTime}</p>
+          <p>Status: {item.Status === 'open' ? 'Open' : 'Closed'}</p></>}
+        />
+      </Card>
+    ));
+  };
 
   return (
     <>
@@ -147,29 +92,13 @@ const FullEvents = () => {
       ) : (
         <div>
           <div className=" bg-light row ">
-            <div className="border-bottom pb-3 d-float">
-              <div className="float-start">
-                <span className="fs-2 fw-bolder fst-italic"> Events</span><br></br>
-                <span className="text-black-50 fst-italic no-warp">Overview of your events</span>
-              </div>
-              <div className='float-end'>
-                <a className='btn text-black' href='/admin/Events/EventFormCreation'><FiPlusSquare size={30} />New Events</a>
-              </div>
-            </div>
+            {/* Header section remains the same */}
           </div>
           <div className='row'>
             <span className='fs-2 fw-bolder fst-italic'>Your Events:</span>
-            <div>
-              <div className=' rounded-3  m-2'>
-                <Table
-                  columns={columns}
-                  dataSource={mappedTableData}
-                  scroll={{ x: 150 }}
-                  bordered
-                  pagination={false}
-                />
-              </div>
-            </div>
+            <Flex justify='center' align="center" wrap="wrap" gap="small">
+        {renderEventCards()}
+      </Flex>
           </div>
         </div>
       )}

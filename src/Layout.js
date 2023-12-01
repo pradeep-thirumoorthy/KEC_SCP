@@ -17,8 +17,22 @@ const Layout1 = ({element}) => {
     const { logout } = useAuth();
     const [dropdownStates, setDropdownStates] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+    const [checkedEmail, setCheckedEmail] = useState(false);
+    console.log(checkedEmail)
   // Update windowWidth when the window is resized
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await checkEmail(); // Assuming checkEmail is an asynchronous function
+        setCheckedEmail(result);
+      } catch (error) {
+        // Handle error if the promise rejects
+        console.error('Error checking email:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
   useEffect(() => {
     const foldersToCheck = [
         '/admin/dashboard',
@@ -28,6 +42,8 @@ const Layout1 = ({element}) => {
         '/admin/History',
         '/admin/PersonalInfo',
         '/admin/createPost',
+        
+        '/admin/Faculty',
     ];
     const dropdownStatesUpdates = {};
 
@@ -143,8 +159,6 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
                                         <li><a href="#overview"  className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        {(checkEmail())?<li><a href="/admin/Complaints/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</a></li>:<></>}
-                                        {(checkEmail())?<li><a href="/admin/Complaints/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</a></li>:<></>}
                                         <li><a href="/admin/Complaints/MoreInfo"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</a></li>
                                     </ul>
                                 
@@ -152,6 +166,34 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                         </Card>
                     </Accordion>
                 </li>
+                {(checkedEmail)?<><li className="nav-item w-100 " >
+                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/Faculty'] ? 'Faculty' : null}>
+                        <Card className=' border-0 bg-dark '>
+                            
+                                <button 
+                                    type="button"
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Faculty'] ? 'bg-light text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    onClick={() => handledirect('/admin/Faculty')}
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#home-collapse1"
+                                    aria-expanded="false"
+                                >
+                                    <FiTrello size={25}/>Faculty
+                                </button>
+                            
+                            <Accordion.Collapse eventKey="Faculty">
+                                
+                                    <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
+                                        
+                                        console
+                                        <li><a href="/admin/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</a></li>
+                                        <li><a href="/admin/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</a></li>
+                                    </ul>
+                                
+                            </Accordion.Collapse>
+                        </Card>
+                    </Accordion>
+                </li></>:<></>}
                 {/* Events */}
                 <li className="nav-item w-100 " >
                     <Accordion className='bg-dark'activeKey={isEventPage ? 'events' : null}>

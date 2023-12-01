@@ -1,4 +1,3 @@
-// StudentAuthContext.js
 import { createContext, useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
@@ -18,8 +17,9 @@ export function StudentAuthProvider({ children }) {
   const studentLogin = (email) => {
     setIsStudentAuthenticated(true);
     Cookies.set('isStudentAuthenticated', true, { expires: 1 });
-    const Emailscm = CryptoJS.AES.encrypt(email, "student-_?info").toString();
-    Cookies.set('StudentEmail', Emailscm, { expires: 1 });
+    const encryptedEmail = CryptoJS.AES.encrypt(email, 'student-_?info').toString();
+    Cookies.set('StudentEmail', encryptedEmail, { expires: 1 });
+    sessionStorage.setItem('StudentEmail', encryptedEmail); // Store encrypted email in sessionStorage
     Cookies.remove('isAuthenticated');
     Cookies.remove('AdminEmail');
   };
@@ -28,6 +28,7 @@ export function StudentAuthProvider({ children }) {
     setIsStudentAuthenticated(false);
     Cookies.remove('isStudentAuthenticated');
     Cookies.remove('StudentEmail');
+    sessionStorage.removeItem('StudentEmail'); // Clear the encrypted email from sessionStorage on logout
   };
 
   return (

@@ -30,8 +30,11 @@ const StudentActivity= () => {
   };
   useEffect(() => {
     fetchData();
-    const hashValue = window.location.hash.replace('#', ''); // Get the hash value
+    const hashValue = window.location.hash.replace('#', '');
+    
     const [value1, value2] = hashValue.split('=');
+    if(value1!=="" && value2!=="")
+    {
     if(value2 !==''){
       if(value2==='Sent'){
         setFilter('Arrived');
@@ -45,15 +48,15 @@ console.log('Value 2:', value2);
     const filteredType = value1;
     if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
         Type: [filteredType],
-      });}
+      });}}
     filterData();
   }, []);
  
   const columns = [
     {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
+      title: 'Roll No',
+      dataIndex: 'Roll',
+      key: 'Roll',
     },
     {
       title: 'Type',
@@ -126,7 +129,7 @@ console.log('Value 2:', value2);
   })
   .map((item) => ({
     key: item.id, // Assuming 'id' is the key in your data
-    Email: item.email,
+    Roll: item.Roll_No,
     Type: item.Type,
     
     Date: item.info1, // Assuming 'info1' is a property in your data
@@ -135,7 +138,7 @@ console.log('Value 2:', value2);
     Details: 'More',
   })).reverse();
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentActivity.php';
+    const apiUrl = 'http://localhost:8000/SCP/StudentActivity.php';
 
     axios.get(apiUrl,{Filter:'No'})
       .then((response) => {
@@ -151,20 +154,17 @@ console.log('Value 2:', value2);
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = Cookies.get('StudentEmail');
+  const Email = sessionStorage.getItem('StudentEmail');
   const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/StudentActivity.php';
+    const apiUrl = 'http://localhost:8000/SCP/StudentActivity.php';
     const params = {
       Filter:'Yes',
       start_date: startDate,
       end_date: endDate,
       email:email,
     };
-    const hashValue = window.location.hash.replace('#', ''); // Get the hash value
-    const [value1, value2] = hashValue.split('=');
-    setSearch(value1);
     
     axios.get(apiUrl, { params })
       .then((response) => {
@@ -224,7 +224,7 @@ console.log('Value 2:', value2);
       )}
       
     </div>
-    <Table columns={columns} dataSource={mappedTableData} onChange={handleChange} scroll={{x:800}} bordered pagination={false}/>;
+    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange} z bordered pagination={false}/>;
               </div>
         </>
       );

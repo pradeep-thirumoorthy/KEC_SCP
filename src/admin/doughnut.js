@@ -8,7 +8,7 @@ const Doughnut = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/doughnet.php';
+    const apiUrl = 'http://localhost:8000/SCP/doughnet.php';
     const email = getEmailFromCookies();
 
     axios

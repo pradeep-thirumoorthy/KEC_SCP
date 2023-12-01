@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { Card, Space } from 'antd';
+import { Card, Input, Space } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
@@ -31,7 +31,7 @@ const EventInfoWrapper = () => {
     }, MAX_TIMEOUT);
 
     axios
-      .get(`http://192.168.157.250:8000/SCP/getEventInfo.php?eventId=${eventId}&email=${email}`)
+      .get(`http://localhost:8000/SCP/getEventInfo.php?eventId=${eventId}&email=${email}`)
       .then(response => {
         clearTimeout(timeoutId);
         const data = response.data;
@@ -73,7 +73,7 @@ const EventInfoWrapper = () => {
     e.preventDefault();
 
     if (Formdata && Formdata.inputs && Formdata.inputs.length !== 0) {
-      axios.post('http://192.168.157.250:8000/SCP/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
+      axios.post('http://localhost:8000/SCP/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
         .then(response => {
           if (response.data.success) {
             console.log("Event data inserted successfully");
@@ -126,7 +126,7 @@ const EventInfoWrapper = () => {
         {Formdata &&
           Formdata.inputs.map((item, index) => (
             <div key={index}>
-              <Card className='p-5 '  style={{backgroundColor:'#ffeaab'}} hoverable>
+              <Card className='p-5 ' hoverable>
                 <h2>{item.label}</h2>
                 {item.choices.length === 0 && (
                   <input
@@ -163,7 +163,7 @@ const EventInfoWrapper = () => {
               <br/>
             </div>
           ))}
-        <input className='btn bg-warning bg-opacity-25 float-end mx-5' type='submit' />
+        <Input className='float-end mx-5' style={{width:'100px'}} type='submit' value="Submit"/>
       </form>
       </div>
     </Space>

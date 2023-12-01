@@ -64,7 +64,7 @@ const History= () => {
     Status: item.Status,
   })).reverse();
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/History.php';
+    const apiUrl = 'http://localhost:8000/SCP/History.php';
 
     axios.get(apiUrl,{Filter:'No'})
       .then((response) => {
@@ -84,7 +84,7 @@ const History= () => {
   const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/History.php';
+    const apiUrl = 'http://localhost:8000/SCP/History.php';
     const params = {
       Filter:'Yes',
       start_date: startDate,
@@ -149,7 +149,7 @@ const History= () => {
       
     </div>
               
-    <Table columns={columns} dataSource={mappedTableData} scroll={{x:500}} bordered  pagination={false}/>;
+    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData} bordered  pagination={false}/>;
               </div>
         </>
       );

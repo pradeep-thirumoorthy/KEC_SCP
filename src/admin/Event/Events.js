@@ -24,7 +24,7 @@ const Events = () => {
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
       axios
-        .get(`http://192.168.157.250:8000/SCP/EventInfoAdmin.php?email=${email}`)
+        .get(`http://localhost:8000/SCP/EventInfoAdmin.php?email=${email}`)
         .then((response) => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -107,11 +107,10 @@ const Events = () => {
             <span className='fs-2 fw-bolder fst-italic'>Your Events:</span>
             <div>
               <div className='rounded-3 m-2'>
-                <Table
+                <Table scroll={{x:1000}}
                   columns={columns}
                   dataSource={mappedTableData}
                   bordered
-                  scroll={{x:150}}
                   pagination={false}
                 />
                 <a href='/admin/Events/Fullview'>See More</a>

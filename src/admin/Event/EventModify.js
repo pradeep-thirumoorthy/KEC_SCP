@@ -4,7 +4,7 @@ import FNF from '../../FNF';
 import { useNavigate, useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
-import { Button, Flex } from 'antd';
+import { Button, Card, Flex, Input, Radio, Select } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
@@ -19,7 +19,10 @@ const EventModifier = () => {
   const [lastDate, setLastDate] = useState(null);
   const [formData, setFormData] = useState({});
   const [isModified, setIsModified] = useState(false); // Track if any field is modified
-
+  const [visibility,setvisible] = useState('');
+  const [department,setDepartment]=useState('Not Applied');
+  const [Class,setClass]=useState('Not Applied');
+  const [Batch,setBatch]=useState('Not Applied');
   const Email = Cookies.get('AdminEmail');
   const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -33,7 +36,7 @@ const EventModifier = () => {
     }, MAX_TIMEOUT);
   
     axios
-      .get(`http://192.168.157.250:8000/SCP/Eventmodify.php?email=${email}&EventId=${eventId}`)
+      .get(`http://localhost:8000/SCP/Eventmodify.php?email=${email}&EventId=${eventId}`)
       .then(response => {
         clearTimeout(timeoutId); // Clear the timeout since response was received
         const data = response.data;
@@ -46,6 +49,15 @@ const EventModifier = () => {
           setLastDate(data.IntervalTime);
           setLimit(parseInt(data.Limits));
           setStatus(data.Status);
+          setvisible(data.visible);
+          
+          if(data.visible === 'constraint'){
+            const constraint=JSON.parse(data.constraints);
+            setDepartment(constraint[0])
+            setBatch(constraint[1])
+            setClass(constraint[2])
+          }
+          console.log(data);
         } else {
           setError('Event data not found');
         }
@@ -80,7 +92,8 @@ const EventModifier = () => {
     setIsModified(true);
   };
   const handleSubmit = () => {
-    axios.post('http://192.168.157.250:8000/SCP/modifyevent.php', {limit,lastDate,status,eventId,email},)
+    const constraint = JSON.stringify([department,Batch,Class]);
+    axios.post('http://localhost:8000/SCP/modifyevent.php', {limit,lastDate,status,eventId,email,visibility,constraint},)
       .then(response => {
         if (response.data.success) {
           window.confirm('successfully updated');
@@ -114,16 +127,19 @@ const EventModifier = () => {
   return (
     <>
       <div className='h-100'>
-          <div className='p-5 m-5 bg-warning rounded-3 bg-opacity-25'>
+          <Card hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/SCP/Upload/${eventId}.png)`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',}}>
             {formData && (
               <>
                 <h2>Title: {formData.title}</h2>
                 <h4>Description: {formData.description}</h4>
               </>
             )}
-          </div>
+          </Card>
 
-          <div className='p-5 m-5 bg-warning rounded-3 bg-opacity-25'>
+          <Card hoverable className='p-5 m-5  rounded-3'>
             Limit:
             <input
               className='form-control'
@@ -133,9 +149,9 @@ const EventModifier = () => {
               value={limit}
               onChange={handleLimitChange}
             />
-          </div>
+          </Card>
 
-          <div className='p-5 m-5 bg-warning rounded-3 bg-opacity-25'>
+          <Card hoverable className='p-5 m-5  rounded-3'>
             Status:<br></br>
             <input
               type='radio'
@@ -155,9 +171,9 @@ const EventModifier = () => {
               onChange={handleStatusChange}
             />
             Close
-          </div>
+          </Card>
 
-          <div className='p-5 m-5 bg-warning rounded-3 bg-opacity-25'>
+          <Card hoverable className='p-5 m-5  rounded-3'>
             Last Date:
             <input
               className='form-control'
@@ -167,7 +183,50 @@ const EventModifier = () => {
               min={eventInfo.IntervalTime}
             />
             
-          </div>
+          </Card>
+          <Card hoverable className='p-5 m-5  rounded-3'>
+            Visibility:
+            <Radio.Group optionType='button' onChange={(e)=>{setvisible(e.target.value);setIsModified(true)}} value={visibility}>
+      <Radio value='Private'>Private</Radio>
+      <Radio value='Public'>Public</Radio>
+      <Radio value='constraint'>constraint</Radio>
+    </Radio.Group>
+            {(visibility==='constraint')?<>
+            <Select className='w-100'
+                value={department}
+                onChange={(e) => {setDepartment(e);setBatch('Not Applied');setClass('Not Applied')}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+                <option value="CSD">CSD</option>
+                <option value="EEE">EEE</option>
+                <option value="EIE">EIE</option>
+            </Select>
+            <Select className='w-100'
+                value={Batch}
+                disabled={(department==='Not Applied')}
+                onChange={(e) => {setBatch(e);setClass('Not Applied')}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </Select>
+            <Select className='w-100'
+                value={Class}
+                disabled={(Batch==='Not Applied')}
+                onChange={(e) => {setClass(e)}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </Select>
+            </>:<></>} 
+          </Card>
           <div className='w-100'>
              <Flex  justify={'flex-end'} >
         <Button type="primary" className='mt-2 m-5' disabled={!isModified}

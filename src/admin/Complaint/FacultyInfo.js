@@ -38,7 +38,7 @@ const FacultyInfo = () => {
       return;
     }
 
-    const apiUrl = `http://192.168.157.250:8000/SCP/getdesignation.php?designation=${Designation}`;
+    const apiUrl = `http://localhost:8000/SCP/getdesignation.php?designation=${Designation}`;
 
     axios
       .get(apiUrl, { designation: Designation })
@@ -67,7 +67,7 @@ const FacultyInfo = () => {
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://192.168.157.250:8000/SCP/ForwardComplaint.php", {
+        .post("http://localhost:8000/SCP/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -93,7 +93,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://192.168.157.250:8000/SCP/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/SCP/Facultyforward.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -117,7 +117,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://192.168.157.250:8000/SCP/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/SCP/Facultyforward.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -175,8 +175,8 @@ const FacultyInfo = () => {
             <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
             <Descriptions.Item label="Email">{info.email}</Descriptions.Item>
             <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
-            <Descriptions.Item label="Courses">{JSON.parse(info.Subject_Data).Subjectname}</Descriptions.Item>
-            <Descriptions.Item label="Faculty">{JSON.parse(info.Subject_Data).FacultyName}</Descriptions.Item>
+            <Descriptions.Item label="Courses">{info.Subjectname}</Descriptions.Item>
+            <Descriptions.Item label="Faculty">{info.FacultyName}</Descriptions.Item>
             
             <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
             <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>

@@ -26,7 +26,7 @@ const Eventviewresp = () => {
         const EventId = match[1];
 
         axios
-          .get(`http://192.168.157.250:8000/SCP/ResponseView.php?email=${email}&EventId=${EventId}`)
+          .get(`http://localhost:8000/SCP/ResponseView.php?email=${email}&EventId=${EventId}`)
           .then((response) => {
             const data = response.data;
             if (Array.isArray(data) && data.length > 0) {
@@ -75,8 +75,7 @@ const Eventviewresp = () => {
 
       {selectedOption === 'List' ? (
         <div className="table-responsive w-100">
-          <Table style={{height:'100vh'}}
-          scroll={{ x: 150 }}
+          <Table scroll={{x:1000}} style={{height:'100vh'}}
             columns={[
               {
                 title: 'S.no',

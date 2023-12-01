@@ -32,7 +32,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
-      .post("http://192.168.157.250:8000/SCP/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
+      .post("http://localhost:8000/SCP/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -47,7 +47,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Complete the resolvation of the complaint?');
     if (confirmed) {
     axios
-      .post("http://192.168.157.250:8000/SCP/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
+      .post("http://localhost:8000/SCP/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');

@@ -14,12 +14,14 @@ const Complaintsview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-
+  
+  const [adminData, setAdminData] = useState(null);
   const handleButtonClick = (rowData) => {
     navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
   };
-
   useEffect(() => {
+    console.log(adminData)
+    fetchAdminData();
     fetchData();
     const hashValue = window.location.hash.replace('#', '');
     const hashVal=hashValue.replace('%20',' ');
@@ -28,10 +30,27 @@ const Complaintsview = () => {
         Type: [filteredType],
       });}
     filterData();
+    
   }, []);
 
+  const fetchAdminData = () => {
+    
+    axios
+        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .then((response) => {
+          const data = response.data;
+          if (data) {
+            setAdminData(data);
+            console.log(JSON.stringify(data))
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching admin data:', error);
+        })
+  };
+
   const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp.php';
+    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
     // Your email retrieval logic here
     const email = getEmailFromCookies();
 
@@ -45,6 +64,7 @@ const Complaintsview = () => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
+    
   };
 
   const getEmailFromCookies = () => {
@@ -61,7 +81,7 @@ const Complaintsview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp.php';
+    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
     const params = {
       Filter: 'Yes',
       start_date: startDate,
@@ -81,11 +101,12 @@ const Complaintsview = () => {
 
   const columns = [
     {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
+      title: 'Roll No',
+      dataIndex: 'Roll_No',
+      key: 'Roll_No',
       
     },
+    
     {
       title: 'Type',
       dataIndex: 'Type',
@@ -122,14 +143,61 @@ const Complaintsview = () => {
       ellipsis: true,
     },
     {
+      title: 'Class',
+      dataIndex: 'Class',
+      key: 'Class',
+      filters: [
+        {
+          text: 'A',
+          value: 'A',
+        },
+        {
+          text: 'B',
+          value: 'B',
+        },{
+          text: 'C',
+          value: 'C',
+        },{
+          text: 'D',
+          value: 'D',
+        },
+      ],
+      filteredValue: filteredInfo.Class || null,
+      onFilter: (value, record) => record.Class.includes(value),
+      sorter: (a, b) => a.Class.length - b.Class.length,
+      sortOrder: sortedInfo.columnKey === 'Class' ? sortedInfo.order : null,
+      ellipsis: true,
+    },{
+      title: 'Batch',
+      dataIndex: 'Batch',
+      key: 'Batch',
+      filters: [
+        {
+          text: '2024',
+          value: '2024',
+        },
+        {
+          text: '2025',
+          value: '2025',
+        },{
+          text: '2026',
+          value: '2026',
+        },{
+          text: '2027',
+          value: '2027',
+        },
+      ],
+      filteredValue: filteredInfo.Batch || null,
+      onFilter: (value, record) => record.Batch.includes(value),
+      sorter: (a, b) => a.Batch.length - b.Batch.length,
+      sortOrder: sortedInfo.columnKey === 'Batch' ? sortedInfo.order : null,
+      ellipsis: true,
+    },
+    
+    {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'Status',
-      key: 'Status',
     },
     {
       title: 'Details',
@@ -153,12 +221,13 @@ const Complaintsview = () => {
             ))
         );
       }).map((item) => ({
-        key: item.id, // Assuming 'id' is the key in your data
-        Email: item.email,
+        key: item.id, 
+        Roll_No:item.Roll_No,
+        Class:item.Class,
+        Batch:JSON.stringify(item.Batch),
         Type: item.Type,
-        Date: item.info1, // Assuming 'info1' is a property in your data
+        Date: item.info1,
         info: item,
-        Status: item.Status,
         Details: 'More',
       })).reverse()
     );
@@ -170,6 +239,8 @@ const Complaintsview = () => {
         <div className="App">
           <h1>Complaints:</h1>
           <div className="d-flex justify-content-around">
+          
+
             <div>
               <label>Start Date:</label>
               <Input
@@ -190,7 +261,6 @@ const Complaintsview = () => {
               Filter
             </Button>
           </div>
-
           <form>
             <input
               className="my-3 form-control"
@@ -201,7 +271,7 @@ const Complaintsview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table columns={columns} scroll={{ x: 750 }} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
+          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
         </div>
       </div>
     </>

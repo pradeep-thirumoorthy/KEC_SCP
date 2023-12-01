@@ -24,7 +24,7 @@ const ForgetPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://192.168.157.250:8000/SCP/sendEmailStudent.php', {
+      .post('http://localhost:8000/SCP/sendEmailStudent.php', {
         to: email,
         subject: 'Forget password',
       })
@@ -98,7 +98,7 @@ const ForgetPass = () => {
         return false;
     }
     else{
-    axios.post('http://192.168.157.250:8000/SCP/ForgetStudentPass.php', { email: email, password: newPassword })
+    axios.post('http://localhost:8000/SCP/ForgetStudentPass.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {

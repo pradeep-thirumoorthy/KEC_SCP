@@ -1,79 +1,62 @@
-import React ,{ useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import {Table,Button,Space} from 'antd';
-const Activity= () => {
+import { Button, Input, Space, Table } from 'antd';
+
+const Activity = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [search, setSearch] = useState('');
-
+  const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  // function nextpage(){
-  //   return navigate('/forward');
-  // }
-
+  
+  const [adminData, setAdminData] = useState(null);
   const handleButtonClick=(rowData)=>
   {
     navigate('/admin/Activity/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
+    console.log(adminData)
+    fetchAdminData();
     fetchData();
-    const hashValue = window.location.hash.replace('#', ''); // Remove the '#' character
-    setSearch(hashValue);
+    const hashValue = window.location.hash.replace('#', '');
+    const hashVal=hashValue.replace('%20',' ');
+    const filteredType = hashVal;
+    if(hashVal==='Maintenance'||hashVal==='Academic'||hashVal==='Lab'||hashVal==='Courses'||hashVal==='Faculty'||hashVal==='Others'){    setFilteredInfo({
+        Type: [filteredType],
+      });}
     filterData();
-  }, []);
- 
-  const columns = [
-    {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
-    },
-    {
-      title: 'Type',
-      dataIndex: 'Type',
-      key: 'Type',
-    },
-    {
-      title: 'Date',
-      dataIndex: 'Date',
-      key: 'Date',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'Status',
-      key: 'Status'
-    },
-    {
-      title: 'Details',
-    key: 'Details',
-    render: (_, record) => (
-      <Space size="middle">
-        <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
-      </Space>
-    ),
-    }
-  ];
-  const mappedTableData = data
-  .map((item) => ({
-    key: item.id, // Assuming 'id' is the key in your data
-    Email: item.email,
-    Type: item.Type,
     
-    Date: item.info1, // Assuming 'info1' is a property in your data
-    info: item,
-    Status: item.Status,
-  })).reverse();
-  const fetchData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp2.php';
+  }, []);
 
-    axios.get(apiUrl,{Filter:'No'})
+  const fetchAdminData = () => {
+    
+    axios
+        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .then((response) => {
+          const data = response.data;
+          if (data) {
+            setAdminData(data);
+            console.log(JSON.stringify(data))
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching admin data:', error);
+        })
+  };
+
+  const fetchData = () => {
+    const apiUrl = 'http://localhost:8000/SCP/viewComp2.php';
+    // Your email retrieval logic here
+    const email = getEmailFromCookies();
+
+    axios
+      .get(apiUrl, { Filter: 'No', email: email })
       .then((response) => {
         setData(response.data.data || []);
         setLoading(false);
@@ -82,22 +65,33 @@ const Activity= () => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
+    
   };
-  const Email = Cookies.get('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+
+  const getEmailFromCookies = () => {
+    const Email = Cookies.get('AdminEmail');
+    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
+    return bytes.toString(CryptoJS.enc.Utf8);
+  };
+  
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  };
   const filterData = () => {
-    const apiUrl = 'http://192.168.157.250:8000/SCP/viewComp2.php';
+    const apiUrl = 'http://localhost:8000/SCP/viewComp2.php';
     const params = {
-      Filter:'Yes',
+      Filter: 'Yes',
       start_date: startDate,
       end_date: endDate,
-      email:email,
+      email: getEmailFromCookies(),
     };
-    const hashValue = window.location.hash.replace('#', '');
-    setSearch(hashValue);
-    
-    axios.get(apiUrl, { params })
+
+    axios
+      .get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
       })
@@ -105,52 +99,184 @@ const Activity= () => {
         console.error('Error filtering data:', error);
       });
   };
-      return (
-        <>
-        <div className='row'>
-                <div className="App">
-      <h1>Activity:</h1>
-      <div className='d-flex justify-content-around'>
-        <div>
-        <label>Start Date:</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        /></div>
-        <div>
-        <label>End Date:</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        /></div>
-        <button className='filter' onClick={filterData}>Filter</button>
-      </div>
 
-      <form>
-        <input
-          className='my-3 form-control'
-          type='search'
-          placeholder='search name'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          // onClick={fetchData}
-        />
-      </form>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-        </>
-      )}
+  const columns = [
+    {
+      title: 'Roll No',
+      dataIndex: 'Roll_No',
+      key: 'Roll_No',
       
-    </div>
-    <Table columns={columns} scroll={{ x: 150 }} dataSource={mappedTableData}  bordered pagination={false}/>;
-              </div>
-        </>
-      );
-   }
-export default Activity;
+    },
+    
+    {
+      title: 'Type',
+      dataIndex: 'Type',
+      key: 'Type',
+      filters: [
+        {
+          text: 'Academic',
+          value: 'Academic',
+        },
+        {
+          text: 'Maintenance',
+          value: 'Maintenance',
+        },
+        {
+          text: 'Faculty',
+          value: 'Faculty',
+        },
+        {
+          text: 'Courses',
+          value: 'Courses',
+        },
+        {
+          text: 'Lab',
+          value: 'Lab',
+        },{
+          text: 'Others',
+          value: 'Others',
+        },
+      ],
+      filteredValue: filteredInfo.Type || null,
+      onFilter: (value, record) => record.Type.includes(value),
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Type' ? sortedInfo.order : null,
+      ellipsis: true,
+    },
+    {
+      title: 'Class',
+      dataIndex: 'Class',
+      key: 'Class',
+      filters: [
+        {
+          text: 'A',
+          value: 'A',
+        },
+        {
+          text: 'B',
+          value: 'B',
+        },{
+          text: 'C',
+          value: 'C',
+        },{
+          text: 'D',
+          value: 'D',
+        },
+      ],
+      filteredValue: filteredInfo.Class || null,
+      onFilter: (value, record) => record.Class.includes(value),
+      sorter: (a, b) => a.Class.length - b.Class.length,
+      sortOrder: sortedInfo.columnKey === 'Class' ? sortedInfo.order : null,
+      ellipsis: true,
+    },{
+      title: 'Batch',
+      dataIndex: 'Batch',
+      key: 'Batch',
+      filters: [
+        {
+          text: '2024',
+          value: '2024',
+        },
+        {
+          text: '2025',
+          value: '2025',
+        },{
+          text: '2026',
+          value: '2026',
+        },{
+          text: '2027',
+          value: '2027',
+        },
+      ],
+      filteredValue: filteredInfo.Batch || null,
+      onFilter: (value, record) => record.Batch.includes(value),
+      sorter: (a, b) => a.Batch.length - b.Batch.length,
+      sortOrder: sortedInfo.columnKey === 'Batch' ? sortedInfo.order : null,
+      ellipsis: true,
+    },
+    
+    {
+      title: 'Date',
+      dataIndex: 'Date',
+      key: 'Date',
+    },
+    {
+      title: 'Details',
+      key: 'Details',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
+        </Space>
+      ),
+    },
+  ];
 
+  useEffect(() => {
+    setFilteredData(
+      data.filter((item) => {
+        return (
+          (search.toLowerCase() === '' ||
+            Object.values(item).some(
+              (value) =>
+                value !== null && value.toString().toLowerCase().includes(search.toLowerCase())
+            ))
+        );
+      }).map((item) => ({
+        key: item.id, 
+        Roll_No:item.Roll_No,
+        Class:item.Class,
+        Batch:JSON.stringify(item.Batch),
+        Type: item.Type,
+        Date: item.info1,
+        info: item,
+        Details: 'More',
+      })).reverse()
+    );
+  }, [data, search]);
+
+  return (
+    <>
+      <div className="row">
+        <div className="App">
+          <h1>Complaints:</h1>
+          <div className="d-flex justify-content-around">
+          
+
+            <div>
+              <label>Start Date:</label>
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>End Date:</label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+            <Button className="filter mt-3" onClick={filterData}>
+              Filter
+            </Button>
+          </div>
+          <form>
+            <input
+              className="my-3 form-control"
+              type="search"
+              placeholder="Search name"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </form>
+
+          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Activity;
