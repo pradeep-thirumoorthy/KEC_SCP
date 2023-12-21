@@ -3,14 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useLocation } from 'react-router';
 import { useEffect } from 'react';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { Table, Segmented, Descriptions, ConfigProvider, Empty } from 'antd';
 
 const Eventviewresp = () => {
   const [adminData, setAdminData] = useState([]);
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
   const location = JSON.stringify(useLocation());
   const match = location.match(/eventInfo\/(.*?)\/response/i);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +25,7 @@ const Eventviewresp = () => {
         const EventId = match[1];
 
         axios
-          .get(`http://localhost:8000/SCP/ResponseView.php?email=${email}&EventId=${EventId}`)
+          .get(`http://localhost:8000/ResponseView.php?email=${email}&EventId=${EventId}`)
           .then((response) => {
             const data = response.data;
             if (Array.isArray(data) && data.length > 0) {

@@ -23,7 +23,6 @@ const Activity = () => {
   useEffect(() => {
     console.log(adminData)
     fetchAdminData();
-    fetchData();
     const hashValue = window.location.hash.replace('#', '');
     const hashVal=hashValue.replace('%20',' ');
     const filteredType = hashVal;
@@ -31,13 +30,12 @@ const Activity = () => {
         Type: [filteredType],
       });}
     filterData();
-    
   }, []);
 
   const fetchAdminData = () => {
     
     axios
-        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -49,27 +47,8 @@ const Activity = () => {
           console.error('Error fetching admin data:', error);
         })
   };
-
-  const fetchData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp2.php';
-    // Your email retrieval logic here
-    const email = getEmailFromCookies();
-
-    axios
-      .get(apiUrl, { Filter: 'No', email: email })
-      .then((response) => {
-        setData(response.data.data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-    
-  };
-
   const getEmailFromCookies = () => {
-    const Email = Cookies.get('AdminEmail');
+    const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
@@ -82,9 +61,8 @@ const Activity = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp2.php';
+    const apiUrl = 'http://localhost:8000/viewComp2.php';
     const params = {
-      Filter: 'Yes',
       start_date: startDate,
       end_date: endDate,
       email: getEmailFromCookies(),
@@ -94,9 +72,11 @@ const Activity = () => {
       .get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error filtering data:', error);
+        setLoading(false);
       });
   };
 

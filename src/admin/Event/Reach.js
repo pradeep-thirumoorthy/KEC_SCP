@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Input, Radio } from 'antd'; // Import Radio from 'antd'
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const MAX_TIMEOUT = 10000;
 
@@ -13,7 +12,7 @@ const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange 
   const [batch, setBatch] = useState(''); // State for batch input
   const [classValue, setClassValue] = useState(''); // State for class input
 
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
 
   const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);

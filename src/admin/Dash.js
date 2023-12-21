@@ -4,7 +4,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Doughnut from './doughnut';
 import LineChart from './Linechart';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,7 @@ const Dash = () => {
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false); // New state variable
   const navigate=useNavigate();
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
   const linec = {
     height: '300px',
     overflowX: 'scroll',
@@ -31,7 +30,7 @@ const Dash = () => {
       const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
       const email = bytes.toString(CryptoJS.enc.Utf8);
 
-      axios.post('http://localhost:8000/SCP/dash.php', `email=${encodeURIComponent(email)}`)
+      axios.post('http://localhost:8000/dash.php', `email=${encodeURIComponent(email)}`)
         .then(response => {
           const data = response.data;
           if (data) {
@@ -63,7 +62,7 @@ const Dash = () => {
   if (isLoading) {
     return (
       <>
-          none
+          none empty
       </>
     );
   }
@@ -76,11 +75,11 @@ const Dash = () => {
             </div>
           ) : (
             <>
-              <div className=" bg-light row ">
+              <div className=" row ">
                 <div className="row border-bottom pb-3">
                   <div className="col-lg-12">
                     <span className="fs-2 fw-bolder fst-italic"> Welcome, {adminData.Name}</span><br />
-                    <span className="text-black-50 fst-italic no-warp">Here is your complaints arrived</span>
+                    <span className=" fst-italic no-warp">Here is your complaints arrived</span>
                   </div>
                 </div>
               </div>
@@ -94,7 +93,7 @@ const Dash = () => {
                     <script src="bar-chart.js"></script>
                   </div>
                   <h1 id="updates">Updates</h1>
-                  <div className="col-lg-12 mx-3 bg-light my-3 " style={linec}>sdubdshffbjhsbdakdhj ahs s </div>
+                  <div className="col-lg-12 mx-3 bg-light my-3 text-center justify-content-center d-flex" style={linec}>No Updates</div>
                   <h1 id="reports">Complaints</h1>
                   <div className="col-lg-12 mx-3 bg-light my-3" style={linec}>wjld sjdhcscsd hs cdcdfdc dhdg</div>
                   <div className="table"></div>

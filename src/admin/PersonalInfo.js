@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import { ConfigProvider, Descriptions, List } from 'antd';
 
@@ -14,7 +13,7 @@ const PersonalInfo = () => {
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
 
   useEffect(() => {
     if (Email) {
@@ -22,7 +21,7 @@ const PersonalInfo = () => {
       const email = bytes.toString(CryptoJS.enc.Utf8);
 
       axios
-        .post('http://localhost:8000/SCP/Admin_info.php', `email=${encodeURIComponent(email)}`)
+        .post('http://localhost:8000/Admin_info.php', `email=${encodeURIComponent(email)}`)
         .then((response) => {
           const data = response.data;
           if (data) {

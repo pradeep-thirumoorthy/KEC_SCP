@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
 import { useAuth } from './admin/AuthContext';
 import { useNavigate, useLocation } from 'react-router';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +17,6 @@ const Layout1 = ({element}) => {
     const [dropdownStates, setDropdownStates] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [checkedEmail, setCheckedEmail] = useState(false);
-    console.log(checkedEmail)
   // Update windowWidth when the window is resized
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +78,7 @@ const logo = {
     height: '50px',
 };
 const isEventPage = location.pathname.toLowerCase().includes('/admin/events');
-const Email = Cookies.get("AdminEmail");
+const Email = sessionStorage.getItem('AdminEmail');
 const secretKey = "admin-_?info";
 const bytes = CryptoJS.AES.decrypt(Email, secretKey);
 const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
@@ -98,10 +96,8 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
         breakpoint="lg"
         collapsedWidth="0"
         onBreakpoint={(broken) => {
-          console.log(broken);
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
         }}
       >
         <div style={{height:'100vh',display:'flex', flexDirection:'column',alignItems: 'flex-end'}}>
@@ -133,8 +129,8 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled pb-1 small d-block list-group">
                                         <li><a href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
                                         <li><a href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
-                                        <li><a href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</a></li>
-                                    </ul>
+                                        <li><a href="/admin/dashboard/Calendar"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/dashboard/Calendar' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Calendar</a></li>
+                                   </ul>
                                 
                             </Accordion.Collapse>
                         </Card>
@@ -302,7 +298,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="PersonalInfo">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><a href="/admin/PersonalInfo/Contact" className="link-light text-white-50 w-100 btn m-0 p-0">Contact Admin</a></li>
+                                        {/* <li><a href="/admin/PersonalInfo/Contact" className="link-light text-white-50 w-100 btn m-0 p-0">Contact Admin</a></li> */}
                                     </ul>
                                 
                             </Accordion.Collapse>

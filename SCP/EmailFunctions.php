@@ -252,24 +252,6 @@ function StudentForward($conn, $Faculty, $info, $fromemail) {
                                     Please feel free to reach out oue website if you have any additional information or questions regarding your complaint. We want to ensure that your concerns are addressed to your satisfaction, and your input is valuable to us.
 
                                     <br>
-                                    <h4>Complaint Info:</h4><br/>
-                                    <table>
-                                        <tr>
-                                            <td>Student Name</td>
-                                            <td>:</td>
-                                            <td>'.$studentname.'</td>
-                                        </tr>
-                                        <tr>
-                                      <td>RollNo</td>
-                                      <td>:</td>
-                                      <td>'.$studentrollno.'</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Complaint Type</td>
-                                      <td>:</td>
-                                      <td>'.$complainttype.'</td>
-                                  </tr>
-                                    </table>
                                     <br>
                                     </p>
                                     <p>

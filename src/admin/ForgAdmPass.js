@@ -20,7 +20,7 @@ const ForgAdmPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://localhost:8000/SCP/sendEmail.php', {
+      .post('http://localhost:8000/ForgetAdminOTP.php', {
         to: email,
         subject: 'Email Verification',
       })
@@ -92,7 +92,7 @@ const ForgAdmPass = () => {
         return false;
     }
     else{
-    axios.post('http://localhost:8000/SCP/ForgetAdminPass.php', { email: email, password: newPassword })
+    axios.post('http://localhost:8000/ForgetAdminPass.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {

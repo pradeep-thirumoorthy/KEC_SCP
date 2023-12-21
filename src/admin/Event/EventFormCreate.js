@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { Button, Card, Flex, Input, Layout, Select} from 'antd';
@@ -199,7 +198,7 @@ const EventFormCreation = () => {
         if (formData.inputs.length !== 0 && pfile !== '' && Title!=='' && description !=="") {
             const limit = (slimit !== '') ? parseInt(slimit) : 1;
             console.log(formData);
-            const Email = Cookies.get("AdminEmail");
+            const Email = sessionStorage.getItem('AdminEmail');
             const secretKey = "admin-_?info";
             const bytes = CryptoJS.AES.decrypt(Email, secretKey);
             const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -215,7 +214,7 @@ const EventFormCreation = () => {
             finformData.append('formdata', formdata);
             finformData.append('lastDate', lastDate);
             finformData.append('pfile', pfile);
-            axios.post('http://localhost:8000/SCP/EventForm.php', finformData)
+            axios.post('http://localhost:8000/EventForm.php', finformData)
                 .then(response => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do

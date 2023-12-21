@@ -8,7 +8,7 @@ const StudentDash = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500); // Display content after 1 second
+    }, 500);
 
     return () => {
       clearTimeout(timer);
@@ -21,7 +21,7 @@ const StudentDash = () => {
         <h3 style={{fontFamily:"monospace"}}>Loading...</h3>
       ) : (
         <>
-          <h1>Student Dash</h1>
+          <h1>Student Dashboard</h1>
         </>
         )}
     </>

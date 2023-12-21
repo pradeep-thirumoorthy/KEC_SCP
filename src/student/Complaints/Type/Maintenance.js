@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import {Breadcrumb, Flex, Radio, Select, TreeSelect, message } from 'antd';
 import { Input, Button,} from 'antd'; // Import InputNumber instead of TextArea
@@ -15,7 +14,7 @@ const Maintenance = () => {
   const [department, setDepartment] = useState('');
   const [Class, setClass] = useState('');
   const [Batch, setBatch] = useState(0);
-  const Email = Cookies.get('StudentEmail');
+  const Email = sessionStorage.getItem('StudentEmail');
   const secretKey = 'student-_?info';
   const bytes = CryptoJS.AES.decrypt(Email, secretKey);
   const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -102,7 +101,7 @@ const Maintenance = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -141,7 +140,7 @@ const Maintenance = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/SCP/Type/Maintenance.php', {
+      .post('http://localhost:8000/Type/Maintenance.php', {
         name: name,
         rollno: rollno,
         email: email,
@@ -170,7 +169,7 @@ const Maintenance = () => {
   return (
     <>
     {contextHolder}
-      <div className=' bg-light row '>
+      <div className=' row '>
       <Breadcrumb
     items={[
       {
@@ -188,7 +187,7 @@ const Maintenance = () => {
           <div className='col-md-9 col-lg-10'>
             <span className='fs-2 fw-bolder fst-italic'> Maintenance Entry</span>
             <br></br>
-            <span className='text-black-50 fst-italic no-warp'>Here are your complaints</span>
+            <span className=' fst-italic no-warp'>Here are your complaints</span>
           </div>
         </div>
       </div>

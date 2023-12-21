@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { Button, Input, Space, Table } from 'antd';
 
@@ -22,7 +21,6 @@ const Complaintsview = () => {
   useEffect(() => {
     console.log(adminData)
     fetchAdminData();
-    fetchData();
     const hashValue = window.location.hash.replace('#', '');
     const hashVal=hashValue.replace('%20',' ');
     const filteredType = hashVal;
@@ -36,7 +34,7 @@ const Complaintsview = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -49,26 +47,8 @@ const Complaintsview = () => {
         })
   };
 
-  const fetchData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
-    // Your email retrieval logic here
-    const email = getEmailFromCookies();
-
-    axios
-      .get(apiUrl, { Filter: 'No', email: email })
-      .then((response) => {
-        setData(response.data.data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-    
-  };
-
   const getEmailFromCookies = () => {
-    const Email = Cookies.get('AdminEmail');
+    const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
@@ -81,9 +61,8 @@ const Complaintsview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewComp.php';
+    const apiUrl = 'http://localhost:8000/viewComp.php';
     const params = {
-      Filter: 'Yes',
       start_date: startDate,
       end_date: endDate,
       email: getEmailFromCookies(),
@@ -93,9 +72,11 @@ const Complaintsview = () => {
       .get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error filtering data:', error);
+        setLoading(false);
       });
   };
 
@@ -237,10 +218,8 @@ const Complaintsview = () => {
     <>
       <div className="row">
         <div className="App">
-          <h1>Complaints:</h1>
+          <h1>Complaints</h1>
           <div className="d-flex justify-content-around">
-          
-
             <div>
               <label>Start Date:</label>
               <Input

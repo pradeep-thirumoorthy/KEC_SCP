@@ -4,7 +4,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FiCircle} from 'react-icons/fi';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Table, Button } from 'antd';
 
 const MAX_TIMEOUT = 10000;
@@ -12,7 +11,7 @@ const MAX_TIMEOUT = 10000;
 const Events = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [EventData, setEventData] = useState([]);
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
 
   useEffect(() => {
     if (Email) {
@@ -24,7 +23,7 @@ const Events = () => {
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
       axios
-        .get(`http://localhost:8000/SCP/EventInfoAdmin.php?email=${email}`)
+        .get(`http://localhost:8000/EventInfoAdmin.php?email=${email}`)
         .then((response) => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -100,7 +99,7 @@ const Events = () => {
         </div>
       ) : (
         <div className=''>
-          <div className='bg-light row'>
+          <div className='row'>
             {/* Your header */}
           </div>
           <div className='row'>

@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/SCP/login.php', { email, password },)
+    axios.post('http://localhost:8000/login.php', { email, password },)
       .then(response => {
         if (response.data.success) {
           login(email);

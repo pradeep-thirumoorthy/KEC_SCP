@@ -3,7 +3,6 @@ import axios from 'axios';
 import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { Radio,Table,Space,Button, Input } from 'antd';
 const StudentActivity= () => {
@@ -29,7 +28,6 @@ const StudentActivity= () => {
     navigate('/student/Activity/Panel', { state: { info: rowData ,Heading:'Activity'} });
   };
   useEffect(() => {
-    fetchData();
     const hashValue = window.location.hash.replace('#', '');
     
     const [value1, value2] = hashValue.split('=');
@@ -137,19 +135,6 @@ console.log('Value 2:', value2);
     Status: (item.Status==='Arrived')?'Sent':item.Status,
     Details: 'More',
   })).reverse();
-  const fetchData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/StudentActivity.php';
-
-    axios.get(apiUrl,{Filter:'No'})
-      .then((response) => {
-        setData(response.data.data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  };
   const onChange = (e) => {
     setFilter(e.target.value);
     console.log(Filter);
@@ -158,9 +143,8 @@ console.log('Value 2:', value2);
   const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/StudentActivity.php';
+    const apiUrl = 'http://localhost:8000/StudentActivity.php';
     const params = {
-      Filter:'Yes',
       start_date: startDate,
       end_date: endDate,
       email:email,
@@ -169,9 +153,11 @@ console.log('Value 2:', value2);
     axios.get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error filtering data:', error);
+        setLoading(false);
       });
   };
       return (

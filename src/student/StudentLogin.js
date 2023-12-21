@@ -14,7 +14,7 @@ const StudentLogin = () => {
   const [password, setPassword] = useState('');
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/SCP/student-login.php', { email, password },)
+    axios.post('http://localhost:8000/student-login.php', { email, password },)
       .then(response => {
         if (response.data.success) {
           studentLogin(email);

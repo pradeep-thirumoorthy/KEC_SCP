@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 const Doughnut = () => {
   const chartRef = useRef(null);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8000/SCP/doughnet.php';
+    const apiUrl = 'http://localhost:8000/doughnet.php';
     const email = getEmailFromCookies();
 
     axios
@@ -24,7 +23,7 @@ const Doughnut = () => {
       });
   }, []);
   const getEmailFromCookies = () => {
-    const Email = Cookies.get('AdminEmail');
+    const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };

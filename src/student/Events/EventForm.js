@@ -27,7 +27,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/SCP/EventInfoStudent.php?email=${email}`)
+      axios.get(`http://localhost:8000/EventInfoStudent.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -49,7 +49,7 @@ const FullEvents = () => {
     return EventData.map((item) => (
       <Card bordered
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/SCP/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
         ]}
@@ -70,7 +70,7 @@ const FullEvents = () => {
     return EventData.map((item) => (
       <Card bordered
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/SCP/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
         ]}
@@ -91,7 +91,7 @@ const FullEvents = () => {
     return EventData.map((item) => (
       <Card bordered
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/SCP/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
         ]}
@@ -117,7 +117,7 @@ const FullEvents = () => {
         </div>
       ) : (
         <div>
-          <div className=" bg-light row ">
+          <div className=" row ">
           </div>
           <div className='row'>
             <span className='fs-2 fw-bolder fst-italic'>Public Events:</span>

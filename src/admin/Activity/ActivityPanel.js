@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiArrowUp, FiCheck } from "react-icons/fi";
 import { useLocation,useNavigate } from 'react-router-dom';
-import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 import { Button, ConfigProvider, Descriptions, Result} from "antd";
@@ -23,7 +22,7 @@ const ActivityPanel = () => {
     }
   }
   }, [info]);
-  const Email = Cookies.get("AdminEmail");
+  const Email = sessionStorage.getItem('AdminEmail');
   const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
   const email = bytes.toString(CryptoJS.enc.Utf8);
 
@@ -32,7 +31,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/SCP/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
+      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -47,7 +46,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Complete the resolvation of the complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/SCP/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
+      .post("http://localhost:8000/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -62,11 +61,11 @@ const ActivityPanel = () => {
   return (
     
         <>
-        <div className=" bg-light row ">
+        <div className=" row ">
                 <div className="row border-bottom pb-3">
                   <div className="col-lg-12">
                     <span className="fs-2 fw-bolder fst-italic">Activity Panel</span><br />
-                    <span className="text-black-50 fst-italic no-warp">Here is the Info of the complaint arrived</span>
+                    <span className=" fst-italic no-warp">Here is the Info of the complaint arrived</span>
                   </div>
                 </div>
               </div>

@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Fetch the count of each type and create data entries
     foreach ($types as $type => $color) {
-        $query = "SELECT COUNT(*) as count FROM complaints WHERE Type = ? AND Status != 'Rejected' AND Status != 'Resolved' AND Forward_To = ?";
+        $query = "SELECT COUNT(*) as count FROM complaints WHERE Type = ? AND Status != 'Rejected' AND Status != 'Resolved' AND Status != 'Accepted' AND Forward_To = ?";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ss", $type, $email);
         mysqli_stmt_execute($stmt);

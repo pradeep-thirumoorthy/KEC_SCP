@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { Button, Input, Space, Table } from 'antd';
 
@@ -21,7 +20,6 @@ const Facultyview = () => {
   };
   useEffect(() => {
     fetchAdminData();
-    fetchData();
     filterData();
     console.log(data)
     
@@ -30,7 +28,7 @@ const Facultyview = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://localhost:8000/SCP/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -43,26 +41,9 @@ const Facultyview = () => {
         })
   };
 
-  const fetchData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewFacComp.php';
-    // Your email retrieval logic here
-    const email = getEmailFromCookies();
-
-    axios
-      .get(apiUrl, { Filter: 'No', email: email })
-      .then((response) => {
-        setData(response.data.data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-    
-  };
 
   const getEmailFromCookies = () => {
-    const Email = Cookies.get('AdminEmail');
+    const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
@@ -75,9 +56,8 @@ const Facultyview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/SCP/viewFacComp.php';
+    const apiUrl = 'http://localhost:8000/viewFacComp.php';
     const params = {
-      Filter: 'Yes',
       start_date: startDate,
       end_date: endDate,
       email: getEmailFromCookies(),
@@ -87,19 +67,15 @@ const Facultyview = () => {
       .get(apiUrl, { params })
       .then((response) => {
         setData(response.data.data || []);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error filtering data:', error);
+        setLoading(false);
       });
   };
 
   const columns = [
-    {
-      title: 'Roll No',
-      dataIndex: 'Roll_No',
-      key: 'Roll_No',
-      
-    },
     
     {
       title: 'Faculty',
@@ -201,7 +177,7 @@ const Facultyview = () => {
     <>
       <div className="row">
         <div className="App">
-          <h1>Complaints:</h1>
+          <h1>Faculty Complaints</h1>
           <div className="d-flex justify-content-around">
           
 

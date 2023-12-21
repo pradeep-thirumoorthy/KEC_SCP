@@ -16,28 +16,29 @@ if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
+// Endpoint to handle fetching data with optional info1 filter
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $email=$_GET['email'];
     if (!empty($startDate) || !empty($endDate)) {
     
         if (empty($startDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 <= ? AND email = ? ";
+            $query = "SELECT * FROM complaints WHERE info1 <= ? AND Forward_To = ? ";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ss", $endDate, $email);
         }
         elseif (empty($endDate)) {
-            $query = "SELECT * FROM complaints WHERE info1 >= ? AND email = ?  ";
+            $query = "SELECT * FROM complaints WHERE info1 >= ? AND Forward_To = ?  ";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ss", $startDate, $email);
         }
         else {
-            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND email = ? ";
+            $query = "SELECT * FROM complaints WHERE info1 BETWEEN ? AND ? AND Forward_To = ? ";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $email);
         }
     }
     else{
-        $query = "SELECT * FROM complaints WHERE email = ?  ";
+        $query = "SELECT * FROM complaints WHERE Forward_TO = ?  ";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "s", $email);
     }

@@ -3,10 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import CopyToClipboard from '../CopyToClipboard';
 import { useNavigate } from 'react-router';
-import { EditOutlined, SettingOutlined } from '@ant-design/icons';
+import { FileDoneOutlined, SettingOutlined } from '@ant-design/icons';
 
 import { Card, Flex, Image} from 'antd';
 const MAX_TIMEOUT = 10000;
@@ -15,7 +14,7 @@ const FullEvents = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [EventData, setEventData] = useState([]);
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
   const response = (id) => {
     navigate("/admin/Events/eventInfo/" + id + "/response");
   };
@@ -33,7 +32,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/SCP/EventInfoAdmin.php?email=${email}`)
+      axios.get(`http://localhost:8000/EventInfoAdmin.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -55,10 +54,10 @@ const FullEvents = () => {
     return EventData.map((item) => (
       <Card
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/SCP/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <SettingOutlined key="setting" onClick={() => modify(item.event_id)} />,
-          <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
+          <FileDoneOutlined key="edit" onClick={() => response(item.event_id)} />,
           <CopyToClipboard
             className="text-center w-100"
             textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
@@ -91,7 +90,7 @@ const FullEvents = () => {
         </div>
       ) : (
         <div>
-          <div className=" bg-light row ">
+          <div className=" row ">
             {/* Header section remains the same */}
           </div>
           <div className='row'>

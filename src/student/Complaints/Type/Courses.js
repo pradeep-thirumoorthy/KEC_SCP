@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { FiPlusSquare } from 'react-icons/fi';
 import {Radio, TreeSelect, message } from 'antd';
@@ -89,7 +88,7 @@ const Courses = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -129,7 +128,7 @@ const Courses = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/SCP/Type/Courses.php', {
+      .post('http://localhost:8000/Type/Courses.php', {
         name: name,
         rollno: rollno,
         email: email,
@@ -160,12 +159,12 @@ const Courses = () => {
   return (
     <>
     {contextHolder}
-      <div className=' bg-light row '>
+      <div className=' row '>
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
             <span className='fs-2 fw-bolder fst-italic'> Courses Entry</span>
             <br></br>
-            <span className='text-black-50 fst-italic no-warp'>Here are your complaints</span>
+            <span className=' fst-italic no-warp'>Here are your complaints</span>
           </div>
           <div className='col-md-3 col-lg-2 align-items-center d-flex '>
             <a href='/student/Complaint/ComplaintEntry' className='fs-5 text-nowrap btn text-black'>

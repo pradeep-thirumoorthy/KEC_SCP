@@ -4,14 +4,13 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 
 const LineChartComponent = () => {
   const chartRef = useRef(null);
   const [complaintData, setComplaintData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8000/SCP/Linechart.php';
+    const apiUrl = 'http://localhost:8000/Linechart.php';
     const email = getEmailFromCookies();
 
     axios
@@ -32,7 +31,7 @@ const LineChartComponent = () => {
   }, [complaintData]);
 
   const getEmailFromCookies = () => {
-    const Email = Cookies.get('AdminEmail');
+    const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
@@ -59,7 +58,6 @@ const LineChartComponent = () => {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        stepped:true,
         title: {
           display: true,
           text: 'Complaints',

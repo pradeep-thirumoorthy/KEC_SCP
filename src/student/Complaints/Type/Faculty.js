@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import {Breadcrumb, Radio, TreeSelect, message } from 'antd';
 import { Input, Select, Button, } from 'antd'; // Import InputNumber instead of TextArea
@@ -93,7 +92,7 @@ const Faculty = () => {
     // Define the Axios POST request to fetch admin data
     
     axios
-      .post('http://localhost:8000/SCP/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -133,7 +132,7 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/SCP/Type/Faculty.php', {
+      .post('http://localhost:8000/Type/Faculty.php', {
         name: name,
         rollno: rollno,
         email: email,
@@ -163,7 +162,7 @@ const Faculty = () => {
   return (
     <>
     {contextHolder}
-      <div className=' bg-light row '>
+      <div className=' row '>
       <Breadcrumb
     items={[
       {
@@ -181,7 +180,7 @@ const Faculty = () => {
           <div className='col-md-9 col-lg-10'>
             <span className='fs-2 fw-bolder fst-italic'>Faculty Entry:</span>
             <br></br>
-            <span className='text-black-50 fst-italic no-warp'>Enter your complaints based on Faculties</span>
+            <span className=' fst-italic no-warp'>Enter your complaints based on Faculties</span>
           </div>
         </div>
       </div>

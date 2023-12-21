@@ -7,10 +7,8 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    
-    const storedAuthStatus = Cookies.get('isAuthenticated');
-    if (storedAuthStatus) {
-      setIsAuthenticated(JSON.parse(storedAuthStatus));
+    if (sessionStorage.getItem('AdminEmail')) {
+      setIsAuthenticated(true);
     }
   }, []);
 
@@ -20,7 +18,8 @@ export function AuthProvider({ children }) {
     Cookies.set('isAuthenticated', true, { expires: 1 });
     const Emailscm = CryptoJS.AES.encrypt(email,"admin-_?info").toString();
     Cookies.set('AdminEmail',Emailscm,{expires:1})
-    Cookies.remove('isStudentAuthenticated');
+    sessionStorage.setItem('AdminEmail',Emailscm);
+    sessionStorage.setItem('PanelTrigger',false);
     Cookies.remove('StudentEmail');
   };
 
@@ -28,10 +27,26 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
     Cookies.remove('isAuthenticated');
     Cookies.remove('AdminEmail');
+    sessionStorage.removeItem('AdminEmail');
   };
-
+  const CheckAuth = () => {
+    if(!sessionStorage.getItem('AdminEmail')){
+      if(Cookies.get('AdminEmail')){
+        const Email=Cookies.get('AdminEmail');
+        sessionStorage.setItem('AdminEmail',Email);
+        
+        setIsAuthenticated(true);
+      }
+      else{
+        setIsAuthenticated(false);
+        console.log("There is no more log");
+      }
+    }
+    else{
+    }
+  };
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout,CheckAuth }}>
       {children}
     </AuthContext.Provider>
   );

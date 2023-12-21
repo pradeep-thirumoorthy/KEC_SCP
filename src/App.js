@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './admin/AuthContext';
-import { StudentAuthProvider,useStudentAuth } from './student/StudentAuthContext';
+import { StudentAuthProvider,useStudentAuth} from './student/StudentAuthContext';
 import FNF from './FNF';
 import Home from './Home';
 import About from './About';
@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,IndividualDisplay,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,IndividualDisplay,Admincalendar,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,ComplaintStatus, Histandtrends,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
@@ -18,14 +18,28 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import Layout2 from './Layout2';
 import { EventInfoWrapper, StudentHistory } from './student';
-import { Spin } from 'antd';
+import { ConfigProvider, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Facultyview from './admin/Complaint/Facultyview';
 import checkEmail from './FacultyAccess';
+import CSVReaderComponent from './master_admin/upload';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
+  useEffect(() => {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    if (storedDarkMode === 'true') {
+      setDarkMode(true);
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    localStorage.setItem('darkMode', darkMode);
+  }, [darkMode]);
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -35,6 +49,7 @@ const App = () => {
       clearTimeout(timer);
     };
   }, []);
+  
   const PrivateRoute = ({ element, redirectTo }) => {
     const { isAuthenticated } = useAuth();
 
@@ -46,8 +61,8 @@ const App = () => {
   };
 
   const PrivateStudentRoute = ({ element, redirectTo }) => {
-    const { isStudentAuthenticated } = useStudentAuth();
-
+    const { isStudentAuthenticated,CheckStudentLogin } = useStudentAuth();
+    CheckStudentLogin();
     if (isStudentAuthenticated) {
       return <>{element}</>;
     } else {
@@ -55,8 +70,8 @@ const App = () => {
     }
   };
   const RedirectToAdmLogin = ({ element}) => {
-    const { isAuthenticated } = useAuth();
-  
+    const { isAuthenticated,CheckAuth } = useAuth();
+    CheckAuth();
     if (isAuthenticated) {
       return <>{element}</>;
     } else {
@@ -75,15 +90,25 @@ const App = () => {
   };
   
   const RedirectToStudentLogin = ({ element}) => {
-    const { isStudentAuthenticated } = useStudentAuth();
-  
+    const { isStudentAuthenticated,CheckStudentLogin } = useStudentAuth();
+    CheckStudentLogin();
     if (isStudentAuthenticated) {
+      
       return <>{element}</>;
     } else {
       return <Navigate to={"/student/login"} replace />;
     }
   };
     return (
+      <div
+      style={{
+        background: darkMode ? 'rgb(33, 37, 41)' : 'white', // Set your preferred background color
+        height: 'calc(100vh - 20px)',
+      }}
+    >
+      <ConfigProvider theme={{ // Apply the Ant Design dark theme
+        ...(darkMode ? { dark: true } : {}),
+      }}>
       <Router>
         <AuthProvider>
         <StudentAuthProvider>
@@ -94,6 +119,8 @@ const App = () => {
             <Route path="/admin/Login" element={isLoading ? <LoadingScreen />:<Login />} />
                 <Route path="/admin/ForgetPass" element={isLoading ? <LoadingScreen />:<ForgAdmPass />}/>
                 <Route path="/admin/dashboard" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<Layout1 element={<Dash />}/>}/>}/>
+                
+                <Route path="/admin/dashboard/Calendar" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<Layout1 element={<Admincalendar />}/>}/>}/>
                 <Route path="/admin/Complaints" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Complaintsview />}/>}/>} />
                 <Route path="/admin/Activity/post" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<CreatePost />}/>} />
                 <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventFormCreation />}/>}/>} />
@@ -110,7 +137,7 @@ const App = () => {
                 <Route path="/admin/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview />}/>}/>}/>} />
                 <Route path="/admin/Faculty/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<FacultyInfo />}/>}/>}/>}/>
                 <Route path="/admin/Activity/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<ActivityPanel />}/>}/>}/>
-
+                <Route path='/master/admin/' element={<CSVReaderComponent/>}/>
 
                 <Route path='/student/login' element={isLoading ? <LoadingScreen />:<StudentLogin/>} />
                 <Route path='/student/ForgetPass' element={isLoading ? <LoadingScreen />:<ForgetPass/>}/>
@@ -144,6 +171,8 @@ const App = () => {
           </StudentAuthProvider>
         </AuthProvider>
       </Router>
+      </ConfigProvider>
+      </div>
     );
   };
   const LoadingScreen = () => (

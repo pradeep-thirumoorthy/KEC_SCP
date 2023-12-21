@@ -8,9 +8,8 @@ export function StudentAuthProvider({ children }) {
   const [isStudentAuthenticated, setIsStudentAuthenticated] = useState(false);
 
   useEffect(() => {
-    const storedAuthStatus = Cookies.get('isStudentAuthenticated');
-    if (storedAuthStatus) {
-      setIsStudentAuthenticated(JSON.parse(storedAuthStatus));
+    if (sessionStorage.getItem('StudentEmail')) {
+      setIsStudentAuthenticated(true);
     }
   }, []);
 
@@ -19,8 +18,7 @@ export function StudentAuthProvider({ children }) {
     Cookies.set('isStudentAuthenticated', true, { expires: 1 });
     const encryptedEmail = CryptoJS.AES.encrypt(email, 'student-_?info').toString();
     Cookies.set('StudentEmail', encryptedEmail, { expires: 1 });
-    sessionStorage.setItem('StudentEmail', encryptedEmail); // Store encrypted email in sessionStorage
-    Cookies.remove('isAuthenticated');
+    sessionStorage.setItem('StudentEmail', encryptedEmail);
     Cookies.remove('AdminEmail');
   };
 
@@ -30,9 +28,25 @@ export function StudentAuthProvider({ children }) {
     Cookies.remove('StudentEmail');
     sessionStorage.removeItem('StudentEmail'); // Clear the encrypted email from sessionStorage on logout
   };
+  const CheckStudentLogin = () => {
+    if(!sessionStorage.getItem('StudentEmail')){
+      if(Cookies.get('StudentEmail')){
+        const Email=Cookies.get('StudentEmail');
+        sessionStorage.setItem('StudentEmail',Email);
+        
+        setIsStudentAuthenticated(true);
+      }
+      else{
+        setIsStudentAuthenticated(false);
+        console.log("There is no more log");
+      }
+    }
+    else{
+    }
+  };
 
   return (
-    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, logout }}>
+    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, logout ,CheckStudentLogin}}>
       {children}
     </StudentAuthContext.Provider>
   );

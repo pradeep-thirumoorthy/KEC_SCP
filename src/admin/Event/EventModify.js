@@ -3,7 +3,6 @@ import axios from 'axios';
 import FNF from '../../FNF';
 import { useNavigate, useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 import { Button, Card, Flex, Input, Radio, Select } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
@@ -23,7 +22,7 @@ const EventModifier = () => {
   const [department,setDepartment]=useState('Not Applied');
   const [Class,setClass]=useState('Not Applied');
   const [Batch,setBatch]=useState('Not Applied');
-  const Email = Cookies.get('AdminEmail');
+  const Email = sessionStorage.getItem('AdminEmail');
   const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const EventModifier = () => {
     }, MAX_TIMEOUT);
   
     axios
-      .get(`http://localhost:8000/SCP/Eventmodify.php?email=${email}&EventId=${eventId}`)
+      .get(`http://localhost:8000/Eventmodify.php?email=${email}&EventId=${eventId}`)
       .then(response => {
         clearTimeout(timeoutId); // Clear the timeout since response was received
         const data = response.data;
@@ -93,7 +92,7 @@ const EventModifier = () => {
   };
   const handleSubmit = () => {
     const constraint = JSON.stringify([department,Batch,Class]);
-    axios.post('http://localhost:8000/SCP/modifyevent.php', {limit,lastDate,status,eventId,email,visibility,constraint},)
+    axios.post('http://localhost:8000/modifyevent.php', {limit,lastDate,status,eventId,email,visibility,constraint},)
       .then(response => {
         if (response.data.success) {
           window.confirm('successfully updated');
@@ -127,7 +126,7 @@ const EventModifier = () => {
   return (
     <>
       <div className='h-100'>
-          <Card hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/SCP/Upload/${eventId}.png)`,
+          <Card hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/Upload/${eventId}.png)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',}}>

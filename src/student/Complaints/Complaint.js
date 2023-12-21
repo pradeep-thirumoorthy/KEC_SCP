@@ -3,11 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Card, Col, Flex, Popover, Row } from 'antd';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 const ComplaintStatus = () => {
-  const Email = Cookies.get('StudentEmail');
+  const Email = sessionStorage.getItem('StudentEmail');
   const secretKey = 'student-_?info';
   const bytes = CryptoJS.AES.decrypt(Email, secretKey);
   const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -31,7 +30,7 @@ const ComplaintStatus = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/SCP/Complaint.php?email=${email}`)
+      .get(`http://localhost:8000/Complaint.php?email=${email}`)
       .then((response) => {
         const data = response.data.data; // Assuming the data structure is as provided
         console.log(JSON.stringify(data));
@@ -46,12 +45,12 @@ const ComplaintStatus = () => {
 
   return (
     <>
-      <div className=' bg-light row '>
+      <div className=' row '>
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
             <span className='fs-2 fw-bolder fst-italic'> Complaints</span>
             <br></br>
-            <span className='text-black-50 fst-italic no-warp'>Here are your complaints</span>
+            <span className=' fst-italic no-warp'>Here are your complaints</span>
           </div>
         </div>
       </div>

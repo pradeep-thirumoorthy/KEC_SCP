@@ -3,7 +3,7 @@ import { Badge, Calendar, Modal, Button, List, Pagination } from 'antd';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
-const Nfcalendar = () => {
+const Admincalendar = () => {
     
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -55,10 +55,10 @@ const Nfcalendar = () => {
       
     const filterData = async () => {
         try {
-          const Email = sessionStorage.getItem('StudentEmail');
-          const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
+          const Email = sessionStorage.getItem('AdminEmail');
+          const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
           const email = bytes.toString(CryptoJS.enc.Utf8);
-          const apiUrl = 'http://localhost:8000/StudentCalendar.php';
+          const apiUrl = 'http://localhost:8000/AdminCalendar.php';
           const params = {
             email: email,
           };
@@ -119,7 +119,12 @@ const Nfcalendar = () => {
     }, []); // Fetch data when the component mounts
     const handleButtonClick=(rowData)=>
   {
-    navigate('/student/Complaints/Panel', { state: { info: rowData ,Heading:'Complaints'} });
+    if(rowData.Status==='Arrived'){
+      navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
+    }
+    if(rowData.Status==='Accepted'){
+      navigate('/admin/Activity/Panel', { state: { info: rowData } });
+    }
   };
   return (
     <>
@@ -168,4 +173,4 @@ const Nfcalendar = () => {
   );
 };
 
-export default Nfcalendar;
+export default Admincalendar;

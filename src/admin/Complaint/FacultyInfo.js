@@ -6,7 +6,6 @@ import { TbArrowForwardUp } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { Descriptions } from "antd";
-import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { message,ConfigProvider } from 'antd';
 
@@ -38,7 +37,7 @@ const FacultyInfo = () => {
       return;
     }
 
-    const apiUrl = `http://localhost:8000/SCP/getdesignation.php?designation=${Designation}`;
+    const apiUrl = `http://localhost:8000/getdesignation.php?designation=${Designation}`;
 
     axios
       .get(apiUrl, { designation: Designation })
@@ -67,7 +66,7 @@ const FacultyInfo = () => {
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/SCP/ForwardComplaint.php", {
+        .post("http://localhost:8000/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -93,7 +92,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/SCP/Facultyforward.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/Facultyforward.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -117,7 +116,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/SCP/Facultyforward.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/Facultyforward.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -147,18 +146,18 @@ const FacultyInfo = () => {
     }
   }
   }, [info]);
-  const Email = Cookies.get("AdminEmail");
+  const Email = sessionStorage.getItem('AdminEmail');
   const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
   const email = bytes.toString(CryptoJS.enc.Utf8);
 
   return (
     <div className="vh-100">
-      <div className="bg-light row">
+      <div className="row">
         <div className="row border-bottom pb-3">
           <div className="col-lg-12">
             <span className="fs-2 fw-bolder fst-italic">Complaint Info</span>
             <br />
-            <span className="text-black-50 fst-italic no-wrap">Here is the Info of the complaint arrived</span>
+            <span className=" fst-italic no-wrap">Here is the Info of the complaint arrived</span>
           </div>
         </div>
       </div>
@@ -171,13 +170,10 @@ const FacultyInfo = () => {
   }}
 >
 <Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}} labelStyle={{color:'black',fontStyle:'oblique'}} >
-            <Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
-            <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
-            <Descriptions.Item label="Email">{info.email}</Descriptions.Item>
-            <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
+            
             <Descriptions.Item label="Courses">{info.Subjectname}</Descriptions.Item>
             <Descriptions.Item label="Faculty">{info.FacultyName}</Descriptions.Item>
-            
+            <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
             <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
             <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>
             <Descriptions.Item label="Date">{info.info1}</Descriptions.Item>
@@ -208,7 +204,7 @@ const FacultyInfo = () => {
     title="No Complaint Choosen"
     subTitle="Please check and modify the following information before resubmitting."
     extra={[
-      <Button type="primary" onClick={()=>{navigate('/admin/Complaints/Faculty')}}>
+      <Button type="primary" onClick={()=>{navigate('/admin/Faculty')}}>
         Go Console
       </Button>
     ]}

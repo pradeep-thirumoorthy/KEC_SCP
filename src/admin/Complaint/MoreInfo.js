@@ -6,7 +6,6 @@ import { TbArrowForwardUp } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { Descriptions } from "antd";
-import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { message,ConfigProvider } from 'antd';
 
@@ -38,7 +37,7 @@ const Forward = () => {
       return;
     }
 
-    const apiUrl = `http://localhost:8000/SCP/getdesignation.php?designation=${Designation}`;
+    const apiUrl = `http://localhost:8000/getdesignation.php?designation=${Designation}`;
 
     axios
       .get(apiUrl, { designation: Designation })
@@ -67,7 +66,7 @@ const Forward = () => {
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/SCP/ForwardComplaint.php", {
+        .post("http://localhost:8000/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -93,7 +92,7 @@ const Forward = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/SCP/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -117,7 +116,7 @@ const Forward = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/SCP/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -147,18 +146,18 @@ const Forward = () => {
     }
   }
   }, [info]);
-  const Email = Cookies.get("AdminEmail");
+  const Email = sessionStorage.getItem('AdminEmail');
   const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
   const email = bytes.toString(CryptoJS.enc.Utf8);
 
   return (
     <div className="vh-100">
-      <div className="bg-light row">
+      <div className="row">
         <div className="row border-bottom pb-3">
           <div className="col-lg-12">
             <span className="fs-2 fw-bolder fst-italic">Complaint Info</span>
             <br />
-            <span className="text-black-50 fst-italic no-wrap">Here is the Info of the complaint arrived</span>
+            <span className=" fst-italic no-wrap">Here is the Info of the complaint arrived</span>
           </div>
         </div>
       </div>

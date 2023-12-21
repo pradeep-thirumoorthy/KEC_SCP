@@ -35,7 +35,7 @@ const StudentActivityPanel = () => {
     {
       title: 'Completed',
       content: 'Last-content',
-      disabled: (info.info4==='')?true:false,
+      disabled: (info.info4==='' || info.Status==='Rejected')?true:false,
     },
   ];
 

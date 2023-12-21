@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Card, Input, Space } from 'antd';
 
@@ -17,7 +16,7 @@ const EventInfoWrapper = () => {
   const [userInputData, setUserInputData] = useState({}); // Initialize with an empty object
 
   const navigate = useNavigate();
-  const Email = Cookies.get("StudentEmail");
+  const Email = sessionStorage.getItem("StudentEmail");
   const secretKey = "student-_?info";
   const bytes = CryptoJS.AES.decrypt(Email, secretKey);
   const email = bytes.toString(CryptoJS.enc.Utf8);
@@ -31,7 +30,7 @@ const EventInfoWrapper = () => {
     }, MAX_TIMEOUT);
 
     axios
-      .get(`http://localhost:8000/SCP/getEventInfo.php?eventId=${eventId}&email=${email}`)
+      .get(`http://localhost:8000/getEventInfo.php?eventId=${eventId}&email=${email}`)
       .then(response => {
         clearTimeout(timeoutId);
         const data = response.data;
@@ -73,7 +72,7 @@ const EventInfoWrapper = () => {
     e.preventDefault();
 
     if (Formdata && Formdata.inputs && Formdata.inputs.length !== 0) {
-      axios.post('http://localhost:8000/SCP/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
+      axios.post('http://localhost:8000/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
         .then(response => {
           if (response.data.success) {
             console.log("Event data inserted successfully");

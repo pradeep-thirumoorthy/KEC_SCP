@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers,FiLogOut } from 'react-icons/fi';
 import { useStudentAuth } from './student/StudentAuthContext';
 import { useNavigate, useLocation } from 'react-router';
-import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,9 +16,34 @@ const Layout2 = ({element}) => {
     const { logout } = useStudentAuth();
     const [dropdownStates, setDropdownStates] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    
 
+
+  const [selectedTheme, setSelectedTheme] = useState('light'); // Default theme
+  // Function to set the theme based on user selection
+  const setTheme = (theme) => {
+    setSelectedTheme(theme);
+    localStorage.setItem('theme', theme); // Save theme preference to localStorage
+  };
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setSelectedTheme(storedTheme);
+    }
+  }, []);
+
+
+  const isWideLayout = window.innerWidth > 991;
+  const customTheme = {
+    ...theme,
+    textColorPrimary: selectedTheme === 'dark' ? '#ffffff' : 'dark', // Example text color based on theme
+    backgroundColorPrimary: selectedTheme === 'dark' ? '#212529' : '#ffffff', // Example background color based on theme
+    // Add more customizations as needed...
+  };
   // Update windowWidth when the window is resized
   useEffect(() => {
+    console.log(selectedTheme);
     const foldersToCheck = [
         '/student/dashboard',
         '/student/Complaint',
@@ -64,21 +88,15 @@ const logo = {
     width: '50px',
     height: '50px',
 };
-const Email = Cookies.get("StudentEmail");
+const Email = sessionStorage.getItem("StudentEmail");
 const secretKey = "student-_?info";
 const bytes = CryptoJS.AES.decrypt(Email, secretKey);
 const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
 const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
-
-
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-  const isWideLayout = windowWidth > 991;
   return (
     
     <Layout>
-      <Sider theme='dark' style={{height:'100vh',position:'fixed',backgroundColor:'#212529',zIndex:'5'}}
+      <Sider theme={(selectedTheme==='light')?'dark':'light'} style={{height:'100vh',position:'fixed',zIndex:'5'}}
         breakpoint="lg"
         collapsedWidth="0"
         onBreakpoint={(broken) => {
@@ -89,7 +107,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
         }}
       >
         <div style={{height:'100vh',display:'flex', flexDirection:'column',alignItems: 'flex-end'}}>
-              <div className="text-white w-100 text-white text-center">
+              <div className=" w-100 text-center">
                   <a href="/" className="link-light text-decoration-none text-white text-center">
                       <span className=" fs-4 text-white">
                           <img className="rounded " style={logo} src={he} alt=""></img>
@@ -100,7 +118,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
               <ul className="sidebar_1 nav nav-pills flex-column mb-auto w-100">
                   <li className="nav-item w-100 " >
 
-                  <Accordion className='bg-dark' activeKey={dropdownStates['/student/dashboard'] ? 'dashboard' : null}>
+                  <Accordion className='' activeKey={dropdownStates['/student/dashboard'] ? 'dashboard' : null}>
                         <Card className=' border-0 bg-dark '>
                                 <button
                                     type="button"
@@ -187,7 +205,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                 </li>
                 <li className="nav-item w-100 " >
                     <Accordion className='bg-dark'activeKey={dropdownStates['/student/Activity'] ? 'activity' : null}>
-                        <Card className=' border-0 bg-dark '>
+                        <Card className=' border-0 '>
                             
                                 <button
                                     type="button"
@@ -293,19 +311,21 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                   </div>
         </div>
       </Sider>
-      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0' }}>
-        
+      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0'}}>
         <Content
           style={{
-            margin: '0 6px 0',
+            background: selectedTheme === 'dark' ? '#212529' : '#ffffff', // Apply background based on theme
+            color: selectedTheme === 'dark' ? '#ffffff' : '#000000', // Apply text color based on theme
           }}
         >
           <div
             style={{
               minHeight: 360,
-              background: colorBgContainer,
             }}
           >
+            <button onClick={() => setTheme(selectedTheme === 'dark' ? 'light' : 'dark')}>
+        Toggle Theme
+      </button>
             {element}
           </div>
         </Content>
