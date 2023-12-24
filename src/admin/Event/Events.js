@@ -4,8 +4,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FiCircle} from 'react-icons/fi';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { Table, Button } from 'antd';
-
+import { Table, Button,Typography } from 'antd';
+import Link from 'antd/es/typography/Link';
 const MAX_TIMEOUT = 10000;
 
 const Events = () => {
@@ -103,16 +103,16 @@ const Events = () => {
             {/* Your header */}
           </div>
           <div className='row'>
-            <span className='fs-2 fw-bolder fst-italic'>Your Events:</span>
+            <Typography className='fs-2 fw-bolder fst-italic'>Your Events:</Typography>
             <div>
               <div className='rounded-3 m-2'>
                 <Table scroll={{x:1000}}
                   columns={columns}
                   dataSource={mappedTableData}
-                  bordered
+                  
                   pagination={false}
                 />
-                <a href='/admin/Events/Fullview'>See More</a>
+                <Link  href='/admin/Events/Fullview'>See More</Link>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { EditOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Card, Flex, Image} from 'antd';
+import { Card, Flex, Image, Typography} from 'antd';
 const MAX_TIMEOUT = 10000;
 
 const FullEvents = () => {
@@ -47,7 +47,7 @@ const FullEvents = () => {
 
   const renderEventCards = () => {
     return EventData.map((item) => (
-      <Card bordered
+      <Card 
         style={{ width: 300 }}
         cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
@@ -56,7 +56,7 @@ const FullEvents = () => {
         hoverable
         key={item.event_id}
       >
-        <Card.Meta 
+        < Card.Meta  
           title={item.Title}
           description={<><p>Limit: {item.Limits}</p>
           <p>Start Date: {item.Date}</p>
@@ -68,7 +68,7 @@ const FullEvents = () => {
   };
   const renderEventCards2 = () => {
     return EventData.map((item) => (
-      <Card bordered
+      <Card 
         style={{ width: 300 }}
         cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
@@ -77,7 +77,7 @@ const FullEvents = () => {
         hoverable
         key={item.event_id}
       >
-        <Card.Meta 
+        < Card.Meta  
           title={item.Title}
           description={<><p>Limit: {item.Limits}</p>
           <p>Start Date: {item.Date}</p>
@@ -89,7 +89,7 @@ const FullEvents = () => {
   };
   const renderEventCards3 = () => {
     return EventData.map((item) => (
-      <Card bordered
+      <Card 
         style={{ width: 300 }}
         cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
@@ -98,7 +98,7 @@ const FullEvents = () => {
         hoverable
         key={item.event_id}
       >
-        <Card.Meta 
+        < Card.Meta  
           title={item.Title}
           description={<><p>Limit: {item.Limits}</p>
           <p>Start Date: {item.Date}</p>
@@ -120,7 +120,7 @@ const FullEvents = () => {
           <div className=" row ">
           </div>
           <div className='row'>
-            <span className='fs-2 fw-bolder fst-italic'>Public Events:</span>
+            <Typography className='fs-2 fw-bolder fst-italic'>Public Events:</Typography>
             <Flex justify='center' align="center" wrap="wrap" gap="small">
         {renderEventCards()}
       </Flex>

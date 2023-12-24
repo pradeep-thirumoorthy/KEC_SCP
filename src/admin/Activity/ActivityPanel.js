@@ -3,7 +3,7 @@ import { FiArrowUp, FiCheck } from "react-icons/fi";
 import { useLocation,useNavigate } from 'react-router-dom';
 import CryptoJS from "crypto-js";
 import axios from "axios";
-import { Button, ConfigProvider, Descriptions, Result} from "antd";
+import { Button, ConfigProvider, Descriptions, Result, Typography} from "antd";
 import TextArea from "antd/es/input/TextArea";
 const ActivityPanel = () => {
   const location = useLocation();
@@ -64,20 +64,14 @@ const ActivityPanel = () => {
         <div className=" row ">
                 <div className="row border-bottom pb-3">
                   <div className="col-lg-12">
-                    <span className="fs-2 fw-bolder fst-italic">Activity Panel</span><br />
-                    <span className=" fst-italic no-warp">Here is the Info of the complaint arrived</span>
+                    <Typography className="fs-2 fw-bolder fst-italic">Activity Panel</Typography><br />
+                    <Typography className=" fst-italic no-warp">Here is the Info of the complaint arrived</Typography>
                   </div>
                 </div>
               </div>
               {info?<ConfigProvider
-  theme={{
-    token: {
-      colorFillAlter:'#d8d8d8',
-      colorSplit:'#999999'
-    },
-  }}
->
-<Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{color:'black',fontStyle:'oblique'}} >
+  >
+<Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{fontStyle:'oblique'}} >
             <Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
             <Descriptions.Item label="Complaint_Id">{info.Complaint_Id}</Descriptions.Item>
             <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
@@ -93,8 +87,8 @@ const ActivityPanel = () => {
             
           </Descriptions>
       <div className="d-flex justify-content-center align-items-center">
-            <h5><div>Update:</div><div>
-              <TextArea value={Update}onChange={handleValue} rows={2} cols={40} maxLength={50}/></div></h5></div>
+            <Typography.Title level={5}><div>Update:</div><div>
+              <TextArea value={Update}onChange={handleValue} rows={2} cols={40} maxLength={50}/></div></Typography.Title></div>
       <div className="d-flex justify-content-center my-5" id="access">
       <div className="row h-auto">
             <div className="col-6">

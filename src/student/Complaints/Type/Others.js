@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import {Breadcrumb, Radio, TreeSelect, message } from 'antd';
+import {Breadcrumb, Radio, TreeSelect, Typography, message } from 'antd';
 import { Input, Button,} from 'antd'; // Import InputNumber instead of TextArea
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import Link from 'antd/es/typography/Link';
 const Faculty = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
@@ -117,7 +118,7 @@ const Faculty = () => {
         title: 'Student',
       },
       {
-        title: <a style={{textDecoration:'none'}} href="/student/Complaint">Complaint</a>,
+        title: <Link  style={{textDecoration:'none'}} href="/student/Complaint">Complaint</Link>,
       },
       {
         title:'Faculty',
@@ -126,9 +127,9 @@ const Faculty = () => {
   />
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
-            <span className='fs-2 fw-bolder fst-italic'>Others Entry:</span>
+            <Typography className='fs-2 fw-bolder fst-italic'>Others Entry:</Typography>
             <br></br>
-            <span className=' fst-italic no-warp'>Enter your complaints based on Acadamics</span>
+            <Typography className=' fst-italic no-warp'>Enter your complaints based on Acadamics</Typography>
           </div>
         </div>
       </div>

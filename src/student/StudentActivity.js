@@ -4,7 +4,7 @@ import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
-import { Radio,Table,Space,Button, Input } from 'antd';
+import { Radio,Table,Space,Button, Input, Typography } from 'antd';
 const StudentActivity= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -164,7 +164,7 @@ console.log('Value 2:', value2);
         <>
         <div className='row'>
                 <div className="App">
-      <h1>Activity:</h1>
+      <Typography.Title level={1}>Activity:</Typography.Title>
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
@@ -210,7 +210,7 @@ console.log('Value 2:', value2);
       )}
       
     </div>
-    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange} z bordered pagination={false}/>;
+    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange} z  pagination={false}/>;
               </div>
         </>
       );

@@ -1,4 +1,4 @@
-import { Layout, theme } from 'antd';
+import { Layout, theme,Button,Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
 import { useAuth } from './admin/AuthContext';
@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
 import checkEmail from './FacultyAccess';
 import Card from 'react-bootstrap/Card';
+import Link from 'antd/es/typography/Link';
 const {  Content, Sider } = Layout;
 const Layout1 = ({element}) => {
     const navigate = useNavigate();
@@ -17,7 +18,14 @@ const Layout1 = ({element}) => {
     const [dropdownStates, setDropdownStates] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [checkedEmail, setCheckedEmail] = useState(false);
+    const [selectedTheme, setSelectedTheme] = useState('light'); 
   // Update windowWidth when the window is resized
+  const setTheme = (theme) => {
+    window.location.reload();
+    setSelectedTheme(theme);
+    localStorage.setItem('theme', theme);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,6 +40,12 @@ const Layout1 = ({element}) => {
     fetchData();
   }, []);
   useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setSelectedTheme(storedTheme);
+    }
+    console.log(selectedTheme);
+
     const foldersToCheck = [
         '/admin/dashboard',
         '/admin/Complaints',
@@ -40,7 +54,6 @@ const Layout1 = ({element}) => {
         '/admin/History',
         '/admin/PersonalInfo',
         '/admin/createPost',
-        
         '/admin/Faculty',
     ];
     const dropdownStatesUpdates = {};
@@ -77,7 +90,6 @@ const logo = {
     width: '50px',
     height: '50px',
 };
-const isEventPage = location.pathname.toLowerCase().includes('/admin/events');
 const Email = sessionStorage.getItem('AdminEmail');
 const secretKey = "admin-_?info";
 const bytes = CryptoJS.AES.decrypt(Email, secretKey);
@@ -92,246 +104,241 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
   return (
     
     <Layout>
-      <Sider theme='dark' style={{height:'100vh',position:'fixed',backgroundColor:'#212529',zIndex:'5'}}
+      <Sider style={{height:'100vh',position:'fixed',zIndex:'5'}}
         breakpoint="lg"
         collapsedWidth="0"
-        onBreakpoint={(broken) => {
-        }}
-        onCollapse={(collapsed, type) => {
-        }}
       >
         <div style={{height:'100vh',display:'flex', flexDirection:'column',alignItems: 'flex-end'}}>
-              <div className="text-white w-100 text-white text-center">
-                  <a href="/" className="link-light text-decoration-none text-white text-center">
-                      <span className=" fs-4 text-white">
+        <div className={` w-100 text-center`}>
+                  <Link  href="/" className={`link-light text-decoration-none text-white text-center`}>
+                      <Typography className={` fs-4 text-white`}>
                           <img className="rounded " style={logo} src={he} alt=""></img>
-                      </span>
-                  </a>
+                      </Typography>
+                  </Link>
               </div>
               <hr className="bg-white "></hr>
               <ul className="nav nav-pills flex-column w-100">
                   <li className="nav-item w-100 " >
 
-                  <Accordion className='bg-dark' activeKey={dropdownStates['/admin/dashboard'] ? 'dashboard' : null}>
-                        <Card className=' border-0 bg-dark '>
-                                <button
+                  <Accordion  activeKey={dropdownStates['/admin/dashboard'] ? 'dashboard' : null}>
+
+                                <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/dashboard'] ? 'bg-light text-black' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/dashboard'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/dashboard')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse"
                                     aria-expanded="true"
                                 >
                                     <FiPieChart size={25} />Dash
-                                </button>
+                                </Button>
                             <Accordion.Collapse eventKey="dashboard">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled pb-1 small d-block list-group">
-                                        <li><a href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        <li><a href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
-                                        <li><a href="/admin/dashboard/Calendar"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/dashboard/Calendar' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Calendar</a></li>
+                                        <li><Link  href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
+                                        <li><Link  href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</Link></li>
+                                        <li><Link  href="/admin/dashboard/Calendar"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/dashboard/Calendar' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Calendar</Link></li>
                                    </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                   </li>
                   <li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/Complaints'] ? 'complaints' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/Complaints'] ? 'complaints' : null}>
+
                             
-                                <button 
+                                <Button 
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Complaints'] ? 'bg-light text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Complaints'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Complaints')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
                                     <FiTrello size={25}/>Complaint
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="complaints">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
-                                        <li><a href="#overview"  className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        <li><a href="/admin/Complaints/MoreInfo"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</a></li>
+                                        <li><Link  href="#overview"  className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
+                                        <li><Link  href="/admin/Complaints/MoreInfo"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
+                    
                 </li>
                 {(checkedEmail)?<><li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/Faculty'] ? 'Faculty' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/Faculty'] ? 'Faculty' : null}>
+
                             
-                                <button 
+                                <Button 
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Faculty'] ? 'bg-light text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Faculty'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Faculty')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
                                     <FiTrello size={25}/>Faculty
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="Faculty">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
-                                        <li><a href="/admin/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</a></li>
-                                        <li><a href="/admin/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</a></li>
+                                        <li><Link  href="/admin/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
+                                        <li><Link  href="/admin/Faculty/Panel" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FacultyInfo</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                 </li></>:<></>}
                 {/* Events */}
                 <li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={isEventPage ? 'events' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/Events'] ? 'events' : null}>
+
                             
-                                <button
+                                <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${isEventPage ? 'bg-white text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Events'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Events')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse2"
                                     aria-expanded="false"
                                 >
                                     <FiFileText size={25} />Events
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="events">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
                                         <li>
-                                            <a href='/admin/Events/Fullview' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/Fullview' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Fullview</a>
+                                            <Link  href='/admin/Events/Fullview' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/Fullview' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Fullview</Link>
                                             </li><li>
-                                            <a href='/admin/Events/EventFormCreation' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/EventFormCreation' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Create</a>
+                                            <Link  href='/admin/Events/EventFormCreation' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/EventFormCreation' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Create</Link>
                                             </li>
                                             <li>
-                                                <span className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/modify')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Modify</span>
+                                                <Typography className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/modify')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Modify</Typography>
                                             </li>
                                             <li>
-                                            <span className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/response')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Response</span>
+                                            <Typography className={` w-100 btn m-0 p-0 border-0 ${(location.pathname.includes('/admin/Events/') && location.pathname.includes('/response')) ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Response</Typography>
                                             </li>
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                 </li>
                 <li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/Activity'] ? 'activity' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/Activity'] ? 'activity' : null}>
+
                             
-                                <button
+                                <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Activity'] ? 'bg-white text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Activity'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Activity')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse3"
                                     aria-expanded="false"
                                 >
                                     <FiCheckCircle  size={25}/>Activity
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="activity">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><a href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        <li><a href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
-                                        <li><a href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</a></li>
+                                        <li><Link  href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
+                                        <li><Link  href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</Link></li>
+                                        <li><Link  href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                 </li>
                 {/* Event */}
                 <li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/History'] ? 'history' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/History'] ? 'history' : null}>
+
                             
-                                <button
+                                <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/History'] ? 'bg-white text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/History'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/admin/History')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
                                     <FiLayers  size={25}/>History
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="history">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><a href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</a></li>
-                                        <li><a href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</a></li>
-                                        <li><a href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</a></li>
+                                        <li><Link  href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
+                                        <li><Link  href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</Link></li>
+                                        <li><Link  href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                 </li>
                 {/* Account */}
                 <li className="nav-item w-100 " >
-                    <Accordion className='bg-dark'activeKey={dropdownStates['/admin/PersonalInfo'] ? 'PersonalInfo' : null}>
-                        <Card className=' border-0 bg-dark '>
+                    <Accordion activeKey={dropdownStates['/admin/PersonalInfo'] ? 'PersonalInfo' : null}>
+
                             
-                                <button
+                                <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/PersonalInfo'] ? 'bg-white text-dark' : 'bg-dark text-white'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/PersonalInfo'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/admin/PersonalInfo')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
                                     <FiUser  size={25}/>Account
-                                </button>
+                                </Button>
                             
                             <Accordion.Collapse eventKey="PersonalInfo">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        {/* <li><a href="/admin/PersonalInfo/Contact" className="link-light text-white-50 w-100 btn m-0 p-0">Contact Admin</a></li> */}
+                                        {/* <li><Link  href="/admin/PersonalInfo/Contact" className="link-light text-white-50 w-100 btn m-0 p-0">Contact Admin</Link></li> */}
                                     </ul>
                                 
                             </Accordion.Collapse>
-                        </Card>
+
                     </Accordion>
                 </li>
               </ul>
                   <div className="w-100 text-center mt-auto mb-5 mb-sm-0">
-                      <button className="btn bg-transparent text-center align-items-center link-light text-decoration-none" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                          <img src={he} alt="" width="32" height="32" className="rounded-circle border border-white border-3"></img>
-                          {tenUsername}
-                        </button>
+                      <Button className={`btn bg-transparent text-center link-light text-white-50 w-100 align-items-center d-flex justify-content-center`} id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3"></img>
+                              {tenUsername}
+                        </Button>
                       <ul className="w-100 dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                          <li><a className="dropdown-item" href="/">Home</a></li>
-                          <li><a className="dropdown-item" href="/about">About</a></li>
-                          <li><a className="dropdown-item" href="/Contact">Contact</a></li>
-                          <li><hr className="dropdown-divider"></hr></li>
-                          <li><button className="dropdown-item" href="#" onClick={handlelogout}><FiLogOut className='mx-2'/>Sign out</button></li>
+                          <li><Link  className="dropdown-item" href="/">Home</Link></li>
+                          <li><Link  className="dropdown-item" href="/about">About</Link></li>
+                          <li><Link  className="dropdown-item" href="/Contact">Contact</Link></li>
+                          <li><hr className="dropdown-divider"></hr></li><li><Button className="dropdown-item btn" onClick={() => setTheme(selectedTheme === 'dark' ? 'light' : 'dark')}>
+        {selectedTheme} Theme
+      </Button></li>
+                          <li><Button className="dropdown-item" href="#" onClick={handlelogout}><FiLogOut className='mx-2'/>Sign out</Button></li>
                       </ul>
                   </div>
         </div>
       </Sider>
       <Layout style={{ marginLeft: isWideLayout ? '200px' : '0' }}>
         
-        <Content
-          style={{
-            margin: '0 6px 0',
-          }}
-        >
+        <Content>
           <div
             style={{
               minHeight: 360,
-              background: colorBgContainer,
+              background:colorBgContainer,
             }}
           >
             {element}

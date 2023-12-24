@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { ConfigProvider, Descriptions, List } from 'antd';
+import { ConfigProvider, Descriptions, List, Typography } from 'antd';
 
 const MAX_TIMEOUT = 10000;
 
@@ -66,7 +66,7 @@ const PersonalInfo = () => {
           </div>
         ) : (
           <div className="table-responsive">
-            <div className="p-5 fs-2 text-center">Personal Info</div>
+            <Typography.Title className="p-5 fs-2 text-center">Personal Info</Typography.Title>
             
             <Descriptions title="User Info" bordered column={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
               <Descriptions.Item label="Name">{adminData.adminInfo.Name}</Descriptions.Item>
@@ -75,17 +75,6 @@ const PersonalInfo = () => {
               <Descriptions.Item label="Email">{adminData.adminInfo.Email}</Descriptions.Item>
               <Descriptions.Item label="Department">{adminData.adminInfo.Department}</Descriptions.Item>
             </Descriptions>
-            <ConfigProvider
-  theme={{
-    token: {
-      colorTextSecondary:'#000000',
-      
-      colorText:'#888888',
-      colorFillAlter:'#e8e8e8',
-      colorSplit:'#999999'
-    },
-  }}
->
             <Descriptions title="Subject Details" bordered column={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
               {adminData.subjectData.map((subject, index) => (
                 <>
@@ -106,7 +95,6 @@ const PersonalInfo = () => {
                 </>
               ))}
               </Descriptions>
-              </ConfigProvider>
           </div>
         )}
       </div>

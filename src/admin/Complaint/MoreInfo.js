@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Modal, Result, Select } from "antd";
+import { Button, Modal, Result, Select, Typography } from "antd";
 import { FiCheck } from "react-icons/fi";
 import { TbArrowForwardUp } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
@@ -155,21 +155,15 @@ const Forward = () => {
       <div className="row">
         <div className="row border-bottom pb-3">
           <div className="col-lg-12">
-            <span className="fs-2 fw-bolder fst-italic">Complaint Info</span>
+            <Typography className="fs-2 fw-bolder fst-italic">Complaint Info</Typography>
             <br />
-            <span className=" fst-italic no-wrap">Here is the Info of the complaint arrived</span>
+            <Typography className=" fst-italic no-wrap">Here is the Info of the complaint arrived</Typography>
           </div>
         </div>
       </div>
       {info?<ConfigProvider
-  theme={{
-    token: {
-      colorFillAlter:'#d8d8d8',
-      colorSplit:'#999999'
-    },
-  }}
->
-<Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{color:'black',fontStyle:'oblique'}} >
+  >
+<Descriptions title="Complaint Data"   column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered labelStyle={{fontStyle:'oblique'}} >
             {(info.Type !== "Courses")?<><Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
             <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
             <Descriptions.Item label="Email">{info.email}</Descriptions.Item></>:<></>}

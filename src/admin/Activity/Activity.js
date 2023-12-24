@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, Space, Table,Typography } from 'antd';
 
 const Activity = () => {
   const [data, setData] = useState([]);
@@ -218,7 +218,7 @@ const Activity = () => {
     <>
       <div className="row">
         <div className="App">
-          <h1>Complaints:</h1>
+          <Typography.Title level={1}>Complaints:</Typography.Title>
           <div className="d-flex justify-content-around">
           
 
@@ -252,7 +252,8 @@ const Activity = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
+          {loading ? <Typography.Title level={1}>Loading</Typography.Title> : 
+          <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>

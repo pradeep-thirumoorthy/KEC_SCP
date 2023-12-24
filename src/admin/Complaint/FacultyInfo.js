@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Modal, Result, Select } from "antd";
+import { Button, Modal, Result, Select, Typography } from "antd";
 import { FiCheck } from "react-icons/fi";
 import { TbArrowForwardUp } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
@@ -155,21 +155,15 @@ const FacultyInfo = () => {
       <div className="row">
         <div className="row border-bottom pb-3">
           <div className="col-lg-12">
-            <span className="fs-2 fw-bolder fst-italic">Complaint Info</span>
+            <Typography className="fs-2 fw-bolder fst-italic">Complaint Info</Typography>
             <br />
-            <span className=" fst-italic no-wrap">Here is the Info of the complaint arrived</span>
+            <Typography className=" fst-italic no-wrap">Here is the Info of the complaint arrived</Typography>
           </div>
         </div>
       </div>
       {info?<ConfigProvider
-  theme={{
-    token: {
-      colorFillAlter:'#d8d8d8',
-      colorSplit:'#999999'
-    },
-  }}
->
-<Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}} labelStyle={{color:'black',fontStyle:'oblique'}} >
+  >
+<Descriptions title="Complaint Data"   column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}} labelStyle={{fontStyle:'oblique'}} >
             
             <Descriptions.Item label="Courses">{info.Subjectname}</Descriptions.Item>
             <Descriptions.Item label="Faculty">{info.FacultyName}</Descriptions.Item>

@@ -140,9 +140,9 @@ const EventFormCreation = () => {
                                     onChange={(e) => updateOptionValue(input.key, optionIndex, e.target.value)} required
                                 />
                                 {optionIndex !== 0 && (
-                                    <button className='outline-0 border-0 bg-transparent' onClick={() => deleteOption(input.key, optionIndex)}>
+                                    <Button className='outline-0 border-0 bg-transparent' onClick={() => deleteOption(input.key, optionIndex)}>
                                         <FiX />
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         )}
@@ -235,9 +235,9 @@ const EventFormCreation = () => {
         }}
       >
         <Flex align='center' justify='space-evenly' className='w-100' gap="middle">
-                    <span>Limit:</span>
+                    <Typography>Limit:</Typography>
                     <Input type='number' value={slimit} onChange={(e) => setlimit(e.target.value)} required max='100' min='1'/>
-                    <span style={{whiteSpace:'nowrap'}}>Last Date:</span>
+                    <Typography style={{whiteSpace:'nowrap'}}>Last Date:</Typography>
                     <Input type='date' value={lastDate} min={getTodayDate()} onChange={handleLastDateChange}/>
                     <Button onClick={generateInput}>Generate Input</Button>
                     
@@ -246,7 +246,7 @@ const EventFormCreation = () => {
       </Header>
       <Content className="site-layout" style={{ padding: '0 50px' }}>
         <form onSubmit={handleSubmit} className='col-12 float-end pt-5 mt-5 mt-lg-0'>
-                    <h1 className='text-center mt-5'>Event Form Creation</h1>
+                    <Typography.Title level={1} className='text-center mt-5'>Event Form Creation</Typography.Title>
                 <div className='px-5 pt-5 py-5 my-5 mx-lg-5 mx-sm-1 bg-info bg-opacity-10 rounded-3'>
                     <div className='form-group'>
                         <label className='form-label fs-3' htmlFor='title'>
@@ -369,16 +369,16 @@ const contentStyle = {
 const App = () => (
   <Carousel autoplay>
     <div>
-      <h3 style={contentStyle}>1</h3>
+      <Typography.Title level={3} style={contentStyle}>1</Typography.Title>
     </div>
     <div>
-      <h3 style={contentStyle}>2</h3>
+      <Typography.Title level={3} style={contentStyle}>2</Typography.Title>
     </div>
     <div>
-      <h3 style={contentStyle}>3</h3>
+      <Typography.Title level={3} style={contentStyle}>3</Typography.Title>
     </div>
     <div>
-      <h3 style={contentStyle}>4</h3>
+      <Typography.Title level={3} style={contentStyle}>4</Typography.Title>
     </div>
   </Carousel>
 );

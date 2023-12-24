@@ -8,6 +8,7 @@ import CryptoJS from 'crypto-js';
 const LineChartComponent = () => {
   const chartRef = useRef(null);
   const [complaintData, setComplaintData] = useState([]);
+  const [myChart, setMyChart] = useState(null);
 
   useEffect(() => {
     const apiUrl = 'http://localhost:8000/Linechart.php';
@@ -26,6 +27,9 @@ const LineChartComponent = () => {
   useEffect(() => {
     // Render the chart when the complaintData is available
     if (complaintData.length > 0) {
+      if (myChart) {
+        myChart.destroy(); // Destroy the existing chart before rendering a new one
+      }
       renderChart();
     }
   }, [complaintData]);
@@ -43,7 +47,8 @@ const LineChartComponent = () => {
     const xValues = lastTenData.map((item) => item.info1);
     const yValues = lastTenData.map((item) => item.count);
   
-    const myChart = new Chart(chartRef.current, {
+    const ctx = chartRef.current.getContext('2d');
+    const newChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: xValues,
@@ -64,6 +69,8 @@ const LineChartComponent = () => {
         },
       },
     });
+
+    setMyChart(newChart); // Set the new chart instance
   };
   
 

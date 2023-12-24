@@ -75,14 +75,14 @@ const TimelineComponent = ({ current,info }) => {
         setTimeData([
           {
             label: <div className='mx-5'>
-              <Descriptions bordered column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}>
+              <Descriptions  column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}>
           <Descriptions.Item label={"Resolved By"}>
             {JSON.parse(info.info4).Resolved[0]}
           </Descriptions.Item>
           
       </Descriptions>
             </div>,
-            children: <><Descriptions bordered column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}><Descriptions.Item label={"Resolved At"}>
+            children: <><Descriptions  column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}><Descriptions.Item label={"Resolved At"}>
             {JSON.parse(info.info4).Resolved[1]}
           </Descriptions.Item></Descriptions><br/><br/><br/><br/><br/></>,
             dot: <CarryOutOutlined style={{ fontSize: '30px',color:'green' }} />,
@@ -97,10 +97,10 @@ const TimelineComponent = ({ current,info }) => {
     {current === 0 ? (
   // Render content for current === 0
   <Descriptions
-    title="Complaint Data"
-    bordered
+    title="Complaint Data" bordered
+    
     column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
-    labelStyle={{ color: 'black', fontStyle: 'oblique' }}
+    labelStyle={{ fontStyle: 'oblique' }}
   >
     {info.Type !== 'Courses' ? (
       <>
@@ -161,7 +161,7 @@ const TimelineComponent = ({ current,info }) => {
         mode={'left'}
       >
         {timelineData.map((item, index) => (
-          <Timeline.Item  key={index} label={item.label} dot={item.dot}>
+          <Timeline.Item key={index} label={item.label} dot={item.dot}>
           {item.children}
         </Timeline.Item>
         

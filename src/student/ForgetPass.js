@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { Button, Card, Col, Image, Input, Row } from 'antd';
+import { Button, Card, Col, Image, Input, Row, Typography } from 'antd';
 import log from '../images/4841115.jpg';
 import logo from '../images/kec.jpg'
 import  { LeftCircleOutlined } from '@ant-design/icons';
@@ -123,7 +123,7 @@ const ForgetPass = () => {
   }
   return (
     
-    <Card hoverable className='m-lg-5 vh-100'>
+    <Card  hoverable className='m-lg-5 vh-100'>
     <Row gutter={20} justify="center" className='w-100 ' align="middle">  
                 
       <Col xs={24} lg={11}><Image src={log} preview={false}/>
@@ -133,7 +133,7 @@ const ForgetPass = () => {
       
         <Image src={logo} preview={false} height={50} width={50}/>
         
-      <h2>Student Forget Password</h2>
+      <Typography.Title level={2}>Student Forget Password</Typography.Title>
       </Col>
         <Row align={'middle'} justify={'end'} gutter={5} className='form-group was-validated'>
                       <Col xs={17} sm={17}>

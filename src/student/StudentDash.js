@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Typography } from 'antd';
 
 const StudentDash = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,10 +19,10 @@ const StudentDash = () => {
   return (
     <>
       {isLoading ? (
-        <h3 style={{fontFamily:"monospace"}}>Loading...</h3>
+        <Typography.Title level={3} style={{fontFamily:"monospace"}}>Loading...</Typography.Title>
       ) : (
         <>
-          <h1>Student Dashboard</h1>
+          <Typography.Title level={1}>Student Dashboard</Typography.Title>
         </>
         )}
     </>

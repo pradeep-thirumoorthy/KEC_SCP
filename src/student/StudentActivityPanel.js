@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import TimelineComponent from './TimelineComponent';
-import { Divider, Steps } from 'antd';
+import { Divider, Steps, Typography } from 'antd';
 
 const StudentActivityPanel = () => {
   const [current, setCurrent] = useState(0);
@@ -47,7 +47,7 @@ const StudentActivityPanel = () => {
 
   return (
     <>
-      <h1>{Heading}</h1>
+      <Typography.Title level={1}>{Heading}</Typography.Title>
       <>
       {}
         <Steps current={current} className=' px-5' onChange={onchange} items={items} />

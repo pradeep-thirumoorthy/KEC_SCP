@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import {Breadcrumb, Flex, Radio, Select, TreeSelect, message } from 'antd';
+import {Breadcrumb, Flex, Radio, Select, TreeSelect, Typography, message } from 'antd';
 import { Input, Button,} from 'antd'; // Import InputNumber instead of TextArea
 import { useNavigate } from 'react-router-dom';
 import { Option } from 'antd/es/mentions';
 import TextArea from 'antd/es/input/TextArea';
+import Link from 'antd/es/typography/Link';
 const Maintenance = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
@@ -176,7 +177,7 @@ const Maintenance = () => {
         title: 'Student',
       },
       {
-        title: <a style={{textDecoration:'none'}} href="/student/Complaint">Complaint</a>,
+        title: <Link  style={{textDecoration:'none'}} href="/student/Complaint">Complaint</Link>,
       },
       {
         title:'Maintenance',
@@ -185,9 +186,9 @@ const Maintenance = () => {
   />
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
-            <span className='fs-2 fw-bolder fst-italic'> Maintenance Entry</span>
+            <Typography className='fs-2 fw-bolder fst-italic'> Maintenance Entry</Typography>
             <br></br>
-            <span className=' fst-italic no-warp'>Here are your complaints</span>
+            <Typography className=' fst-italic no-warp'>Here are your complaints</Typography>
           </div>
         </div>
       </div>
@@ -285,7 +286,7 @@ const Maintenance = () => {
         <div className='col-lg-6 col-sm-12 '>
         <div className='col-lg-6 col-sm-12 mx-5 my-3'  style={{width:'80%'}}>
           <div className='my-2'>
-          <span className='mx-3'>Floor:</span>
+          <Typography className='mx-3'>Floor:</Typography>
           <Select style={{ width: '60%' }} onChange={(e)=>{setFloor(e);setDescription_1();if(category==='Restroom'){setDescription_1(Gender)}}} value={Floor}>
             <Option value='Ground Floor'>Ground Floor</Option>
             <Option value='First Floor'>First Floor</Option>
@@ -299,7 +300,7 @@ const Maintenance = () => {
       
       <div className='col-lg-6 col-sm-12 mx-5 my-3' style={{ width: '80%' }}>
   <div className='my-2'>
-    <span className='mx-3'>Class:</span>
+    <Typography className='mx-3'>Class:</Typography>
     <Select
       style={{ width: '60%' }}
       onChange={(value) => setDescription_1(value)}
@@ -318,7 +319,7 @@ const Maintenance = () => {
         <div>
         <div className='col-lg-6 col-sm-12 mx-5 my-3'  style={{width:'80%'}}>
         <div className='my-2'>
-    <span className='mx-2'>Gender:</span>
+    <Typography className='mx-2'>Gender:</Typography>
           <Input type='text' style={{ width: '60%' }} value={description_1} onBeforeInput={(e)=>{setDescription_1(Gender)}} disabled/>
           </div>
         </div>
@@ -327,7 +328,7 @@ const Maintenance = () => {
         <>
         <div className='col-lg-6 col-sm-12 mx-5 my-3'>
           
-        <span className='mx-3'>Item:</span><Input value={description_1} onChange={(e)=>{setDescription_1(e.target.value)}}
+        <Typography className='mx-3'>Item:</Typography><Input value={description_1} onChange={(e)=>{setDescription_1(e.target.value)}}
           
         style={{ width: '80%' }} type='text'/>
         </div></>

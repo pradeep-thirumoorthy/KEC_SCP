@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CryptoJS from 'crypto-js';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, Space, Table, Typography } from 'antd';
 
 const Complaintsview = () => {
   const [data, setData] = useState([]);
@@ -218,7 +218,7 @@ const Complaintsview = () => {
     <>
       <div className="row">
         <div className="App">
-          <h1>Complaints</h1>
+          <Typography.Title level={1}>Complaints</Typography.Title>
           <div className="d-flex justify-content-around">
             <div>
               <label>Start Date:</label>
@@ -250,7 +250,7 @@ const Complaintsview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData} bordered pagination={false} />}
+          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>

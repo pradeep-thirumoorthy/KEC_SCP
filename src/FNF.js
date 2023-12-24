@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Result, Spin } from 'antd';
+import { Button, Result, Spin, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 const FNF = () => {
@@ -21,7 +21,7 @@ const FNF = () => {
     <section className="fnf-container">
       {isLoading ? (
         <div className="loading">
-          <h3><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></h3>
+          <Typography.Title level={3}><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></Typography.Title>
         </div>
       ) : (
         <div className="error-content">

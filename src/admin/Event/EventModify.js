@@ -3,7 +3,7 @@ import axios from 'axios';
 import FNF from '../../FNF';
 import { useNavigate, useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import { Button, Card, Flex, Input, Radio, Select } from 'antd';
+import { Button, Card, Flex, Input, Radio, Select, Typography } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
@@ -126,19 +126,19 @@ const EventModifier = () => {
   return (
     <>
       <div className='h-100'>
-          <Card hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/Upload/${eventId}.png)`,
+          <Card  hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/Upload/${eventId}.png)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',}}>
             {formData && (
               <>
-                <h2>Title: {formData.title}</h2>
-                <h4>Description: {formData.description}</h4>
+                <Typography.Title level={2}>Title: {formData.title}</Typography.Title>
+                <Typography.Title level={4}>Description: {formData.description}</Typography.Title>
               </>
             )}
           </Card>
 
-          <Card hoverable className='p-5 m-5  rounded-3'>
+          <Card  hoverable className='p-5 m-5  rounded-3'>
             Limit:
             <input
               className='form-control'
@@ -150,7 +150,7 @@ const EventModifier = () => {
             />
           </Card>
 
-          <Card hoverable className='p-5 m-5  rounded-3'>
+          <Card  hoverable className='p-5 m-5  rounded-3'>
             Status:<br></br>
             <input
               type='radio'
@@ -172,7 +172,7 @@ const EventModifier = () => {
             Close
           </Card>
 
-          <Card hoverable className='p-5 m-5  rounded-3'>
+          <Card  hoverable className='p-5 m-5  rounded-3'>
             Last Date:
             <input
               className='form-control'
@@ -183,7 +183,7 @@ const EventModifier = () => {
             />
             
           </Card>
-          <Card hoverable className='p-5 m-5  rounded-3'>
+          <Card  hoverable className='p-5 m-5  rounded-3'>
             Visibility:
             <Radio.Group optionType='button' onChange={(e)=>{setvisible(e.target.value);setIsModified(true)}} value={visibility}>
       <Radio value='Private'>Private</Radio>

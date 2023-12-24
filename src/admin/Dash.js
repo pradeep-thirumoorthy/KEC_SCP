@@ -5,7 +5,7 @@ import Doughnut from './doughnut';
 import LineChart from './Linechart';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { Button } from 'antd';
+import { Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 const MAX_TIMEOUT = 10000;
 
@@ -78,24 +78,24 @@ const Dash = () => {
               <div className=" row ">
                 <div className="row border-bottom pb-3">
                   <div className="col-lg-12">
-                    <span className="fs-2 fw-bolder fst-italic"> Welcome, {adminData.Name}</span><br />
-                    <span className=" fst-italic no-warp">Here is your complaints arrived</span>
+                    <Typography className="fs-2 fw-bolder fst-italic"> Welcome, {adminData.Name}</Typography><br />
+                    <Typography className=" fst-italic no-warp">Here is your complaints arrived</Typography>
                   </div>
                 </div>
               </div>
               <div className="content row">
                 <div className="row row-gap-5" data-bs-spy="scroll" data-bs-target="#home-collapse" data-bs-offset="0">
-                  <h1 id="overview">Overview</h1>
+                  <Typography.Title level={1} id="overview">Overview</Typography.Title>
                   
-                  <div className="col-lg-7  bg-light mx-3 mb-3" style={linec}><LineChart />
+                  <div className="col-lg-7   mx-3 mb-3" style={linec}><LineChart />
                   </div>
-                  <div className="col-lg-4  bg-light mb-3 mx-3 text-center" style={douc}><Doughnut />
+                  <div className="col-lg-4   mb-3 mx-3 text-center" style={douc}><Doughnut />
                     <script src="bar-chart.js"></script>
                   </div>
-                  <h1 id="updates">Updates</h1>
-                  <div className="col-lg-12 mx-3 bg-light my-3 text-center justify-content-center d-flex" style={linec}>No Updates</div>
-                  <h1 id="reports">Complaints</h1>
-                  <div className="col-lg-12 mx-3 bg-light my-3" style={linec}>wjld sjdhcscsd hs cdcdfdc dhdg</div>
+                  <Typography.Title level={1} id="updates">Updates</Typography.Title>
+                  <div className="col-lg-12 mx-3  my-3 text-center justify-content-center d-flex" style={linec}>No Updates</div>
+                  <Typography.Title level={1} id="reports">Complaints</Typography.Title>
+                  <div className="col-lg-12 mx-3  my-3" style={linec}>wjld sjdhcscsd hs cdcdfdc dhdg</div>
                   <div className="table"></div>
                 </div>
               </div>

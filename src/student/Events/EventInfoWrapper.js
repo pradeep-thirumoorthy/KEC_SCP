@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
-import { Card, Input, Space } from 'antd';
+import { Card, Input, Space, Typography } from 'antd';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
@@ -94,7 +94,7 @@ const EventInfoWrapper = () => {
     console.log('Event does not exist.');
     return (
       <div className='m-5'>
-      <Card className='p-5 w-100' style={{backgroundColor:'#ffeaab'}} hoverable>
+      <Card  className='p-5 w-100' bordered hoverable>
         {message}
       </Card>
       </div>
@@ -112,11 +112,11 @@ const EventInfoWrapper = () => {
     <div className='w-100'>
     <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
     <div className='m-5'>
-      <Card className='p-5 '  style={{backgroundColor:'#ffeaab'}} hoverable>
+      <Card  className='p-5 '  style={{backgroundColor:'#ffeaab'}} hoverable>
         {Formdata && (
           <>
-            <h2>{Formdata.title}</h2>
-            <h4>{Formdata.description}</h4>
+            <Typography.Title level={2}>{Formdata.title}</Typography.Title>
+            <Typography.Title level={4}>{Formdata.description}</Typography.Title>
           </>
         )}
       </Card>
@@ -125,8 +125,8 @@ const EventInfoWrapper = () => {
         {Formdata &&
           Formdata.inputs.map((item, index) => (
             <div key={index}>
-              <Card className='p-5 ' hoverable>
-                <h2>{item.label}</h2>
+              <Card  className='p-5 ' hoverable>
+                <Typography.Title level={2}>{item.label}</Typography.Title>
                 {item.choices.length === 0 && (
                   <input
                     key={item.label}

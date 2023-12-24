@@ -1,11 +1,12 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Typography } from 'antd';
 const Histandtrends= () => {
       return (
         <>
         <div>
-            <h1>All previous and Current Complaints Display</h1>
+            <Typography.Title level={1}>All previous and Current Complaints Display</Typography.Title>
         </div>
         </>
       );

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import { Button, Card, Flex, Input, Layout, Select} from 'antd';
+import { Button, Card, Flex, Input, Layout, Select, Typography} from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import { Title } from 'chart.js';
 import Reach from './Reach';
@@ -156,9 +156,9 @@ const EventFormCreation = () => {
                                     onChange={(e) => updateOptionValue(input.key, optionIndex, e.target.value)} required
                                 />
                                 {optionIndex !== 0 && (
-                                    <button className='outline-0 border-0 ' onClick={() => deleteOption(input.key, optionIndex)}>
+                                    <Button className='outline-0 border-0 ' onClick={() => deleteOption(input.key, optionIndex)}>
                                         <FiX />
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         )}
@@ -276,8 +276,8 @@ const EventFormCreation = () => {
       </div>
       <Content className="site-layout ">
         <form onSubmit={handleSubmit} className='col-12 float-end  mt-5 mt-lg-0'>
-                    <h1 className='text-center mt-5'>Event Form Creation</h1>
-                <Card hoverable className='px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(${previewImage})`,
+                    <Typography.Title level={1} className='text-center mt-5'>Event Form Creation</Typography.Title>
+                <Card  hoverable className='px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(${previewImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',}}>
@@ -315,7 +315,7 @@ const EventFormCreation = () => {
       />
                 </Card>
                 {inputs.map((input, index) => (
-            <Card
+            <Card 
                 key={index} // Using index as the key for dynamic rendering
                 style={input.fading ? styles.tagFadeOut : {}}
                 hoverable

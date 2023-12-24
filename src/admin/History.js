@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
-import { Radio,Table} from 'antd';
+import { Button, Radio,Table, Typography} from 'antd';
 const History= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +92,7 @@ const History= () => {
         <>
         <div className='row'>
                 <div className="App">
-      <h1>History:</h1>
+      <Typography.Title level={1}>History:</Typography.Title>
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
@@ -108,7 +108,7 @@ const History= () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         /></div>
-        <button className='filter' onClick={filterData}>Filter</button>
+        <Button className='filter' onClick={filterData}>Filter</Button>
       </div>
 
       <form>
@@ -135,7 +135,7 @@ const History= () => {
       
     </div>
               
-    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData} bordered  pagination={false}/>;
+    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData}   pagination={false}/>;
               </div>
         </>
       );

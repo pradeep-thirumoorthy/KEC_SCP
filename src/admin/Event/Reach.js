@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, Radio } from 'antd'; // Import Radio from 'antd'
+import { Modal, Button, Input, Radio,Typography } from 'antd'; // Import Radio from 'antd'
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
@@ -72,7 +72,7 @@ const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange 
       >
         <div>
           
-          <span>Limit:</span>
+          <Typography>Limit:</Typography>
           <Input
             type='number'
             value={slimit}
@@ -81,7 +81,7 @@ const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange 
             max='100'
             min='1'
           />
-          <span style={{ whiteSpace: 'nowrap' }}>Last Date:</span>
+          <Typography style={{ whiteSpace: 'nowrap' }}>Last Date:</Typography>
           <Input
             type='date'
             value={lastDate}

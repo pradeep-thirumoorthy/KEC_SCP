@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { Card, Col, Flex, Popover, Row } from 'antd';
+import { Card, Col, Flex,Typography } from 'antd';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
+import Link from 'antd/es/typography/Link';
 const ComplaintStatus = () => {
   const Email = sessionStorage.getItem('StudentEmail');
   const secretKey = 'student-_?info';
@@ -48,9 +49,9 @@ const ComplaintStatus = () => {
       <div className=' row '>
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
-            <span className='fs-2 fw-bolder fst-italic'> Complaints</span>
+            <Typography className='fs-2 fw-bolder fst-italic'> Complaints</Typography>
             <br></br>
-            <span className=' fst-italic no-warp'>Here are your complaints</span>
+            <Typography className=' fst-italic no-warp'>Here are your complaints</Typography>
           </div>
         </div>
       </div>
@@ -58,12 +59,12 @@ const ComplaintStatus = () => {
         <Flex wrap='wrap' gap={'large'}>
           {ComplaintData.map((item) => (
             <Col span={11} key={item.Type}>
-              <Card
+              <Card  
                 title={item.Type}
                 hoverable
                 extra={
                   <>
-                    <a href={`/student/Complaint/${item.Type}`}>Entry</a>
+                    <Link  href={`/student/Complaint/${item.Type}`}>Entry</Link>
                   </>
                 }
               >
@@ -71,10 +72,18 @@ const ComplaintStatus = () => {
                   {Object.entries(item).map(([key, value]) => {
                     if (key !== 'Type') {
                       if(key==='Arrived'){
-                        return <Card.Grid onClick={()=>{navigate(`/student/Activity#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
+                        return <Card.Grid  onClick={()=>{navigate(`/student/Activity#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
                       }
                       else{
-                        return <Card.Grid onClick={()=>{if(item.Type==='Faculty'){navigate('/student/Faculty')}else if(key==='Accepted'){navigate(`/student/Activity#${item.Type}=${key}`)}else{navigate(`/student/History#${item.Type}=${key}`)}}} style={gridStyle}>{key} <br/>{value}</Card.Grid>;
+                        return <Card.Grid  onClick={()=>{
+                          if(item.Type==='Faculty'){
+                            navigate('/student/Faculty')
+                          }else if(key==='Accepted'){
+                            navigate(`/student/Activity#${item.Type}=${key}`)
+                          }
+                          else{
+                            navigate(`/student/History#${item.Type}=${key}`)}}
+                          } style={gridStyle}>{key} <br/>{value}</Card.Grid>;
                         
                       }
                     }

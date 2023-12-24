@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { Button, Typography } from 'antd';
 const ForgAdmPass = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -116,7 +117,7 @@ const ForgAdmPass = () => {
   return (
     <div className='wrapper bg-secondary d-flex align-items-center justify-content-center w-100' >
                 <div className='login'>
-      <h2>Admin Forget Password</h2>
+      <Typography.Title level={2}>Admin Forget Password</Typography.Title>
       <form className='needs-validation'>
         <div className='form-group was-validated mb-2'>     
                         <label htmlFor='email' className='form-label'>Email Address</label>
@@ -124,9 +125,9 @@ const ForgAdmPass = () => {
                         <div className='invalid-feedback'>
                             Please enter the email
                         </div>
-                        <button type="button" className='btn btn-success w-50 mt-2' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
+                        <Button type="button" className='btn btn-success w-50 mt-2' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
                         {sendButtonStatus === 'loading' ? 'Loading...' : sendButtonStatus === 'sent' ? 'Resend OTP' : 'Send OTP'}
-                        </button>
+                        </Button>
                     </div>
 
       </form>
@@ -138,7 +139,7 @@ const ForgAdmPass = () => {
           <label htmlFor='OTP' className='form-label'>Enter OTP</label>
           <input className='form-control' name='password' id='password' type="text" value={enteredOtp} onChange={handleOtpInputChange} required></input>
           <div className='invalid-feedback'>Please enter the OTP</div>
-          <button type="button" className='btn btn-success mt-2' onClick={verifyOtp}>Verify OTP</button>
+          <Button type="button" className='btn btn-success mt-2' onClick={verifyOtp}>Verify OTP</Button>
         </div>
       )}
       {messageotp && <p className='text-danger'>{messageotp}</p>}
@@ -163,9 +164,9 @@ const ForgAdmPass = () => {
                         <label htmlFor='check' className='form-check-label'>Remember me</label>
                     </div>
 
-          <button type="button" className='btn btn-success w-100 mt-2' onClick={handleSubmit}>
+          <Button type="button" className='btn btn-success w-100 mt-2' onClick={handleSubmit}>
             Reset Password
-          </button>
+          </Button>
         </div>
       )}
     </div>

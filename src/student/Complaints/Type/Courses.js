@@ -3,10 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { FiPlusSquare } from 'react-icons/fi';
-import {Radio, TreeSelect, message } from 'antd';
+import {Radio, TreeSelect, message,Typography } from 'antd';
 import { Input, Select, Button, } from 'antd'; // Import InputNumber instead of TextArea
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import Link from 'antd/es/typography/Link';
 
 const { Option } = Select;
 
@@ -162,14 +163,14 @@ const Courses = () => {
       <div className=' row '>
         <div className='row border-bottom pb-3'>
           <div className='col-md-9 col-lg-10'>
-            <span className='fs-2 fw-bolder fst-italic'> Courses Entry</span>
+            <Typography className='fs-2 fw-bolder fst-italic'> Courses Entry</Typography>
             <br></br>
-            <span className=' fst-italic no-warp'>Here are your complaints</span>
+            <Typography className=' fst-italic no-warp'>Here are your complaints</Typography>
           </div>
           <div className='col-md-3 col-lg-2 align-items-center d-flex '>
-            <a href='/student/Complaint/ComplaintEntry' className='fs-5 text-nowrap btn text-black'>
+            <Link href='/student/Complaint/ComplaintEntry' className='fs-5 text-nowrap btn text-black'>
               <FiPlusSquare /> Issue Complaint
-            </a>
+            </Link>
           </div>
         </div>
       </div>

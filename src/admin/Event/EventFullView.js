@@ -7,7 +7,7 @@ import CopyToClipboard from '../CopyToClipboard';
 import { useNavigate } from 'react-router';
 import { FileDoneOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Card, Flex, Image} from 'antd';
+import { Card, Flex, Image, Typography} from 'antd';
 const MAX_TIMEOUT = 10000;
 
 const FullEvents = () => {
@@ -52,7 +52,7 @@ const FullEvents = () => {
 
   const renderEventCards = () => {
     return EventData.map((item) => (
-      <Card
+      <Card 
         style={{ width: 300 }}
         cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
@@ -66,7 +66,7 @@ const FullEvents = () => {
         hoverable
         key={item.event_id}
       >
-        <Card.Meta extra={
+        <Card.Meta  extra={
           <CopyToClipboard
             className="text-center w-100"
             textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
@@ -94,7 +94,7 @@ const FullEvents = () => {
             {/* Header section remains the same */}
           </div>
           <div className='row'>
-            <span className='fs-2 fw-bolder fst-italic'>Your Events:</span>
+            <Typography className='fs-2 fw-bolder fst-italic'>Your Events:</Typography>
             <Flex justify='center' align="center" wrap="wrap" gap="small">
         {renderEventCards()}
       </Flex>

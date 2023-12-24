@@ -1,11 +1,12 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Typography } from 'antd';
 const Contact= () => {
       return (
         <>
         <div>
-            <h1>Contact Page</h1>
+            <Typography.Title level={1}>Contact Page</Typography.Title>
         </div>
         </>
       );

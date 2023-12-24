@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,IndividualDisplay,Admincalendar,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,Admincalendar,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,ComplaintStatus, Histandtrends,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import Layout2 from './Layout2';
 import { EventInfoWrapper, StudentHistory } from './student';
-import { ConfigProvider, Spin } from 'antd';
+import { ConfigProvider, Spin,Typography,theme } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Facultyview from './admin/Complaint/Facultyview';
 import checkEmail from './FacultyAccess';
@@ -29,21 +29,25 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const storedDarkMode = localStorage.getItem('darkMode');
-    if (storedDarkMode === 'true') {
+    const storedDarkMode = localStorage.getItem('theme');
+    
+    console.log('kdhdbhjdd '+storedDarkMode);
+    if (storedDarkMode==='dark') {
       setDarkMode(true);
-      document.documentElement.setAttribute('data-theme', 'dark');
     }
-  }, []);
-
-  useEffect(() => {
+    else{
+      setDarkMode(false);
+    }
+    console.log('kdhdbhjddsdddddddddddddddddd '+storedDarkMode);
+    document.body.style.backgroundColor = darkMode?'#141414':'#ffffff';
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 200);
+    console.log("dark : "+darkMode);
 
     return () => {
       clearTimeout(timer);
@@ -100,14 +104,14 @@ const App = () => {
     }
   };
     return (
-      <div
+      <div className={`${darkMode?'bg-black':'bg-white'}`}
       style={{
-        background: darkMode ? 'rgb(33, 37, 41)' : 'white', // Set your preferred background color
-        height: 'calc(100vh - 20px)',
+        height: 'calc(100vh)',
       }}
     >
-      <ConfigProvider theme={{ // Apply the Ant Design dark theme
-        ...(darkMode ? { dark: true } : {}),
+      <ConfigProvider 
+      theme={{
+        algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}>
       <Router>
         <AuthProvider>
@@ -154,7 +158,6 @@ const App = () => {
                   <Route path='/student/dashboard/Calendar' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Nfcalendar/>}/>}/>}/>
                   
                   
-                  <Route path='/student/ComplaintStatus' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<ComplaintStatus/>}/>}/>}/>
                   <Route path='/student/EventForm' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<EventForm/>}/>}/>}/>
                   <Route path='/student/Histandtrends' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<Histandtrends/>}/>}/>}/>
                   
@@ -177,7 +180,7 @@ const App = () => {
   };
   const LoadingScreen = () => (
     <div className="loading w-100" >
-  <h3 className="flex-column my-auto"><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></h3>
+  <Typography.Title level={3} className="flex-column my-auto"><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></Typography.Title>
 </div>
 
 
