@@ -11,12 +11,15 @@ import Contact from './Contact';
 
 import { Login,ForgAdmPass,Dash,Complaintsview,CreatePost,EventFormCreation,Activity,Admincalendar,Updates,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
 
-import {StudentLogin,StudentDash,Complaint,ComplaintStatus, Histandtrends,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
+import {StudentLogin,StudentDash,Complaint, Histandtrends,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
 import Layout1 from './Layout';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Layout2 from './Layout2';
+
+import Forward2 from './admin/Complaint/MoreInfo2';
+
 import { EventInfoWrapper, StudentHistory } from './student';
 import { ConfigProvider, Spin,Typography,theme } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -39,11 +42,19 @@ const App = () => {
       setDarkMode(false);
     }
     console.log('kdhdbhjddsdddddddddddddddddd '+storedDarkMode);
-    document.body.style.backgroundColor = darkMode?'#141414':'#ffffff';
+    document.body.style.backgroundColor = darkMode?'#000000':'#f5f5f5';
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
   useEffect(() => {
+    const startTime = performance.now();
+
+    // Your component's rendering logic goes here...
+
+    const endTime = performance.now();
+    const renderTime = endTime - startTime;
+    console.log(`Component XYZ took ${renderTime} milliseconds to render`);
+  
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 200);
@@ -104,7 +115,7 @@ const App = () => {
     }
   };
     return (
-      <div className={`${darkMode?'bg-black':'bg-white'}`}
+      <div className={`${darkMode?'bg-black':''}`}
       style={{
         height: 'calc(100vh)',
       }}
@@ -136,7 +147,7 @@ const App = () => {
                 <Route path="/admin/Events/eventInfo/:eventId/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Eventviewresp />}/>}/>}/>
                 <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo />}/>}/>}/>
                 <Route path="/admin/Events/Fullview" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FullEvents />}/>}/>}/>
-                <Route path="/admin/Complaints/MoreInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Forward />}/>}/>}/>
+                <Route path="/admin/Complaints/MoreInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Forward2 />}/>}/>}/>
                 
                 <Route path="/admin/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview />}/>}/>}/>} />
                 <Route path="/admin/Faculty/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<FacultyInfo />}/>}/>}/>}/>

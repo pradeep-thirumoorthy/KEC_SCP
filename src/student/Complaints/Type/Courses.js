@@ -100,6 +100,7 @@ const Courses = () => {
           setDepartment(data.Department);
           setClass(data.Class);
           setBatch(data.Batch);
+          console.log("Data : "+JSON.stringify(data2));
           // Extract and display subject information
           const subjects = [];
 

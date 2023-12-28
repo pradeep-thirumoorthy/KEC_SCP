@@ -42,7 +42,7 @@ const CSVReaderComponent = () => {
   return (
     <div>
       <input type="file" accept=".csv" onChange={handleFileUpload} />
-      <Table dataSource={data} columns={columns} />
+      <Table rowKey={(record) => record.uid}dataSource={data} columns={columns} />
     </div>
   );
 };

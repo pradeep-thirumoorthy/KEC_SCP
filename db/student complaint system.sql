@@ -937,6 +937,7 @@ CREATE TABLE `subject` (
   `Advisor1` varchar(50) NOT NULL,
   `Advisor2` varchar(50) NOT NULL,
   `Advisor3` varchar(50) NOT NULL,
+  `Maintenance` varchar(50) NOT NULL DEFAULT 'email',
   `Year_Incharge` varchar(50) NOT NULL,
   `HOD` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

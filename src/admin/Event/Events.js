@@ -106,7 +106,7 @@ const Events = () => {
             <Typography className='fs-2 fw-bolder fst-italic'>Your Events:</Typography>
             <div>
               <div className='rounded-3 m-2'>
-                <Table scroll={{x:1000}}
+                <Table rowKey={(record) => record.uid}scroll={{x:1000}}
                   columns={columns}
                   dataSource={mappedTableData}
                   

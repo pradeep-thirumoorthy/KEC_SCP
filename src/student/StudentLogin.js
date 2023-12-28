@@ -52,11 +52,6 @@ const StudentLogin = () => {
       
       <Col xs={24} lg={12}>
           <Typography.Title level={1} className='w-100 text-center'>Student Login</Typography.Title>
-          <p className='p-1 px-lg-5 mx-lg-5 text-center text-danger'>
-            Note: You have to authenticate before proceeding to other pages in the student portal
-            
-    {contextHolder}
-          </p>
           {/* Other login form elements */}
           <form onSubmit={handleLogin}>
             <Row gutter={[16, 16]}>

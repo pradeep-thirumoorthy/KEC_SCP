@@ -74,7 +74,7 @@ const Eventviewresp = () => {
 
       {selectedOption === 'List' ? (
         <div className="table-responsive w-100">
-          <Table scroll={{x:1000}} style={{height:'100vh'}}
+          <Table rowKey={(record) => record.uid}scroll={{x:1000}} style={{height:'100vh'}}
             columns={[
               {
                 title: 'S.no',

@@ -210,7 +210,7 @@ console.log('Value 2:', value2);
       
     </div>
               </div>
-              <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={mappedTableData}  pagination={false}/>
+              <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={mappedTableData}  pagination={false}/>
         </>
       );
    }

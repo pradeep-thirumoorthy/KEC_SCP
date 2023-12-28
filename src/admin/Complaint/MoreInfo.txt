@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Result, Select, Typography } from "antd";
+import { Button, Modal, Result, Select, Typography } from "antd";
 import { FiCheck } from "react-icons/fi";
+import { TbArrowForwardUp } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { Descriptions } from "antd";
 import CryptoJS from "crypto-js";
 import { message,ConfigProvider } from 'antd';
 
-const FacultyInfo = () => {
+const { Option } = Select;
+
+const Forward = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [fetchedNames, setFetchedNames] = useState([]);
@@ -89,7 +92,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/Facultyforward.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -113,7 +116,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/Facultyforward.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -160,27 +163,76 @@ const FacultyInfo = () => {
       </div>
       {info?<ConfigProvider
   >
-<Descriptions title="Complaint Data"   column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}} labelStyle={{fontStyle:'oblique'}} >
+<Descriptions title="Complaint Data"   column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered labelStyle={{fontStyle:'oblique'}} >
+            {(info.Type !== "Courses")?<><Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
+            <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
+            <Descriptions.Item label="Email">{info.email}</Descriptions.Item></>:<></>}
             
-            <Descriptions.Item label="Courses">{info.Subjectname}</Descriptions.Item>
-            <Descriptions.Item label="Faculty">{info.FacultyName}</Descriptions.Item>
+            <Descriptions.Item label="Type">{info.Type}</Descriptions.Item>
             <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
+            
+            {(info.Type === "Courses")?<>
+            
+            <Descriptions.Item label="Courses">{info.Extra}</Descriptions.Item>
+            </>:<></>}
+
             <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
             <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>
             <Descriptions.Item label="Date">{info.info1}</Descriptions.Item>
+            {(info.Type === "Maintenance")?<>
+            <Descriptions.Item label="Category">{Extra.category}</Descriptions.Item>
+            <Descriptions.Item label="Floor">{Extra.Floor}</Descriptions.Item>
+            <Descriptions.Item label={(Extra.category==='Other Area')?"Item":(Extra.category==='Restroom')?"Gender":(Extra.category ==='Classroom')?"Classroom":""}>{Extra.data}</Descriptions.Item>
+</>:<></>}
             <Descriptions.Item label="Description">{info.Description}</Descriptions.Item>
             
           </Descriptions>
 
       <div className="d-flex justify-content-center my-5" id="access">
         <div className="row h-auto">
-          <div className="col-6">
-            <Button type="primary"  size="large" onClick={handleAccept}>
+          <div className="col-4">
+            <Button style={{backgroundColor:'green'}} type="primary"  size="large" onClick={handleAccept}>
               <FiCheck />
               Accept
             </Button>
           </div>
-          <div className="col-6">
+          <div className="col-4">
+          {(info.Type === "Maintenance")?<></>:<>
+            <Button size="large" type="primary"  onClick={togglePopup}>
+              <TbArrowForwardUp />
+              Forward
+            </Button>
+            <Modal title="Forward Complaint" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+              <div>
+                <div className="fs-3">Designation:</div>
+                <Select style={{ width: "100%" }} value={Designation} onChange={handleDesignationChange}>
+                  <Option value="">NiL</Option>
+                  <Option value="Associate Professor">Associate Professor</Option>
+                  <Option value="Professor">Professor</Option>
+                  <Option value="Assistant Professor[SLG]">Assistant Professor[SLG]</Option>
+                  <Option value="Assistant Professor[SRG]">Assistant Professor[SRG]</Option>
+                  <Option value="Assistant Professor">Assistant Professor</Option>
+                </Select>
+                <div className="fs-3">Faculty:</div>
+                <Select style={{ width: "100%" }} value={Faculty} onChange={handleFacultyChange}>
+                  <Option value="">NiL</Option>
+                  {fetchedNames.length > 0 ? (
+                    fetchedNames.map((item, index) => (
+                      <Option key={index} value={item.email}>
+                        {item.name}
+                      </Option>
+                    ))
+                  ) : (
+                    <Option value="" disabled>
+                      No Names Available
+                    </Option>
+                  )}
+                </Select>
+              </div>
+            </Modal>
+            </>}
+          </div>
+          <div className="col-4">
             <Button danger size="large" type="primary" onClick={handleReject}>
               <RxCross2 />
               Reject
@@ -195,7 +247,7 @@ const FacultyInfo = () => {
     title="No Complaint Choosen"
     subTitle="Please check and modify the following information before resubmitting."
     extra={[
-      <Button type="primary" onClick={()=>{navigate('/admin/Faculty')}}>
+      <Button type="primary" onClick={()=>{navigate('/admin/Complaints')}}>
         Go Console
       </Button>
     ]}
@@ -205,4 +257,4 @@ const FacultyInfo = () => {
   );
 };
 
-export default FacultyInfo;
+export default Forward;

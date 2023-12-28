@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import {Breadcrumb, Flex, Radio, Select, TreeSelect, Typography, message } from 'antd';
+import {Breadcrumb, Col, Divider, Flex, Radio, Row, Select, TreeSelect, Typography, message } from 'antd';
 import { Input, Button,} from 'antd'; // Import InputNumber instead of TextArea
 import { useNavigate } from 'react-router-dom';
 import { Option } from 'antd/es/mentions';
@@ -15,6 +15,12 @@ const Maintenance = () => {
   const [department, setDepartment] = useState('');
   const [Class, setClass] = useState('');
   const [Batch, setBatch] = useState(0);
+
+
+  
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+
   const Email = sessionStorage.getItem('StudentEmail');
   const secretKey = 'student-_?info';
   const bytes = CryptoJS.AES.decrypt(Email, secretKey);
@@ -133,6 +139,17 @@ const Maintenance = () => {
       .catch((error) => {
         console.error('Error fetching admin data:', error);
       });
+
+
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+  
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+
   }, [email,Gender]);
   const handleLogin = () => {
     if ( description === '' ||description_1 ===''||Floor === '') {
@@ -167,126 +184,53 @@ const Maintenance = () => {
         console.error('Error during complaint submission:', error);
       });
   };
+  
+  const isSmallScreen = windowWidth < 991;
+  const responsiveSpan = isSmallScreen ? 24 : 12;
   return (
     <>
     {contextHolder}
-      <div className=' row '>
-      <Breadcrumb
-    items={[
-      {
-        title: 'Student',
-      },
-      {
-        title: <Link  style={{textDecoration:'none'}} href="/student/Complaint">Complaint</Link>,
-      },
-      {
-        title:'Maintenance',
-      },
-    ]}
-  />
-        <div className='row border-bottom pb-3'>
-          <div className='col-md-9 col-lg-10'>
-            <Typography className='fs-2 fw-bolder fst-italic'> Maintenance Entry</Typography>
-            <br></br>
-            <Typography className=' fst-italic no-warp'>Here are your complaints</Typography>
-          </div>
-        </div>
-      </div>
+    <Row>
+      <Col span={24}>
+        <Breadcrumb>
+          <Breadcrumb.Item>Student</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaint">
+              Complaint
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Maintenance</Breadcrumb.Item>
+        </Breadcrumb>
+      </Col>
+        <Col>
+          <Typography className='fs-2 fw-bolder fst-italic'>Maintenance Entry:</Typography>
+          <Typography className='fst-italic no-wrap'>
+            Enter your complaints based on Maintenance
+          </Typography>
+        </Col>
+    </Row>
+    <Divider/>
+
       <div className='row form-group'>
-        {/* <div className='col-lg-6 col-sm-12 '>
-          <label className='entry'>Your Roll No</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Roll No'
-            name='rollno'
-            id='rollno'
-            
-  style={{ width: '80%' }}
-            value={rollno}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Name</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Name'
-            name='name'
-            id='name'
-            
-  style={{ width: '80%' }}
-            value={name}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Email</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Email'
-            name='email'
-            id='email'
-            
-  style={{ width: '80%' }}
-            value={email}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Department</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Department'
-            name='department'
-            id='department'
-            
-  style={{ width: '80%' }}
-            value={department}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Class</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Department'
-            name='department'
-            id='department'
-            
-  style={{ width: '80%' }}
-            value={Class}
-            disabled
-          ></Input>
-        </div> */}
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Option</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-        <div className='col-lg-6 col-sm-12 mx-5 my-3'>
+        <Col span={responsiveSpan}>
+          <Typography className='entry mx-9 px-5'>Your Option</Typography>
+        </Col>
+        <Col align='center' span={responsiveSpan}>
+        <Col className='mx-5 my-3'>
         <Radio.Group onChange={(e)=>{setcategory(e.target.value);setDescription();if(e.target.value==='Restroom'){setDescription_1(Gender)}else{setDescription_1()}}} value={category}>
       <Radio checked={true} value={"Classroom"}>Classroom</Radio>
       <Radio value={"Restroom"}>Restroom</Radio>
       <Radio value={"Other Area"}>Other Area</Radio>
       </Radio.Group>
-        </div>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry px-5'>Category</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-        <div className='col-lg-6 col-sm-12 mx-5 my-3'  style={{width:'80%'}}>
+        </Col>
+        </Col>
+        <Col  span={responsiveSpan}>
+          <Typography className='entry px-5'>Category</Typography>
+        </Col>
+        <Col align='center' span={responsiveSpan}>
+        <Col className='mx-5 my-3'  style={{width:'80%'}}>
           <div className='my-2'>
-          <Typography className='mx-3'>Floor:</Typography>
+          <Typography className='entry px-5 mx-3'>Floor:</Typography>
           <Select style={{ width: '60%' }} onChange={(e)=>{setFloor(e);setDescription_1();if(category==='Restroom'){setDescription_1(Gender)}}} value={Floor}>
             <Option value='Ground Floor'>Ground Floor</Option>
             <Option value='First Floor'>First Floor</Option>
@@ -294,11 +238,11 @@ const Maintenance = () => {
           </Select>
           
           </div>
-        </div>
+        </Col>
         
       {category==='Classroom'?<>
       
-      <div className='col-lg-6 col-sm-12 mx-5 my-3' style={{ width: '80%' }}>
+      <Col className='mx-5 my-3' style={{ width: '80%' }}>
   <div className='my-2'>
     <Typography className='mx-3'>Class:</Typography>
     <Select
@@ -314,27 +258,29 @@ const Maintenance = () => {
         ))}
     </Select>
   </div>
-</div></>:
+</Col>
+</>:
         (category==='Restroom')?<>
         <div>
-        <div className='col-lg-6 col-sm-12 mx-5 my-3'  style={{width:'80%'}}>
+        <Col className='mx-5 my-3'  style={{width:'80%'}}>
         <div className='my-2'>
     <Typography className='mx-2'>Gender:</Typography>
           <Input type='text' style={{ width: '60%' }} value={description_1} onBeforeInput={(e)=>{setDescription_1(Gender)}} disabled/>
           </div>
-        </div>
+        </Col>
         </div></>
         :(category==='Other Area')?
         <>
-        <div className='col-lg-6 col-sm-12 mx-5 my-3'>
+        <Col className='mx-5 my-3'>
           
         <Typography className='mx-3'>Item:</Typography><Input value={description_1} onChange={(e)=>{setDescription_1(e.target.value)}}
           
         style={{ width: '80%' }} type='text'/>
-        </div></>
+        </Col>
+        </>
         :<></>
         }
-        </div>
+        </Col>
 
 
 
@@ -351,19 +297,19 @@ const Maintenance = () => {
 
 
 
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry px-5'>Your Option</label>
-        </div>
-        <div className='col-lg-6 col-sm-12'>
+        <Col  span={responsiveSpan}>
+          <Typography className='entry px-5'>Your Option</Typography>
+        </Col>
+        <Col align='center' span={responsiveSpan}>
           <Radio.Group className='mx-5 my-3' onChange={(e)=>{setExceptional(e.target.value);setDescription()}} value={Exceptional}>
       <Radio value={false}>Pre-defined</Radio>
       <Radio value={true}>Own</Radio>
     </Radio.Group>
-    </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry px-5'>Your Complaint</label>
-        </div>
-        <div className='col-lg-6 col-sm-12'>
+    </Col>
+        <Col  span={responsiveSpan}>
+          <Typography className='entry px-5'>Your Complaint</Typography>
+        </Col>
+        <Col align='center' span={responsiveSpan}>
         {Exceptional === false ?
         category ==='Other Area'?<TreeSelect
               showSearch
@@ -397,14 +343,13 @@ const Maintenance = () => {
       </>:<>
       <Select value={description} style={{width:'100%'}} onChange={(e)=>{setDescription(e)}} placeholder="select the statement">
   <Option value={'Sanitation facility is not well'}>Sanitation facility is not well</Option>
-  <Option value={'Light'}>Light</Option>
-  <Option value={'Projector'}>Projector</Option>
-  <Option value={'Plug Point'}>Plug Point</Option>
+  <Option value={'Light are not working'}>Light are not working</Option>
+  <Option value={'Tap is leaking'}>Tap is leaking</Option>
 </Select></>:<>
       <TextArea onChange={(e)=>{setDescription(e.target.value)}}  className='mx-5 my-3' style={{ width: '80%' }}/>
       </>}
 
-        </div>
+        </Col>
         
         <div className='w-100 text-center p-5'>
           <Button type='primary' onClick={handleLogin} loading={Loading} className='w-25 mt-2'>

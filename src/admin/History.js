@@ -135,7 +135,7 @@ const History= () => {
       
     </div>
               
-    <Table scroll={{x:1000}} columns={columns} dataSource={mappedTableData}   pagination={false}/>;
+    <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} dataSource={mappedTableData}   pagination={false}/>;
               </div>
         </>
       );

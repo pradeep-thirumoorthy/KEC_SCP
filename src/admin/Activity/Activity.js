@@ -253,7 +253,7 @@ const Activity = () => {
           </form>
 
           {loading ? <Typography.Title level={1}>Loading</Typography.Title> : 
-          <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
+          <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>

@@ -97,9 +97,6 @@ const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
 const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   const isWideLayout = windowWidth > 991;
   return (
     
@@ -338,7 +335,6 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
           <div
             style={{
               minHeight: 360,
-              background:colorBgContainer,
             }}
           >
             {element}

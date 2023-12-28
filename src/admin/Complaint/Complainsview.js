@@ -250,7 +250,7 @@ const Complaintsview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
+          {loading ? <p>Loading...</p> : <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>

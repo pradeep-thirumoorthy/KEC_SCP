@@ -13,33 +13,15 @@ const Facultyview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  
-  const [adminData, setAdminData] = useState(null);
   const handleButtonClick = (rowData) => {
     navigate('/admin/Faculty/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
-    fetchAdminData();
     filterData();
     console.log(data)
     
   }, []);
 
-  const fetchAdminData = () => {
-    
-    axios
-        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
-        .then((response) => {
-          const data = response.data;
-          if (data) {
-            setAdminData(data);
-            console.log(JSON.stringify(data))
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching admin data:', error);
-        })
-  };
 
 
   const getEmailFromCookies = () => {
@@ -211,7 +193,16 @@ const Facultyview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table scroll={{x:1000}} sticky columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
+          {loading ? <p>Loading...</p> : <Table rowKey={(record) => record.uid} scroll={{x:1000}}
+          expandable={{
+            childrenColumnName: 'details',
+            columnTitle: 'Details',
+            defaultExpandAllRows: true,
+            expandRowByClick: true,
+            showExpandColumn: false,
+            onExpand: (expanded, record) => console.log('Row toggled', record),
+          }}
+           sticky columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Descriptions, Result, Timeline } from 'antd';
+import { Descriptions, Result, Timeline } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
-
+import './styles.css';
 const TimelineComponent = ({ current,info }) => {
   const [timelineData, setTimeData] = useState([]);
   const [Pending,setPending] = useState(false);
