@@ -10,6 +10,17 @@ export function AuthProvider({ children }) {
     if (sessionStorage.getItem('AdminEmail')) {
       setIsAuthenticated(true);
     }
+    else{
+      if(Cookies.get('AdminEmail')){
+        const Email=Cookies.get('AdminEmail');
+        sessionStorage.setItem('AdminEmail',Email);
+        setIsAuthenticated(true);
+      }
+      else{
+        setIsAuthenticated(false);
+        console.log("There is no more log");
+      }
+    }
   }, []);
 
   const login = (email) => {
@@ -29,24 +40,8 @@ export function AuthProvider({ children }) {
     Cookies.remove('AdminEmail');
     sessionStorage.removeItem('AdminEmail');
   };
-  const CheckAuth = () => {
-    if(!sessionStorage.getItem('AdminEmail')){
-      if(Cookies.get('AdminEmail')){
-        const Email=Cookies.get('AdminEmail');
-        sessionStorage.setItem('AdminEmail',Email);
-        
-        setIsAuthenticated(true);
-      }
-      else{
-        setIsAuthenticated(false);
-        console.log("There is no more log");
-      }
-    }
-    else{
-    }
-  };
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout,CheckAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

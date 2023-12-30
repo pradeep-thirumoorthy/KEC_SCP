@@ -1,7 +1,7 @@
-import { Layout, theme,Button,Typography } from 'antd';
+import { Layout, theme,Button,Typography, Spin } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
-import { useAuth } from './admin/AuthContext';
+import { useAuth } from './admin/Authenticate/AuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import CryptoJS from 'crypto-js';
 import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
@@ -96,11 +96,19 @@ const bytes = CryptoJS.AES.decrypt(Email, secretKey);
 const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
 const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 
+const [spinning, setSpinning] = React.useState(false);
+const showLoader = () => {
+  setSpinning(true);
+  setTimeout(() => {
+    setSpinning(false);
+  }, 3000);
+};
 
   const isWideLayout = windowWidth > 991;
   return (
     
     <Layout>
+      
       <Sider style={{height:'100vh',position:'fixed',zIndex:'5'}}
         breakpoint="lg"
         collapsedWidth="0"
@@ -121,7 +129,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
 
                                 <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/dashboard'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/dashboard'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/dashboard')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse"
@@ -147,7 +155,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button 
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Complaints'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Complaints'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Complaints')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
@@ -174,7 +182,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button 
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Faculty'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Faculty'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Faculty')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
@@ -201,7 +209,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Events'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Events'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Events')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse2"
@@ -236,7 +244,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Activity'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/Activity'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/admin/Activity')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse3"
@@ -264,7 +272,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/History'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/History'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/admin/History')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse4"
@@ -292,7 +300,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/PersonalInfo'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center ${dropdownStates['/admin/PersonalInfo'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/admin/PersonalInfo')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse4"
@@ -338,6 +346,10 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
             }}
           >
             {element}
+            <>
+      <Button onClick={showLoader}>Show fullscreen for 3s</Button>
+      <Spin spinning={spinning} fullscreen />
+    </>
           </div>
         </Content>
         

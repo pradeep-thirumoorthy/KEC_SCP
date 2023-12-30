@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import TimelineComponent from './Timeline/TimelineComponent';
 import { Divider, Steps, Typography } from 'antd';
+import TimelineComponent2 from '../Timeline/TimelineComponent2';
 
 const StudentActivityPanel = () => {
   const [current, setCurrent] = useState(0);
@@ -53,7 +53,7 @@ const StudentActivityPanel = () => {
         <Steps current={current} className=' px-5' onChange={onchange} items={items} />
         <Divider />
       </>
-      <TimelineComponent current={current} info={info}/>
+      <TimelineComponent2 current={current} info={info}/>
     </>
   );
 };

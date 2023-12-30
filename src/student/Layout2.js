@@ -1,10 +1,10 @@
 import { Button, Layout ,Typography} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers,FiLogOut } from 'react-icons/fi';
-import { useStudentAuth } from './student/StudentAuthContext';
+import { useStudentAuth } from './Authenticate/StudentAuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import CryptoJS from 'crypto-js';
-import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
+import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from 'antd/es/typography/Link';
@@ -107,7 +107,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                         
                                 <Button
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/dashboard'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/dashboard'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/student/dashboard')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse"
@@ -133,7 +133,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button 
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Complaint'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Complaint'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/student/Complaint')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
@@ -163,7 +163,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/EventForm'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/EventForm'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/student/EventForm')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse2"
@@ -191,7 +191,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Activity'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Activity'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
                                     onClick={() => handledirect('/student/Activity')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse3"
@@ -203,7 +203,8 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="activity">
                                 
                                     <ul className={`btn-toggle-nav list-unstyled small d-block list-group`}>
-                                    <li><div href='/student/Activity/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
+                                        <li><div href='/student/Activity/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
+                                        <li><Link href='/student/Activity/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
                                         <li><Link  href="#updates" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Updates</Link></li>
                                         <li><Link  href="#reports" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Reports</Link></li>
                                     </ul>
@@ -218,7 +219,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center d-flex justify-content-center align-items-center  px-0 ${dropdownStates['/student/History'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center d-flex justify-content-center align-items-center  px-0 ${dropdownStates['/student/History'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/student/History')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse4"
@@ -247,7 +248,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                                 <Button
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Updates'] ? 'bg-white text-dark' : 'bg-transparent '+'text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Updates'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
                                     onClick={() => handledirect('/student/Updates')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse5"

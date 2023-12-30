@@ -11,6 +11,18 @@ export function StudentAuthProvider({ children }) {
     if (sessionStorage.getItem('StudentEmail')) {
       setIsStudentAuthenticated(true);
     }
+    else{
+      if(Cookies.get('StudentEmail')){
+        const Email=Cookies.get('StudentEmail');
+        sessionStorage.setItem('StudentEmail',Email);
+        
+        setIsStudentAuthenticated(true);
+      }
+      else{
+        setIsStudentAuthenticated(false);
+        console.log("There is no more log");
+      }
+    }
   }, []);
 
   const studentLogin = (email) => {
@@ -28,25 +40,9 @@ export function StudentAuthProvider({ children }) {
     Cookies.remove('StudentEmail');
     sessionStorage.removeItem('StudentEmail'); // Clear the encrypted email from sessionStorage on logout
   };
-  const CheckStudentLogin = () => {
-    if(!sessionStorage.getItem('StudentEmail')){
-      if(Cookies.get('StudentEmail')){
-        const Email=Cookies.get('StudentEmail');
-        sessionStorage.setItem('StudentEmail',Email);
-        
-        setIsStudentAuthenticated(true);
-      }
-      else{
-        setIsStudentAuthenticated(false);
-        console.log("There is no more log");
-      }
-    }
-    else{
-    }
-  };
 
   return (
-    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, logout ,CheckStudentLogin}}>
+    <StudentAuthContext.Provider value={{ isStudentAuthenticated, studentLogin, logout}}>
       {children}
     </StudentAuthContext.Provider>
   );

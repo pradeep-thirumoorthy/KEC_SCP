@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Button, Card, Col, Image, Input, Row, Typography } from 'antd';
-import log from '../images/4841115.jpg';
-import logo from '../images/kec.jpg'
+import log from '../../images/4841115.jpg';
+import logo from '../../images/kec.jpg'
 import  { LeftCircleOutlined } from '@ant-design/icons';
 const ForgetPass = () => {
   const [email, setEmail] = useState('');

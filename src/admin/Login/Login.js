@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../Authenticate/AuthContext';
 import { Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import '../index.css';
 import axios from 'axios';import Link from 'antd/es/typography/Link';
-import log from '../images/vecteezy_people-planning-concept-entrepreneurship-and-planning-a_7954023.jpg';
+import log from '../../images/vecteezy_people-planning-concept-entrepreneurship-and-planning-a_7954023.jpg';
 import { Card, Checkbox, Col, Image, Input, Row, Typography } from 'antd';
 const Login = () => {
   const { isAuthenticated, login } = useAuth();

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useStudentAuth } from './StudentAuthContext';
+import { useStudentAuth } from '../Authenticate/StudentAuthContext';
 import { Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import '../index.css';
 import axios from 'axios'
-import log from '../images/7606000.jpg';import Link from 'antd/es/typography/Link';
+import log from '../../images/7606000.jpg';
+import Link from 'antd/es/typography/Link';
 import {Card, Checkbox, Col, Image, Input, Row,Typography,notification } from 'antd';
 
 const StudentLogin = () => {
   const { isStudentAuthenticated, studentLogin } = useStudentAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [api, contextHolder] = notification.useNotification(); // Move this line here
+  const [api, contextHolder] = notification.useNotification();
 
   const openNotification = (placement) => {
     api.info({

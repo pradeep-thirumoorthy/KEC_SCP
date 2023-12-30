@@ -8,6 +8,7 @@ const checkEmail = async () => {
 
     try {
       const response = await axios.get(`http://localhost:8000/Facultycheck.php?email=${encodeURIComponent(decryptedEmail)}`);
+      console.log('Faculty:'+JSON.stringify(response.data.present));
       return response.data.present;
     } catch (error) {
       console.error('Error checking email:', error);
