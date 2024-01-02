@@ -1,22 +1,38 @@
 <?php
+header("Access-Control-Allow-Origin: http://192.168.77.250:3000"); // Replace with your React app's URL
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'sgp';
+// Disable caching for the login response
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: 0");
 header("Access-Control-Allow-Origin: http://192.168.77.250:3000");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$host = '192.168.77.250';
-$user = 'root';
-$password = '';
-$database = 'sgp';
 
+
+
+
+
+
+// Disable caching for the login response
+
+// Replace these credentials with your actual database credentials
+
+
+// Connect to the database
 $conn = mysqli_connect($host, $user, $password, $database);
-
 if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $eventId = isset($_GET['eventId']) ? $_GET['eventId'] : '';
-    $email = isset($_GET['email']) ? $_GET['email'] : 'pradeept.21cse@kongu.edu';
+    $email = isset($_GET['email']) ? $_GET['email'] : '';
 
     if ($eventId === '' || $email === '') {
         echo json_encode(['success' => false, 'message' => 'Please provide eventId and email']);
@@ -85,16 +101,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                     if ($responseCount < $eventLimit) {
                         if ($responseCount == 0) {
-                            $eventQuery = "SELECT * FROM events WHERE event_id = '$eventId'";
-                            $eventResult = mysqli_query($conn, $eventQuery);
-
-                            if ($eventResult) {
-                                $eventInfo = mysqli_fetch_assoc($eventResult);
-                                echo json_encode(['success' => true, 'eventInfo' => $eventInfo]);
+                            $studentQuery = "SELECT Name, Roll_No FROM student_info WHERE Email='$email'";
+                            $studentResult = mysqli_query($conn, $studentQuery);
+                        
+                            if ($studentResult) {
+                                $studentInfo = mysqli_fetch_assoc($studentResult);
+                        
+                                $eventQuery = "SELECT * FROM events WHERE event_id = '$eventId'";
+                                $eventResult = mysqli_query($conn, $eventQuery);
+                        
+                                if ($eventResult) {
+                                    $eventInfo = mysqli_fetch_assoc($eventResult);
+                                    echo json_encode(['success' => true, 'eventInfo' => $eventInfo, 'studentInfo' => $studentInfo]);
+                                } else {
+                                    echo json_encode(['success' => false, 'message' => 'Server error']);
+                                }
                             } else {
-                                echo json_encode(['success' => false, 'message' => 'Server error']);
+                                echo json_encode(['success' => false, 'message' => 'Error fetching student information']);
                             }
-                        } else {
+                        } 
+                        else {
                             echo json_encode(['success' => false, 'message' => 'Email already responded to this event']);
                         }
                     } else {
