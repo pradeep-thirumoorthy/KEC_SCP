@@ -32,7 +32,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/EventInfoAdmin.php?email=${email}`)
+      axios.get(`http://192.168.77.250:8000/EventInfoAdmin.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -54,13 +54,13 @@ const FullEvents = () => {
     return EventData.map((item) => (
       <Card 
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://192.168.77.250:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <SettingOutlined key="setting" onClick={() => modify(item.event_id)} />,
           <FileDoneOutlined key="edit" onClick={() => response(item.event_id)} />,
           <CopyToClipboard
             className="text-center w-100"
-            textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
+            textToCopy={`http://192.168.77.250:3000/student/events/EventInfo/${item.event_id}`}
           />
         ]}
         hoverable
@@ -69,7 +69,7 @@ const FullEvents = () => {
         <Card.Meta  extra={
           <CopyToClipboard
             className="text-center w-100"
-            textToCopy={`http://localhost:3000/student/events/EventInfo/${item.event_id}`}
+            textToCopy={`http://192.168.77.250:3000/student/events/EventInfo/${item.event_id}`}
           />
         }
           title={item.Title}

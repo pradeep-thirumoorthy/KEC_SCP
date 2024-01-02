@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
+header("Access-Control-Allow-Origin: http://192.168.77.250:3000"); // Replace with your React app's URL
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -8,7 +8,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Expires: 0");
 
 // Replace these credentials with your actual database credentials
-$host = 'localhost';
+$host = '192.168.77.250';
 $user = 'root';
 $Faculty = ''; // You have an empty string for Faculty here, make sure it's set appropriately.
 $database = 'sgp';

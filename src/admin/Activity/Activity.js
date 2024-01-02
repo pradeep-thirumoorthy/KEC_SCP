@@ -35,7 +35,7 @@ const Activity = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://192.168.77.250:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -61,7 +61,7 @@ const Activity = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/viewComp2.php';
+    const apiUrl = 'http://192.168.77.250:8000/viewComp2.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

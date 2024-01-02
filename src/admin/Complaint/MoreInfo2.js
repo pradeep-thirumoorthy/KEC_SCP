@@ -34,7 +34,7 @@ const Forward2 = () => {
   }, [Designation, Faculty]);
 
   const fetchData = () => {
-    const apiUrl = `http://localhost:8000/getdesignation - Copy.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
+    const apiUrl = `http://192.168.77.250:8000/getdesignation - Copy.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
 
 
     axios
@@ -108,7 +108,7 @@ setDownstream(subjects);
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/ForwardComplaint.php", {
+        .post("http://192.168.77.250:8000/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -134,7 +134,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://192.168.77.250:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -158,7 +158,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://192.168.77.250:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();

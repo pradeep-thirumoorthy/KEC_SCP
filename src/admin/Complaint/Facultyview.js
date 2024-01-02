@@ -38,7 +38,7 @@ const Facultyview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/viewFacComp.php';
+    const apiUrl = 'http://192.168.77.250:8000/viewFacComp.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

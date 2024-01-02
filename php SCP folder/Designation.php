@@ -1,9 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: http://192.168.77.250:3000");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$host = 'localhost';
+$host = '192.168.77.250';
 $user = 'root';
 $password = '';
 $database = 'sgp';

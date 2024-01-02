@@ -179,7 +179,7 @@ const EventFormCreation = () => {
             console.log(email, formData, limit);
             const formdata = JSON.stringify(formData);
             console.log(formdata);
-            axios.post('http://localhost:8000/EventForm.php', { limit, formdata, email, option, title,lastDate, })
+            axios.post('http://192.168.77.250:8000/EventForm.php', { limit, formdata, email, option, title,lastDate, })
                 .then(response => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do

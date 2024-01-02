@@ -21,7 +21,7 @@ const PersonalInfo = () => {
       const email = bytes.toString(CryptoJS.enc.Utf8);
 
       axios
-        .post('http://localhost:8000/Admin_info.php', `email=${encodeURIComponent(email)}`)
+        .post('http://192.168.77.250:8000/Admin_info.php', `email=${encodeURIComponent(email)}`)
         .then((response) => {
           const data = response.data;
           if (data) {

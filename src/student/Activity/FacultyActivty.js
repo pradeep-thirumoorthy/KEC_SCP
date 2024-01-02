@@ -108,7 +108,7 @@ console.log('Value 2:', value2);
   const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/FacutlyActivity.php';
+    const apiUrl = 'http://192.168.77.250:8000/FacutlyActivity.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

@@ -7,7 +7,7 @@ const checkEmail = async () => {
     const decryptedEmail = CryptoJS.AES.decrypt(storedEmail, 'admin-_?info').toString(CryptoJS.enc.Utf8);
 
     try {
-      const response = await axios.get(`http://localhost:8000/Facultycheck.php?email=${encodeURIComponent(decryptedEmail)}`);
+      const response = await axios.get(`http://192.168.77.250:8000/Facultycheck.php?email=${encodeURIComponent(decryptedEmail)}`);
       console.log('Faculty:'+JSON.stringify(response.data.present));
       return response.data.present;
     } catch (error) {

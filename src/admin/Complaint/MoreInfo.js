@@ -37,7 +37,7 @@ const Forward = () => {
       return;
     }
 
-    const apiUrl = `http://localhost:8000/getdesignation.php?designation=${Designation}`;
+    const apiUrl = `http://192.168.77.250:8000/getdesignation.php?designation=${Designation}`;
 
     axios
       .get(apiUrl, { designation: Designation })
@@ -66,7 +66,7 @@ const Forward = () => {
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/ForwardComplaint.php", {
+        .post("http://192.168.77.250:8000/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -92,7 +92,7 @@ const Forward = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://192.168.77.250:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -116,7 +116,7 @@ const Forward = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://192.168.77.250:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();

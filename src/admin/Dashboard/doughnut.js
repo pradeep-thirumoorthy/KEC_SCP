@@ -1,67 +1,96 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js/auto';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-const Doughnut = () => {
-  const chartRef = useRef(null);
+import { G2, Pie } from '@antv/g2plot';
+import { useNavigate } from 'react-router-dom';
+
+G2.registerInteraction('conversion-tag-cursor', {
+  start: [{ trigger: 'conversion-tag-group:mouseenter', action: 'cursor:pointer' }],
+  end: [{ trigger: 'conversion-tag-group:mouseleave', action: 'cursor:default' }],
+});
+
+const DoughnutChart = ({ data }) => {
+  const chartRef = React.useRef(null);
+ const navigate = useNavigate();
+  useEffect(() => {
+    const donutPlot = new Pie(chartRef.current, {
+      data: data.map(item => ({ type: item.label, value: item.value, url: item.url })), // Assuming your data structure contains 'label', 'value', and 'url' properties
+      angleField: 'value',
+      colorField: 'type',
+      radius: 0.8,
+      innerRadius: 0.6,
+      label: {
+        type: 'outer',
+        formatter: (datum) => {
+          return `${datum.type}->${datum.value}`; // Custom HTML tag as label content
+        },
+        style: {
+          textAlign: 'center',
+        },
+      },
+      legend: true,
+      interactions: [
+        { type: 'element-selected' }, { type: 'element-active' },
+        {
+          type: 'conversion-tag-cursor',
+          cfg: {
+            start: [
+              {
+                trigger: 'conversion-tag-group:mouseenter',
+                action: (context) => {
+                },
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    donutPlot.render();
+
+    donutPlot.on('element:dblclick', (evt) => {
+      const { data } = evt;
+      console.log(data.data.url);
+      navigate('/admin/Complaints',{ state: { Filter: data.data.url } });
+    });
+
+    return () => {
+      donutPlot.destroy();
+    };
+  }, [data]);
+
+  return <div ref={chartRef} />;
+};
+
+const YourComponent = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8000/doughnet.php';
+    const apiUrl = 'http://192.168.77.250:8000/doughnet.php';
     const email = getEmailFromCookies();
 
     axios
-      .get(apiUrl, { params: { email: email } })
+      .get(apiUrl, { params: { email } })
       .then((response) => {
         const dataFromApi = response.data;
         setChartData(dataFromApi);
-        console.log(chartData);
-        renderChart(dataFromApi);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, []);
+
   const getEmailFromCookies = () => {
     const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
-  const renderChart = (data) => {
-    const myChart = new Chart(chartRef.current, {
-      type: "doughnut",
-      data: {
-        datasets: [
-          {
-            data: data.map((item) => item.value), // Adjust the property name based on your API response
-            backgroundColor: data.map((item) => item.color),
-          },
-        ],
-        labels: data.map((item) => item.label),
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'Complaint Types',
-        },
-        onClick: (event, elements) => {
-          if (elements && elements.length > 0) {
-            const index = elements[0].index;
-            const url = data[index].url;
-            window.open(url, '_self');
-          }
-        },
-      },
-    });
 
-    return () => {
-      myChart.destroy();
-    };
-  };
-
-  return <canvas id="myChart" ref={chartRef} />;
+  return (
+    <div>
+      <DoughnutChart data={chartData} />
+    </div>
+  );
 };
 
-export default Doughnut;
+export default YourComponent;

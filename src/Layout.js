@@ -1,4 +1,4 @@
-import { Layout, theme,Button,Typography, Spin } from 'antd';
+import { Layout,Button,Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
 import { useAuth } from './admin/Authenticate/AuthContext';
@@ -8,13 +8,14 @@ import he from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-scho
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
 import checkEmail from './FacultyAccess';
-import Card from 'react-bootstrap/Card';
 import Link from 'antd/es/typography/Link';
+import { Footer, Header } from 'antd/es/layout/layout';
 const {  Content, Sider } = Layout;
-const Layout1 = ({element}) => {
+const Layout1 = ({element,data=[]}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { logout } = useAuth();
+    const {Title}=Typography;
     const [dropdownStates, setDropdownStates] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [checkedEmail, setCheckedEmail] = useState(false);
@@ -90,25 +91,18 @@ const logo = {
     width: '50px',
     height: '50px',
 };
+const headerContent = data.length > 0 ? data[0] : 'Default Header';
 const Email = sessionStorage.getItem('AdminEmail');
 const secretKey = "admin-_?info";
 const bytes = CryptoJS.AES.decrypt(Email, secretKey);
 const FullUsername = bytes.toString(CryptoJS.enc.Utf8);
 const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 
-const [spinning, setSpinning] = React.useState(false);
-const showLoader = () => {
-  setSpinning(true);
-  setTimeout(() => {
-    setSpinning(false);
-  }, 3000);
-};
 
   const isWideLayout = windowWidth > 991;
   return (
     
     <Layout>
-      
       <Sider style={{height:'100vh',position:'fixed',zIndex:'5'}}
         breakpoint="lg"
         collapsedWidth="0"
@@ -256,9 +250,11 @@ const showLoader = () => {
                             <Accordion.Collapse eventKey="activity">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><Link  href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
-                                        <li><Link  href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</Link></li>
                                         <li><Link  href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
+                                        
+                                        <li><Link  href="/admin/Activity/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
+                                        
+                                        <li><Link  href="/admin/Activity/Faculty/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Panel</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -337,22 +333,38 @@ const showLoader = () => {
                   </div>
         </div>
       </Sider>
-      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0' }}>
-        
-        <Content>
+      <Layout style={{ marginLeft: isWideLayout ? '200px' : '0'}}>
+        <Header
+          style={{
+            padding:0,
+            paddingLeft:'2px',
+            backgroundColor:'transparent',
+            borderBottom:'2px solid #858585'
+          }}
+          
+        >
+          <div>
+          <Title level={1} style={{fontFamily:'sans-serif',fontStyle:'italic'}}>{data[0]}</Title>
+          <p style={{fontStyle:'oblique',}}>{data[1]}</p>
+          </div>
+        </Header>
+        <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
           <div
             style={{
+              padding: 24,
               minHeight: 360,
             }}
           >
             {element}
-            <>
-      <Button onClick={showLoader}>Show fullscreen for 3s</Button>
-      <Spin spinning={spinning} fullscreen />
-    </>
           </div>
         </Content>
-        
+        <Footer
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Kongu Grievance System
+        </Footer>
       </Layout>
     </Layout>
   );

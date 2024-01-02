@@ -8,15 +8,16 @@ import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-sch
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from 'antd/es/typography/Link';
+import { Footer, Header } from 'antd/es/layout/layout';
 const {  Content, Sider } = Layout;
 
-const Layout2 = ({element}) => {
+const Layout2 = ({element,data=[]}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { logout } = useStudentAuth();
     const [dropdownStates, setDropdownStates] = useState({});
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    
+    const {Title}=Typography;
 
 
   const [selectedTheme, setSelectedTheme] = useState('light');
@@ -37,7 +38,7 @@ const Layout2 = ({element}) => {
     console.log(selectedTheme);
     const foldersToCheck = [
         '/student/dashboard',
-        '/student/Complaint',
+        '/student/Complaints',
         '/student/ComplaintEntry',
         '/student/EventForm',
         '/student/Activity',
@@ -128,13 +129,13 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                     </Accordion>
                   </li>
                   <li className={`nav-item w-100 `}>
-                    <Accordion activeKey={dropdownStates['/student/Complaint'] ? 'complaints' : null}>
+                    <Accordion activeKey={dropdownStates['/student/Complaints'] ? 'complaints' : null}>
                         
                             
                                 <Button 
                                     type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Complaint'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
-                                    onClick={() => handledirect('/student/Complaint')}
+                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Complaints'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
+                                    onClick={() => handledirect('/student/Complaints')}
                                     data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
@@ -145,12 +146,12 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             <Accordion.Collapse eventKey="complaints">
                                 
                                     <ul className={`btn-toggle-nav list-unstyled pb-1 small d-block list-group w-100`}>
-                                    <li><Link  href='/student/Complaint/Academic' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Academic' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Academic</Link></li>
-                                    <li><Link  href='/student/Complaint/Maintenance' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Maintenance' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Maintenance</Link></li>
-                                    <li><Link  href='/student/Complaint/Lab' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Lab' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Lab</Link></li>
-                                    <li><Link  href='/student/Complaint/Courses' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Courses' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Courses</Link></li>
-                                    <li><Link  href='/student/Complaint/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Respective Faculty</Link></li>
-                                    <li><Link  href='/student/Complaint/Others' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaint/Others' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Others</Link></li>
+                                    <li><Link  href='/student/Complaints/Academic' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Academic' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Academic</Link></li>
+                                    <li><Link  href='/student/Complaints/Maintenance' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Maintenance' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Maintenance</Link></li>
+                                    <li><Link  href='/student/Complaints/Lab' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Lab' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Lab</Link></li>
+                                    <li><Link  href='/student/Complaints/Courses' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Courses' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Courses</Link></li>
+                                    <li><Link  href='/student/Complaints/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Respective Faculty</Link></li>
+                                    <li><Link  href='/student/Complaints/Others' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Others' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Others</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -295,17 +296,37 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
         </div>
       </Sider>
       <Layout style={{ marginLeft: isWideLayout ? '200px' : '0'}}>
-        <Content
+        <Header
+          style={{
+            padding:0,
+            paddingLeft:'2px',
+            backgroundColor:'transparent',
+            borderBottom:'2px solid #858585'
+          }}
+          
         >
+          <div>
+          <Title level={1} style={{fontFamily:'sans-serif',fontStyle:'italic'}}>{data[0]}</Title>
+          <p style={{fontStyle:'oblique',}}>{data[1]}</p>
+          </div>
+        </Header>
+        <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
           <div
             style={{
+              padding: 24,
               minHeight: 360,
             }}
           >
             {element}
           </div>
         </Content>
-        
+        <Footer
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Kongu Grievance System
+        </Footer>
       </Layout>
     </Layout>
   );

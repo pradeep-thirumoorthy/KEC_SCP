@@ -58,7 +58,7 @@ const Nfcalendar = () => {
           const Email = sessionStorage.getItem('StudentEmail');
           const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
           const email = bytes.toString(CryptoJS.enc.Utf8);
-          const apiUrl = 'http://localhost:8000/StudentCalendar.php';
+          const apiUrl = 'http://192.168.77.250:8000/StudentCalendar.php';
           const params = {
             email: email,
           };

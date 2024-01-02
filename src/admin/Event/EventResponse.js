@@ -25,7 +25,7 @@ const Eventviewresp = () => {
         const EventId = match[1];
 
         axios
-          .get(`http://localhost:8000/ResponseView.php?email=${email}&EventId=${EventId}`)
+          .get(`http://192.168.77.250:8000/ResponseView.php?email=${email}&EventId=${EventId}`)
           .then((response) => {
             const data = response.data;
             if (Array.isArray(data) && data.length > 0) {

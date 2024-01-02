@@ -25,11 +25,10 @@ const StudentLogin = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/student-login.php', { email, password })
+    axios.post('http://192.168.77.250:8000/student-login.php', { email, password })
       .then(response => {
         if (response.data.success) {
           studentLogin(email);
-          console.log(response.data.token);
         } else {
           openNotification('top');
         }

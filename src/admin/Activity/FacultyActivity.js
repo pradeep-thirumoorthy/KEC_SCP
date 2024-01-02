@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CryptoJS from 'crypto-js';
-import { Button, Input, Space, Table, Typography } from 'antd';
+import { Button, Input, Space, Table,Typography } from 'antd';
 
-const Complaintsview = () => {
-  const location = useLocation();
+const AdminFacultyActivity = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -14,20 +13,15 @@ const Complaintsview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  const { Filter } = location.state || [];
-  const [adminData, setAdminData] = useState(null);
-  const handleButtonClick = (rowData) => {
-    navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
-  };
   
+  const [adminData, setAdminData] = useState(null);
+  const handleButtonClick=(rowData)=>
+  {
+    navigate('/admin/Activity/Panel', { state: { info: rowData } });
+  };
   useEffect(() => {
-    console.log(adminData)
     fetchAdminData();
-    (Filter)?
-    setFilteredInfo({Type: [Filter],}):setFilteredData();
     filterData();
-    
-    console.log(filteredInfo);
   }, []);
 
   const fetchAdminData = () => {
@@ -45,7 +39,6 @@ const Complaintsview = () => {
           console.error('Error fetching admin data:', error);
         })
   };
-
   const getEmailFromCookies = () => {
     const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
@@ -60,7 +53,7 @@ const Complaintsview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/viewComp.php';
+    const apiUrl = 'http://192.168.77.250:8000/Activity/Faculty.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
@@ -217,8 +210,10 @@ const Complaintsview = () => {
     <>
       <div className="row">
         <div className="App">
-          <Typography.Title level={1}>Complaints</Typography.Title>
+          <Typography.Title level={1}>Complaints:</Typography.Title>
           <div className="d-flex justify-content-around">
+          
+
             <div>
               <label>Start Date:</label>
               <Input
@@ -249,11 +244,12 @@ const Complaintsview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
+          {loading ? <Typography.Title level={1}>Loading</Typography.Title> : 
+          <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
       </div>
     </>
   );
 };
 
-export default Complaintsview;
+export default AdminFacultyActivity;

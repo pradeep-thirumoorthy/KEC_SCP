@@ -10,7 +10,6 @@ const Admincalendar = () => {
     
   const [currentPage, setCurrentPage] = useState(1);
     const [events, setEvents] = useState({});
-    
   const [pageSize, setPageSize] = useState(5);
     const navigate= useNavigate();
 
@@ -58,7 +57,7 @@ const Admincalendar = () => {
           const Email = sessionStorage.getItem('AdminEmail');
           const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
           const email = bytes.toString(CryptoJS.enc.Utf8);
-          const apiUrl = 'http://localhost:8000/AdminCalendar.php';
+          const apiUrl = 'http://192.168.77.250:8000/AdminCalendar.php';
           const params = {
             email: email,
           };
@@ -128,7 +127,7 @@ const Admincalendar = () => {
   };
   return (
     <>
-        <Calendar  dateCellRender={dateCellRender} />
+        <Calendar cellRender={dateCellRender} />
       <Modal
         title={`Events for ${selectedDate ? selectedDate.format('YYYY-MM-DD') : ''}`}
         open={modalVisible}

@@ -1,80 +1,73 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js/auto';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Line } from '@antv/g2plot';
 import CryptoJS from 'crypto-js';
-
-const LineChartComponent = () => {
-  const chartRef = useRef(null);
-  const [complaintData, setComplaintData] = useState([]);
-  const [myChart, setMyChart] = useState(null);
+const LineChart = () => {
+  const chartContainer = useRef(null);
+  const [chartData, setComplaintData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8000/Linechart.php';
+    // Axios GET request to fetch data
+    const apiUrl = 'http://192.168.77.250:8000/Linechart.php';
     const email = getEmailFromCookies();
-
+    
     axios
       .get(apiUrl, { params: { email: email } })
       .then((response) => {
         setComplaintData(response.data.data || []);
+        console.log(chartData)
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-  useEffect(() => {
-    // Render the chart when the complaintData is available
-    if (complaintData.length > 0) {
-      if (myChart) {
-        myChart.destroy(); // Destroy the existing chart before rendering a new one
-      }
-      renderChart();
-    }
-  }, [complaintData]);
-
   const getEmailFromCookies = () => {
     const Email = sessionStorage.getItem('AdminEmail');
     const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
     return bytes.toString(CryptoJS.enc.Utf8);
   };
+  useEffect(() => {
+    if (chartData.length > 0) {
+      const line = new Line(chartContainer.current, {
+        data: chartData,
+        xField: 'info1',
+        yField: 'count',
+        label: {
 
-  const renderChart = () => {
-    // Extract the last 10 elements from the complaintData
-    const lastTenData = complaintData.slice(-10);
-    
-    const xValues = lastTenData.map((item) => item.info1);
-    const yValues = lastTenData.map((item) => item.count);
-  
-    const ctx = chartRef.current.getContext('2d');
-    const newChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: xValues,
-        datasets: [{
-          label: "Complaints per day",
-          data: yValues,
-          borderColor: 'rgba(288, 192, 192, 1)',
-          backgroundColor: 'rgba(288, 192, 192, 0.2)',
-          fill: true,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'Complaints',
         },
-      },
-    });
+        stepType:'hvh',
+        point: {
+          size: 5,
+          shape: 'diamond',
+          style: {
+            fill: localStorage.getItem('theme')==='light'?'black':'white',
+            stroke: '#5B8FF9',
+            lineWidth: 2,
+          },
+        },
+        tooltip: { showMarkers: false },
+        state: {
+          active: {
+            style: {
+              shadowBlur: 4,
+              stroke: '#000',
+              fill: 'red',
+            },
+          },
+        },
+        interactions: [{ type: 'marker-active' }],
+      });
 
-    setMyChart(newChart); // Set the new chart instance
-  };
-  
+      line.render();
 
-  return <canvas id="myLineChart" ref={chartRef} style={{ height: "100%", minWidth: "400px", maxWidth: '700px' }}></canvas>;
+      // Clean up the instance on unmount or rerender
+      return () => {
+        line.destroy();
+      };
+    }
+  }, [chartData]);
+
+  return <div ref={chartContainer} />;
 };
 
-export default LineChartComponent;
+export default LineChart;

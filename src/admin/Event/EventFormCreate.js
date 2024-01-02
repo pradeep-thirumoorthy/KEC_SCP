@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
+import './styled.css';
 import CryptoJS from 'crypto-js';
 import { Button, Card, Flex, Input, Layout, Select, Typography} from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
@@ -12,7 +13,21 @@ import { Title } from 'chart.js';
 import Reach from './Reach';
 const EventFormCreation = () => {
     const navigate = useNavigate();
-    const [inputs, setInputs] = useState([]);
+    const newInput1 = {
+        key: 1,
+        label: 'Name',
+        selectedType: 'text',
+        inputArrayLength: 1,
+        options: [{ value: '', display: true }],
+    };
+    const newInput2 = {
+        key: 2,
+        label: 'Roll',
+        selectedType: 'text',
+        inputArrayLength: 1,
+        options: [{ value: '', display: true }],
+    };
+    const [inputs, setInputs] = useState([newInput1,newInput2]);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [slimit,setlimit]=useState(1);
@@ -20,6 +35,7 @@ const EventFormCreation = () => {
     const [lastDate,setLastDate]=useState(getTodayDate);
     
     const [previewImage, setPreviewImage] = useState('');
+
     const generateInput = () => {
         const inputId = Date.now();
         const newInput = {
@@ -50,7 +66,6 @@ const EventFormCreation = () => {
         }
     };
     useEffect(() => {
-        
         console.log(JSON.stringify(pfile));
         if (!generated) {
             generateInput();
@@ -79,6 +94,9 @@ const EventFormCreation = () => {
         setLastDate(newLastDate);
       };
     const handleSelectChange = (event, inputId) => {
+        
+        console.log(JSON.stringify(inputs));
+
         const selectedValue = event.target.value;
         setInputs(prevInputs =>
             prevInputs.map(input => {
@@ -143,24 +161,20 @@ const EventFormCreation = () => {
                 return input.options.map((option, optionIndex) => (
                     <div key={optionIndex}>
                         {option.display && (
-                            <div>
+                            <Flex justify='flex-start' align='center'>
+                                <Input style={{height: '1em'}} type={type} disabled/>
                                 <Input
-                                    type={type}
-                                    className='ms-3'
-                                    disabled
-                                />
-                                <Input
-                                    className='option ms-md-3 my-2  border-0 border-bottom w-75 border-dark'
+                                    className='option ms-md-3 my-2'
                                     type='text'
                                     value={option.value}
                                     onChange={(e) => updateOptionValue(input.key, optionIndex, e.target.value)} required
                                 />
                                 {optionIndex !== 0 && (
-                                    <Button className='outline-0 border-0 ' onClick={() => deleteOption(input.key, optionIndex)}>
-                                        <FiX />
+                                    <Button className='outline-0 border-0 '>
+                                        <FiX onClick={() => deleteOption(input.key, optionIndex)}/>
                                     </Button>
                                 )}
-                            </div>
+                            </Flex>
                         )}
                     </div>
                 ));
@@ -208,13 +222,14 @@ const EventFormCreation = () => {
                         const finformData = new FormData();
             finformData.append('limit', slimit);
             finformData.append('formdata', JSON.stringify(inputs));
+            
             finformData.append('email', email);
             finformData.append('option', 'create');
             finformData.append('title', title);
             finformData.append('formdata', formdata);
             finformData.append('lastDate', lastDate);
             finformData.append('pfile', pfile);
-            axios.post('http://localhost:8000/EventForm.php', finformData)
+            axios.post('http://192.168.77.250:8000/EventForm.php', finformData)
                 .then(response => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do
@@ -314,7 +329,47 @@ const EventFormCreation = () => {
         handleLastDateChange={handleLastDateChange}
       />
                 </Card>
-                {inputs.map((input, index) => (
+                <Card 
+                hoverable
+                className={`px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3`}
+            >
+                        <div className='row'>
+                            <Input
+                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                type='text' placeholder='Label'
+                                value={"Name"}
+                                required disabled
+                            />
+                            <div className='w-25'></div>
+                            <select
+                                className="col-lg-6 w-25 "
+                                value="Plain text" disabled
+                            >
+                            <option value="Plain text">Plain text</option>
+                            </select>
+                        </div>
+                    </Card>
+                    <Card 
+                hoverable
+                className={`px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3`}
+            >
+                        <div className='row'>
+                            <Input
+                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                type='text' placeholder='Label'
+                                value={"Roll No"}
+                                required disabled
+                            />
+                            <div className='w-25'></div>
+                            <select
+                                className="col-lg-6 w-25 "
+                                value="Plain text" disabled
+                            >
+                            <option value="Plain text">Plain text</option>
+                            </select>
+                        </div>
+                    </Card>
+                {inputs.slice(2).map((input, index) => (
             <Card 
                 key={index} // Using index as the key for dynamic rendering
                 style={input.fading ? styles.tagFadeOut : {}}
@@ -336,8 +391,8 @@ const EventFormCreation = () => {
                                 required
                             />
                             <div className='w-25'></div>
-                            <Select
-                                className="col-lg-6 text-start w-25 border-0 border-bottom border-dark form-control rounded-0"
+                            <select
+                                className="col-lg-6 w-25 "
                                 value={input.selectedType}
                                 onChange={(e) => handleSelectChange(e, input.key)}
                             >
@@ -347,10 +402,10 @@ const EventFormCreation = () => {
                                 <option value="date">Date</option>
                                 <option value="email">Email</option>
                                 <option value="radio">Radio options</option>
-                            </Select>
+                            </select>
                         </div>
                         <br />
-                        <div className='col-lg-10'>
+                        <div className='col-lg-10 radio-check-inputs'>
                             {['radio', 'checkbox'].includes(input.selectedType) && (
                                 <div>
                                     {renderOptions(input.key, input.selectedType)}

@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Replace these credentials with your actual database credentials
-$host = 'localhost';
+$host = '192.168.77.250';
 $user = 'root';
 $password = '';
 $database = 'sgp';

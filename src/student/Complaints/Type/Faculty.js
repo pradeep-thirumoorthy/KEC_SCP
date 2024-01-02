@@ -93,7 +93,7 @@ const Faculty = () => {
     // Define the Axios POST request to fetch admin data
     
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://192.168.77.250:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -133,7 +133,7 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Faculty.php', {
+      .post('http://192.168.77.250:8000/Type/Faculty.php', {
         name: name,
         rollno: rollno,
         email: email,

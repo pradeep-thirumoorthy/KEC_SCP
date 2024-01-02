@@ -23,7 +23,7 @@ const Events = () => {
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
       axios
-        .get(`http://localhost:8000/EventInfoAdmin.php?email=${email}`)
+        .get(`http://192.168.77.250:8000/EventInfoAdmin.php?email=${email}`)
         .then((response) => {
           clearTimeout(timeoutId);
           const data = response.data.data;

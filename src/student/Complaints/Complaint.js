@@ -31,7 +31,7 @@ const ComplaintStatus = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/Complaint.php?email=${email}`)
+      .get(`http://192.168.77.250:8000/Complaint.php?email=${email}`)
       .then((response) => {
         const data = response.data.data; // Assuming the data structure is as provided
         console.log(JSON.stringify(data));
