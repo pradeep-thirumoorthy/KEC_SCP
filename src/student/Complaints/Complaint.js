@@ -72,13 +72,22 @@ const ComplaintStatus = () => {
                   {Object.entries(item).map(([key, value]) => {
                     if (key !== 'Type') {
                       if(key==='Arrived'){
+                        if(item.Type==='Faculty'){
+                          return <Card.Grid  onClick={()=>{navigate(`/student/Activity/Faculty#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
+                        }
                         return <Card.Grid  onClick={()=>{navigate(`/student/Activity#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
                       }
                       else{
                         return <Card.Grid  onClick={()=>{
                           if(item.Type==='Faculty'){
-                            navigate('/student/Faculty')
-                          }else if(key==='Accepted'){
+                            if(key==='Accepted'){
+                              navigate(`/student/Activity/Faculty#${key}`)
+                            }
+                            else{
+                              navigate(`/student/History/Faculty#${key}`)
+                            }
+                          }
+                          else if(key==='Accepted'){
                             navigate(`/student/Activity#${item.Type}=${key}`)
                           }
                           else{

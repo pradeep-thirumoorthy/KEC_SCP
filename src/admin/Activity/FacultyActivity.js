@@ -17,7 +17,7 @@ const AdminFacultyActivity = () => {
   const [adminData, setAdminData] = useState(null);
   const handleButtonClick=(rowData)=>
   {
-    navigate('/admin/Activity/Panel', { state: { info: rowData } });
+    navigate('/admin/Activity/Faculty/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
     fetchAdminData();

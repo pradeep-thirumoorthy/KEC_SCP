@@ -27,6 +27,10 @@ import checkEmail from './FacultyAccess';
 import CSVReaderComponent from './master_admin/upload';
 import FacutlyActivity from './student/Activity/FacultyActivty';
 import AdminFacultyActivity from './admin/Activity/FacultyActivity';
+import ActivityFacultyPanel from './admin/Activity/FacultyPanel';
+import FacultyHistory from './admin/History/FacultyHistory';
+import FacultyHistory2 from './student/History/FacultyHistory2';
+import FacultyActivitypanel from './student/Activity/FacultyActivitypanel';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -177,6 +181,8 @@ const App = () => {
                 
                 
                 <Route path="/admin/History" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<History />} data={['History','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/History/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FacultyHistory />} data={['Faculty History','Here is your complaints arrived']}/>}/>}/>
+                
                 <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo  />} data={['Account','Here is your complaints arrived']}/>}/>}/>
                 
 
@@ -188,6 +194,7 @@ const App = () => {
                 <Route path="/admin/Activity/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<ActivityPanel  />} data={['Activity','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/Activity" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Activity  />} data={['Activity Panel','Here is your complaints arrived']}/>}/>}/>
                 <Route path='/admin/Activity/Faculty' element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<AdminFacultyActivity />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>
+                <Route path='/admin/Activity/Faculty/Panel' element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<ActivityFacultyPanel />} data={['Faculty Panel','Here is your complaints arrived']}/>}/>}/>
                 
                 
                 
@@ -225,11 +232,14 @@ const App = () => {
                   <Route path='/student/Activity' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivity />} data={['Activity','Here is your complaints arrived']}/>}/>}/>
                   <Route path='/student/Activity/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivityPanel />} data={['Activity Panel','Here is your complaints arrived']}/>}/>}/>
                   <Route path='/student/Activity/Faculty' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<FacutlyActivity />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>
+                  <Route path='/student/Activity/Faculty/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<FacultyActivitypanel />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>
 
                   
                   
                   <Route path='/student/History' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentHistory />} data={['History','Here is your complaints arrived']}/>}/>}/>
                   <Route path='/student/History/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivityPanel />} data={['History Panel','Here is your complaints arrived']}/>}/>}/>
+                  <Route path='/student/History/Faculty' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<FacultyHistory2 />} data={['History','Here is your complaints arrived']}/>}/>}/>
+                  <Route path='/student/History/Faculty/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<FacultyActivitypanel />} data={['History Panel','Here is your complaints arrived']}/>}/>}/>
                   
                   
                   <Route path='/student/Complaints/Panel' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<StudentActivityPanel />} data={['Complaints Panel','Here is your complaints arrived']}/>}/>}/>

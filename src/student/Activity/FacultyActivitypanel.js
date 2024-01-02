@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import TimelineComponent from '../Timeline/TimelineComponent';
 import { Divider, Steps, Typography } from 'antd';
+import TimelineComponent2 from '../Timeline/TimelineComponent2';
 
-const StudentActivityPanel = () => {
+const FacultyActivitypanel = () => {
   const [current, setCurrent] = useState(0);
   
   const location = useLocation();
@@ -23,11 +24,6 @@ const StudentActivityPanel = () => {
       disabled: (info.info1==='')?true:false,
     },
     {
-      title: 'Forwarded',
-      content: 'Second-content',
-      disabled: (info.info2==='')?true:false,
-    },
-    {
       title: 'Accepted',
       content: 'Last-content',
       disabled: (!(info.Status==='Accepted' ||info.Status ==='Resolved'))?true:false,
@@ -35,7 +31,7 @@ const StudentActivityPanel = () => {
     {
       title: 'Completed',
       content: 'Last-content',
-      disabled: (info.info4==='' || info.Status==='Rejected')?true:false,
+      disabled: (info.info4==='')?true:false,
     },
   ];
 
@@ -53,9 +49,9 @@ const StudentActivityPanel = () => {
         <Steps current={current} className=' px-5' onChange={onchange} items={items} />
         <Divider />
       </>
-      <TimelineComponent current={current} info={info}/>
+      <TimelineComponent2 current={current} info={info}/>
     </>
   );
 };
 
-export default StudentActivityPanel;
+export default FacultyActivitypanel;

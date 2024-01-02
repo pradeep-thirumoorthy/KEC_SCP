@@ -279,10 +279,12 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                             
                             <Accordion.Collapse eventKey="history">
                                 
-                                    <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><Link  href="#overview" className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
-                                        <li><Link  href="#updates" className="link-light text-white-50 w-100 btn m-0 p-0">Updates</Link></li>
-                                        <li><Link  href="#reports" className="link-light text-white-50 w-100 btn m-0 p-0">Reports</Link></li>
+                            <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
+                                        <li><Link  href="/admin/History/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
+                                        
+                                        <li><Link  href="/admin/History/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
+                                        
+                                        <li><Link  href="/admin/History/Faculty/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Panel</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>

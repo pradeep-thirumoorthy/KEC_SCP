@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
-import { Button, Radio,Table, Typography} from 'antd';
+import { Badge, Button, Radio,Table, Typography} from 'antd';
 const History= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,12 @@ const History= () => {
     columns.push({
       title: 'Status',
       dataIndex: 'Status',
-      key: 'Status'
+      key: 'Status',
+      render: (_, { Status }) => (
+        <>
+          <Badge status={(Status==='Resolved')?'success':'error'} text={Status} />
+        </>
+      ),
     });
   }
   const mappedTableData = data

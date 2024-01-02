@@ -28,7 +28,7 @@ const Faculty = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [Exceptional,setExceptional] = useState(false);
   const navigate = useNavigate();
-  
+  const [Type,setType]=useState('Public');
   
   const TreeData = [
     {
@@ -143,6 +143,7 @@ const Faculty = () => {
         Subject: subject.email,
         Batch: Batch,
         Subjectname: subject.name,
+        Type:Type,
       })
       .then((response) => {
         if (response.data.success) {
@@ -322,7 +323,15 @@ const Faculty = () => {
 
 
         </div>
-        
+        <div className='col-lg-6 col-sm-12 '>
+          <label className='entry px-5'>Your Option</label>
+        </div>
+        <div className='col-lg-6 col-sm-12'>
+          <Radio.Group className='mx-5 my-3' onChange={(e)=>{setType(e.target.value)}} value={Type}>
+      <Radio value={'Public'}>Public</Radio>
+      <Radio value={'Anonymous'}>Anonymous</Radio>
+    </Radio.Group>
+    </div>
         <div className='w-100 text-center p-5'>
           <Button type='primary' onClick={handleLogin} loading={Loading} className='w-25 mt-2'>
             Submit
