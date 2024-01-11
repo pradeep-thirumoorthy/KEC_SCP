@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiArrowUp, FiCheck } from "react-icons/fi";
+import {ArrowUpOutlined,CheckOutlined} from '@ant-design/icons';
 import { useLocation,useNavigate } from 'react-router-dom';
 import CryptoJS from "crypto-js";
 import axios from "axios";
@@ -31,7 +31,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
-      .post("http://192.168.77.250:8000/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
+      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -46,7 +46,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Complete the resolvation of the complaint?');
     if (confirmed) {
     axios
-      .post("http://192.168.77.250:8000/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
+      .post("http://localhost:8000/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -61,14 +61,6 @@ const ActivityPanel = () => {
   return (
     
         <>
-        <div className=" row ">
-                <div className="row border-bottom pb-3">
-                  <div className="col-lg-12">
-                    <Typography className="fs-2 fw-bolder fst-italic">Activity Panel</Typography><br />
-                    <Typography className=" fst-italic no-warp">Here is the Info of the complaint arrived</Typography>
-                  </div>
-                </div>
-              </div>
               {info?<ConfigProvider
   >
 <Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{fontStyle:'oblique'}} >
@@ -92,10 +84,10 @@ const ActivityPanel = () => {
       <div className="d-flex justify-content-center my-5" id="access">
       <div className="row h-auto">
             <div className="col-6">
-              <Button  type="primary"  size="large" onClick={handleUpdate}><FiArrowUp/>Update</Button>
+              <Button  type="primary"  size="large" onClick={handleUpdate}><ArrowUpOutlined />Update</Button>
             </div>
             <div className="col-6">
-              <Button style={{backgroundColor:'green'}} type="primary" size="large" onClick={Resolved}><FiCheck/>Resolved</Button>
+              <Button style={{backgroundColor:'green'}} type="primary" size="large" onClick={Resolved}><CheckOutlined />Resolved</Button>
             </div>
           </div>
       </div>

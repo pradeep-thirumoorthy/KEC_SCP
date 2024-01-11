@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import {Breadcrumb, Col, Divider, Flex, Radio, Row, Select, TreeSelect, Typography, message } from 'antd';
-import { Input, Button,} from 'antd'; // Import InputNumber instead of TextArea
+import { Input, Button,} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { Option } from 'antd/es/mentions';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
+import { geteduEmailFromSession } from '../../Emailretrieval';
 const Maintenance = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
@@ -19,12 +19,6 @@ const Maintenance = () => {
 
   
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-
-  const Email = sessionStorage.getItem('StudentEmail');
-  const secretKey = 'student-_?info';
-  const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const [Loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [Floor,setFloor]=useState('');
@@ -104,11 +98,11 @@ const Maintenance = () => {
     'Ground Floor': ['Room 1', 'Room 2', 'Room 3'],
     'First Floor': ['Room A', 'Room B', 'Room C'],
     'Second Floor': ['Room X', 'Room Y', 'Room Z'],
-  };    
+  };
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://192.168.77.250:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -150,7 +144,7 @@ const Maintenance = () => {
         window.removeEventListener('resize', handleResize);
       };
 
-  }, [email,Gender]);
+  }, [Gender]);
   const handleLogin = () => {
     if ( description === '' ||description_1 ===''||Floor === '') {
       alert('Please fill in all required fields');
@@ -158,10 +152,10 @@ const Maintenance = () => {
     }
     setLoading(true);
     axios
-      .post('http://192.168.77.250:8000/Type/Maintenance.php', {
+      .post('http://localhost:8000/Type/Maintenance.php', {
         name: name,
         rollno: rollno,
-        email: email,
+        email: geteduEmailFromSession(),
         description: description,
         department: department,
         Class: Class,

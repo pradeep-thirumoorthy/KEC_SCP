@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CryptoJS from 'crypto-js';
 import { Button, Input, Space, Table,Typography } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const AdminFacultyActivity = () => {
   const [data, setData] = useState([]);
@@ -27,7 +27,7 @@ const AdminFacultyActivity = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://192.168.77.250:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -39,11 +39,6 @@ const AdminFacultyActivity = () => {
           console.error('Error fetching admin data:', error);
         })
   };
-  const getEmailFromCookies = () => {
-    const Email = sessionStorage.getItem('AdminEmail');
-    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-    return bytes.toString(CryptoJS.enc.Utf8);
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -53,11 +48,11 @@ const AdminFacultyActivity = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/Activity/Faculty.php';
+    const apiUrl = 'http://localhost:8000/Activity/Faculty.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email: getEmailFromCookies(),
+      email: getEmailFromSession(),
     };
 
     axios
@@ -74,9 +69,9 @@ const AdminFacultyActivity = () => {
 
   const columns = [
     {
-      title: 'Roll No',
-      dataIndex: 'Roll_No',
-      key: 'Roll_No',
+      title: 'Faculty',
+      dataIndex: 'FacultyName',
+      key: 'FacultyName',
       
     },
     
@@ -194,12 +189,12 @@ const AdminFacultyActivity = () => {
             ))
         );
       }).map((item) => ({
-        key: item.id, 
-        Roll_No:item.Roll_No,
+        key: item.id,
         Class:item.Class,
         Batch:JSON.stringify(item.Batch),
         Type: item.Type,
         Date: item.info1,
+        FacultyName:item.FacultyName,
         info: item,
         Details: 'More',
       })).reverse()
@@ -208,9 +203,6 @@ const AdminFacultyActivity = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="App">
-          <Typography.Title level={1}>Complaints:</Typography.Title>
           <div className="d-flex justify-content-around">
           
 
@@ -246,8 +238,7 @@ const AdminFacultyActivity = () => {
 
           {loading ? <Typography.Title level={1}>Loading</Typography.Title> : 
           <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
-        </div>
-      </div>
+        
     </>
   );
 };

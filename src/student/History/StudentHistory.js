@@ -3,8 +3,8 @@ import axios from 'axios';
 import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import CryptoJS from 'crypto-js';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
+import { geteduEmailFromSession } from '../Emailretrieval';
 
 const StudentHistory= () => {
   const [data, setData] = useState([]);
@@ -139,16 +139,12 @@ console.log('Value 2:', value2);
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = sessionStorage.getItem('StudentEmail');
-  console.log(Email);
-  const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/StudentHistory.php';
+    const apiUrl = 'http://localhost:8000/StudentHistory.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email:email,
+      email:geteduEmailFromSession(),
     };
     
     axios.get(apiUrl, { params })

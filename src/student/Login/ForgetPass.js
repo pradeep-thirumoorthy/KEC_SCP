@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { Button, Card, Col, Image, Input, Row, Typography } from 'antd';
 import log from '../../images/4841115.jpg';
-import logo from '../../images/kec.jpg'
+import logo from '../../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png'
 import  { LeftCircleOutlined } from '@ant-design/icons';
 const ForgetPass = () => {
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ const ForgetPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://192.168.77.250:8000/ForgetStudentOTP.php', {
+      .post('http://localhost:8000/ForgetStudentOTP.php', {
         to: email,
         subject: 'Forget password',
       })
@@ -98,7 +98,7 @@ const ForgetPass = () => {
         return false;
     }
     else{
-    axios.post('http://192.168.77.250:8000/ForgetStudentPass.php', { email: email, password: newPassword })
+    axios.post('http://localhost:8000/ForgetStudentPass.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {

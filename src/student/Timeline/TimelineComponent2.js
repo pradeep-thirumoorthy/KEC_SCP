@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Descriptions, Result, Timeline } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import {ClockCircleOutlined,CarryOutOutlined, LoadingOutlined} from '@ant-design/icons';
 import './styles.css';
 const TimelineComponent2 = ({ current,info }) => {
   const [timelineData, setTimeData] = useState([]);
@@ -36,25 +36,7 @@ const TimelineComponent2 = ({ current,info }) => {
   
         setTimeData(dataToDisplay);
       }
-      if (current === 2) {
-        setTimeData([
-          {
-            label: <div className='mx-5'>
-              <Descriptions  column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}>
-          <Descriptions.Item label={"Resolved By"}>
-            {JSON.parse(info.info4).Resolved[0]}
-          </Descriptions.Item>
-          
-      </Descriptions>
-            </div>,
-            children: <><Descriptions  column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}}><Descriptions.Item label={"Resolved At"}>
-            {JSON.parse(info.info4).Resolved[1]}
-          </Descriptions.Item></Descriptions><br/><br/><br/><br/><br/></>,
-            dot: <CarryOutOutlined style={{ fontSize: '30px',color:'green' }} />,
-          }]);
-        setPending(false);
-      }
-  }, [current]);
+  }, [current, info]);
 
   return (
     <>
@@ -110,9 +92,9 @@ const TimelineComponent2 = ({ current,info }) => {
   </Descriptions>
 ) : current === 2 ? (
   <Result
-  status="success"
-  title={`Resolved by ${JSON.parse(info.info4).Resolved[0]}`}
-  subTitle={`At ${JSON.parse(info.info4).Resolved[1]}`}
+  status={(info.Status==='Resolved')?"success":"error"}
+  title={`${info.Status} by ${JSON.parse(info.info4)[0]}`}
+  subTitle={`At ${JSON.parse(info.info4)[1]}`}
 />
 
 ) : (

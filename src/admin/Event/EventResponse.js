@@ -3,9 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useLocation } from 'react-router';
 import { useEffect } from 'react';
-import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { Table, Segmented, Descriptions, ConfigProvider, Empty } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const Eventviewresp = () => {
   const [adminData, setAdminData] = useState([]);
@@ -13,43 +13,37 @@ const Eventviewresp = () => {
   const location = JSON.stringify(useLocation());
   const match = location.match(/eventInfo\/(.*?)\/response/i);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasLoadedData, setHasLoadedData] = useState(false);
   const [selectedOption, setSelectedOption] = useState('List');
    // Default selected option
-  useEffect(() => {
-    if (Email && isLoading && !hasLoadedData) {
-      const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-      const email = bytes.toString(CryptoJS.enc.Utf8);
-
+   useEffect(() => {
+    const fetchData = async () => {
       if (match && match[1]) {
         const EventId = match[1];
-
-        axios
-          .get(`http://192.168.77.250:8000/ResponseView.php?email=${email}&EventId=${EventId}`)
-          .then((response) => {
-            const data = response.data;
-            if (Array.isArray(data) && data.length > 0) {
-              const parsedData = data.map((item) => ({
-                ...item,
-                Response: JSON.parse(item.Response.replace(/^"|"$/g, '')),
-              }));
-              setAdminData(parsedData);
-              setHasLoadedData(true); // Mark that data has been loaded
-            } else {
-              console.error('Data is not an array or is empty:', data);
-            }
-          })
-          .catch((error) => {
-            console.error('An error occurred:', error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
+        try {
+          const response = await axios.get(`http://localhost:8000/ResponseView.php?email=${getEmailFromSession()}&EventId=${EventId}`);
+          const data = response.data;
+          if (Array.isArray(data) && data.length > 0) {
+            const parsedData = data.map((item) => ({
+              ...item,
+              Response: JSON.parse(item.Response.replace(/^"|"$/g, '')),
+            }));
+            setAdminData(parsedData);
+          } else {
+            console.error('Data is not an array or is empty:', data);
+          }
+        } catch (error) {
+          console.error('An error occurred:', error);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         console.error('EventId not found in the URL');
       }
-    }
-  }, [Email, match, isLoading, hasLoadedData]);
+    };
+  
+    fetchData();
+  }, []);
+  
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);

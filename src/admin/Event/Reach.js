@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, Radio,Typography } from 'antd'; // Import Radio from 'antd'
-import CryptoJS from 'crypto-js';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { Modal, Button, Input, Radio,Typography, Select } from 'antd';
 
-const MAX_TIMEOUT = 10000;
-
-const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange }) => {
+const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange,setConstraint,setvisibility}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [radioValue, setRadioValue] = useState('public'); // State for radio button value
-  const [department, setDepartment] = useState(''); // State for department input
-  const [batch, setBatch] = useState(''); // State for batch input
-  const [classValue, setClassValue] = useState(''); // State for class input
-
-  const Email = sessionStorage.getItem('AdminEmail');
-
-  const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+  const [radioValue, setRadioValue] = useState('private');
+  const [department,setDepartment]=useState('Not Applied');
+  const [Class,setClass]=useState('Not Applied');
+  const [Batch,setBatch]=useState('Not Applied');
 
   const handleModal = () => {
     setModalVisible(true);
   };
 
   const handleModalOk = () => {
-    // Handle any action upon clicking OK in the modal
+    setvisibility(radioValue);
+    setConstraint([department,Batch,Class]);
     setModalVisible(false);
   };
 
@@ -35,24 +27,42 @@ const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange 
   };
 
   const conditionalInputs = () => {
-    if (radioValue === 'conditional') {
+    if (radioValue === 'constraint') {
       return (
         <div>
-          <Input
-            value={department}
-            onChange={e => setDepartment(e.target.value)}
-            placeholder="Department"
-          />
-          <Input
-            value={batch}
-            onChange={e => setBatch(e.target.value)}
-            placeholder="Batch"
-          />
-          <Input
-            value={classValue}
-            onChange={e => setClassValue(e.target.value)}
-            placeholder="Class"
-          />
+          <Select className='w-100'
+                value={department}
+                onChange={(e) => {setDepartment(e);setBatch('Not Applied');setClass('Not Applied')}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+                <option value="CSD">CSD</option>
+                <option value="EEE">EEE</option>
+                <option value="EIE">EIE</option>
+            </Select>
+            <Select className='w-100'
+                value={Batch}
+                disabled={(department==='Not Applied')}
+                onChange={(e) => {setBatch(e);setClass('Not Applied')}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </Select>
+            <Select className='w-100'
+                value={Class}
+                disabled={(Batch==='Not Applied')}
+                onChange={(e) => {setClass(e)}}
+            >
+            <option value="Not Applied">Not Applied</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </Select>
         </div>
       );
     }
@@ -91,7 +101,7 @@ const Reach = ({ slimit, setlimit, lastDate, getTodayDate, handleLastDateChange 
           <Radio.Group onChange={onChange} value={radioValue}>
             <Radio value="public">Public</Radio>
             <Radio value="private">Private</Radio>
-            <Radio value="conditional">Conditional</Radio>
+            <Radio value="constraint">Conditional</Radio>
           </Radio.Group>
           {conditionalInputs()}
         </div>

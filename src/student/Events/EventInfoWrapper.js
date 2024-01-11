@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
-import { Card, Flex, Image, Input, Space, Typography } from 'antd';
+import { Card, Flex, Input, Space, Typography } from 'antd';
+import { geteduEmailFromSession } from '../Emailretrieval';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
@@ -12,15 +12,12 @@ const EventInfoWrapper = () => {
   const [eventExists, setEventExists] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [Formdata, setFormData] = useState(null);
-  const [formDataState, setFormDataState] = useState([]);
+  const [formDataState, setFormDataState] = useState({});
   const [userInputData, setUserInputData] = useState({}); // Initialize with an empty object
   const [StudentInfo,setStudentInfo]=useState({});
 
   const navigate = useNavigate();
-  const Email = sessionStorage.getItem("StudentEmail");
-  const secretKey = "student-_?info";
-  const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+  const email = geteduEmailFromSession();
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -31,17 +28,30 @@ const EventInfoWrapper = () => {
     }, MAX_TIMEOUT);
 
     axios
-      .get(`http://192.168.77.250:8000/getEventInfo.php?eventId=${eventId}&email=${email}`)
+      .get(`http://localhost:8000/getEventInfo.php?eventId=${eventId}&email=${email}`)
       .then(response => {
         clearTimeout(timeoutId);
         const data = response.data;
         console.log(data);
-        if (data.success) {
+        if (data.success){
           setEventExists(true);
           const parsedFormData = JSON.parse(data.eventInfo.Formdata);
           setFormData(parsedFormData);
           setStudentInfo(data.studentInfo);
-          setFormDataState(parsedFormData.inputs.map((item) => ({ [item.label]: '' })));
+          const initialFormDataState = parsedFormData.inputs.reduce((acc, item) => {
+            if(item.label==='Name'){
+              acc[item.label] = data.studentInfo.Name;
+            }
+            else if(item.label==='Roll'){
+              acc[item.label] = data.studentInfo.Roll_No;
+            }
+            else {acc[item.label] = '';}
+            return acc;
+          }, {});
+          setFormDataState(initialFormDataState);
+          console.log(StudentInfo.Name);
+          console.log(data.studentInfo.Name);
+          console.log(formDataState);
         } else {
           setEventExists(false);
           setMessage(response.data.message);
@@ -54,34 +64,33 @@ const EventInfoWrapper = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [eventId]);
+
+  }, [email, eventId]);
 
   const handleInputChange = (inputLabel, value) => {
     setFormDataState(prevState => {
-      const newState = prevState.map(item => ({
-        ...item,
-        [inputLabel]: value
-      }));
+      const newState = {
+        ...prevState,
+        [inputLabel]: value,
+      };
       setUserInputData(prevInputData => ({
         ...prevInputData,
-        ...newState.reduce((result, item) => ({ ...result, ...item }), {})
+        ...newState,
       }));
       return newState;
     });
   };
 
-
-  const order=['Name','Roll_No'];
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (Formdata && Formdata.inputs && Formdata.inputs.length !== 0) {
-      axios.post('http://192.168.77.250:8000/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
+      axios.post('http://localhost:8000/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
         .then(response => {
           if (response.data.success) {
             console.log("Event data inserted successfully");
             navigate("/student/Events");
+            console.log("data"+response.data.message);
           } else {
             alert(response.data.message);
             window.location.reload();
@@ -119,7 +128,7 @@ const EventInfoWrapper = () => {
     <div className=''>
       <Card
       style={{
-        backgroundImage: `linear-gradient(rgba(${bgcolor}, ${bgcolor}, ${bgcolor}, 0.4), rgba(${bgcolor}, ${bgcolor}, ${bgcolor}, 0.4)), url(http://192.168.77.250:8000/Upload/${eventId}.png)`,
+        backgroundImage: `linear-gradient(rgba(${bgcolor}, ${bgcolor}, ${bgcolor}, 0.4), rgba(${bgcolor}, ${bgcolor}, ${bgcolor}, 0.4)), url(http://localhost:8000/Upload/${eventId}.png)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -137,7 +146,7 @@ const EventInfoWrapper = () => {
       <form className='' onSubmit={handleSubmit}>
       {Formdata &&
   <>
-    {Formdata.inputs.slice(0, 2).map((item, index) => (
+    {Formdata.inputs.map((item, index) => (
       <div key={index}>
         <Card className='p-5' hoverable>
           <Typography.Title level={2}>{item.label}</Typography.Title>
@@ -148,29 +157,10 @@ const EventInfoWrapper = () => {
               required
               type={item.type}
               placeholder={`Enter your ${item.label}`}
-              value={StudentInfo[order[index]]} // Adjust the index for formDataState
+              
+              value={formDataState[item.label]}
               onChange={(e) => handleInputChange(item.label, e.target.value)}
-              disabled
-            />
-          )}
-        </Card>
-        <br />
-      </div>
-    ))}
-    {Formdata.inputs.slice(2).map((item, index) => (
-      <div key={index}>
-        <Card className='p-5' hoverable>
-          <Typography.Title level={2}>{item.label}</Typography.Title>
-          {item.choices.length === 0 && (
-            <input
-              key={item.label}
-              className='border-0 border-dark form-control border-bottom'
-              required
-              type={item.type}
-              placeholder={`Enter your ${item.label}`}
-              value={2} // Adjust the index for formDataState
-              onChange={(e) => handleInputChange(item.label, e.target.value)}
-              disabled
+              disabled={(index)<=1}
             />
           )}
           

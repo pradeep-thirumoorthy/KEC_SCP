@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import {Breadcrumb, Radio, TreeSelect, message,Typography, Row, Col, Divider } from 'antd';
 import { Button,} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
+import { geteduEmailFromSession } from '../../Emailretrieval';
 const Academic = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
@@ -16,12 +16,8 @@ const Academic = () => {
   const [Batch, setBatch] = useState(0);
   
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const Email = sessionStorage.getItem('StudentEmail');
-  const secretKey = 'student-_?info';
   
   const [Exceptional,setExceptional]=useState(false);
-  const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const [Loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
@@ -86,7 +82,7 @@ const Academic = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://192.168.77.250:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         console.log(data);
@@ -109,7 +105,7 @@ const Academic = () => {
       return () => {
         window.removeEventListener('resize', handleResize);
       };
-  }, [email]);
+  }, []);
   const handleLogin = () => {
     if ( description === '') {
       alert('Please fill in all required fields');
@@ -117,10 +113,10 @@ const Academic = () => {
     }
     setLoading(true);
     axios
-      .post('http://192.168.77.250:8000/Type/Academic.php', {
+      .post('http://localhost:8000/Type/Academic.php', {
         name: name,
         rollno: rollno,
-        email: email,
+        email: geteduEmailFromSession(),
         description: description,
         department: department,
         Class: Class,

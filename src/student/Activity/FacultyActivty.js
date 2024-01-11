@@ -3,8 +3,8 @@ import axios from 'axios';
 import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import CryptoJS from 'crypto-js';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
+import { geteduEmailFromSession } from '../Emailretrieval';
 const FacutlyActivity= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,9 +15,6 @@ const FacutlyActivity= () => {
   const navigate = useNavigate();
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
-  // function nextpage(){
-  //   return navigate('/forward');
-  // }
   const handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
@@ -51,6 +48,11 @@ console.log('Value 2:', value2);
   }, []);
  
   const columns = [
+    {
+      title: 'Type',
+      dataIndex: 'Type',
+      key: 'Type',
+    },
     {
       title: 'Roll No',
       dataIndex: 'Roll',
@@ -104,15 +106,12 @@ console.log('Value 2:', value2);
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = sessionStorage.getItem('StudentEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/FacutlyActivity.php';
+    const apiUrl = 'http://localhost:8000/FacutlyActivity.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email:email,
+      email:geteduEmailFromSession(),
     };
     
     axios.get(apiUrl, { params })

@@ -3,14 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Card, Col, Flex,Typography } from 'antd';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 import Link from 'antd/es/typography/Link';
+import { geteduEmailFromSession } from '../Emailretrieval';
 const ComplaintStatus = () => {
-  const Email = sessionStorage.getItem('StudentEmail');
-  const secretKey = 'student-_?info';
-  const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const navigate=useNavigate();
   const [ComplaintData, setComplaintData] = useState([]);
   const gridStyle = {
@@ -31,7 +27,7 @@ const ComplaintStatus = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.77.250:8000/Complaint.php?email=${email}`)
+      .get(`http://localhost:8000/Complaint.php?email=${geteduEmailFromSession()}`)
       .then((response) => {
         const data = response.data.data; // Assuming the data structure is as provided
         console.log(JSON.stringify(data));
@@ -42,7 +38,7 @@ const ComplaintStatus = () => {
       .catch((error) => {
         console.error('Error fetching complaint data:', error);
       });
-  }, [email]);
+  }, []);
 
   return (
     <>
@@ -81,10 +77,10 @@ const ComplaintStatus = () => {
                         return <Card.Grid  onClick={()=>{
                           if(item.Type==='Faculty'){
                             if(key==='Accepted'){
-                              navigate(`/student/Activity/Faculty#${key}`)
+                              navigate(`/student/Activity/Faculty#${item.Type}=${key}`)
                             }
                             else{
-                              navigate(`/student/History/Faculty#${key}`)
+                              navigate(`/student/History/Faculty#${item.Type}=${key}`)
                             }
                           }
                           else if(key==='Accepted'){

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import { G2, Pie } from '@antv/g2plot';
 import { useNavigate } from 'react-router-dom';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 G2.registerInteraction('conversion-tag-cursor', {
   start: [{ trigger: 'conversion-tag-group:mouseenter', action: 'cursor:pointer' }],
@@ -57,7 +57,7 @@ const DoughnutChart = ({ data }) => {
     return () => {
       donutPlot.destroy();
     };
-  }, [data]);
+  }, [data, navigate]);
 
   return <div ref={chartRef} />;
 };
@@ -66,8 +66,8 @@ const YourComponent = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://192.168.77.250:8000/doughnet.php';
-    const email = getEmailFromCookies();
+    const apiUrl = 'http://localhost:8000/doughnet.php';
+    const email = getEmailFromSession();
 
     axios
       .get(apiUrl, { params: { email } })
@@ -79,12 +79,6 @@ const YourComponent = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-  const getEmailFromCookies = () => {
-    const Email = sessionStorage.getItem('AdminEmail');
-    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-    return bytes.toString(CryptoJS.enc.Utf8);
-  };
 
   return (
     <div>

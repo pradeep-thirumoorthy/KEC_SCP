@@ -12,7 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('http://192.168.77.250:8000/login.php', { email, password },)
+    axios.post('http://localhost:8000/login.php', { email, password },)
       .then(response => {
         if (response.data.success) {
           login(email);
@@ -28,6 +28,7 @@ const Login = () => {
     return <Navigate to="/admin/dashboard" replace />;
   }
   return (
+    <div className='align-items-center justify-content-center vh-100'>
     <Card  hoverable className=' m-lg-5 px-lg-5' >
     <Row gutter={20} justify="center" className='w-100 py-5' align="middle">
       
@@ -73,6 +74,7 @@ const Login = () => {
       </Col>
     </Row>
     </Card>
+    </div>
   );
 };
 

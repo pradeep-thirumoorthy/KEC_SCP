@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import {  FiPlusCircle, FiTrash2, FiX } from 'react-icons/fi';
+import {DeleteOutlined,PlusCircleOutlined,CloseOutlined} from '@ant-design/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
 import './styled.css';
-import CryptoJS from 'crypto-js';
-import { Button, Card, Flex, Input, Layout, Select, Typography} from 'antd';
-import { Content, Header } from 'antd/es/layout/layout';
-import { Title } from 'chart.js';
+import { Button, Card, Flex, Input, Layout, Typography} from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import Reach from './Reach';
+import { getEmailFromSession } from '../EmailRetrieval';
 const EventFormCreation = () => {
     const navigate = useNavigate();
     const newInput1 = {
@@ -33,8 +32,10 @@ const EventFormCreation = () => {
     const [slimit,setlimit]=useState(1);
     const [generated] = useState(false);
     const [lastDate,setLastDate]=useState(getTodayDate);
+    const [constraint,setConstraint]=useState(['Not Applied','Not Applied','Not Applied']);
     
     const [previewImage, setPreviewImage] = useState('');
+    const [visibility, setvisibility] = useState('private');
 
     const generateInput = () => {
         const inputId = Date.now();
@@ -57,6 +58,7 @@ const EventFormCreation = () => {
       }
       const handleFileChange = (e) => {
         const file = e.target.files[0];
+        console.log(file);
         if (file.type.startsWith('image/')) {
             // Set the file in state if it's an image
             psetfile(file);
@@ -171,7 +173,7 @@ const EventFormCreation = () => {
                                 />
                                 {optionIndex !== 0 && (
                                     <Button className='outline-0 border-0 '>
-                                        <FiX onClick={() => deleteOption(input.key, optionIndex)}/>
+                                        <CloseOutlined onClick={() => deleteOption(input.key, optionIndex)}/>
                                     </Button>
                                 )}
                             </Flex>
@@ -188,14 +190,23 @@ const EventFormCreation = () => {
           transform: 'translateY(-20px)', // Adjust the value as needed for the upward motion
           transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out', // Adding transform to the transition
         },
-        
-        // Other styles
       };
       
       
 
-    const handleSubmit = (e) => {
+      const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Check for duplicate labels
+        const isDuplicateLabel = inputs.some((input, index) => {
+            return inputs.findIndex(item => item.label === input.label) !== index;
+        });
+    
+        if (isDuplicateLabel) {
+            alert("Warning: Input labels must be unique");
+            return; // Stop form submission if there are duplicate labels
+        }
+    
         const formData = {
             title: title,
             description: description,
@@ -209,49 +220,50 @@ const EventFormCreation = () => {
                 };
             }),
         };
-        if (formData.inputs.length !== 0 && pfile !== '' && Title!=='' && description !=="") {
-            const limit = (slimit !== '') ? parseInt(slimit) : 1;
+    
+        if (
+            formData.inputs.length !== 0 &&
+            pfile !== '' &&
+            title !== '' &&
+            description !== ''
+        ) {
+            const limit = slimit !== '' ? parseInt(slimit) : 1;
             console.log(formData);
-            const Email = sessionStorage.getItem('AdminEmail');
-            const secretKey = "admin-_?info";
-            const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-            const email = bytes.toString(CryptoJS.enc.Utf8);
-            console.log(email, formData, limit);
+            console.log(formData, limit);
             const formdata = JSON.stringify(formData);
-                        console.log(formdata);
-                        const finformData = new FormData();
+            console.log(formdata);
+            const finformData = new FormData();
             finformData.append('limit', slimit);
             finformData.append('formdata', JSON.stringify(inputs));
-            
-            finformData.append('email', email);
+    
+            finformData.append('email', getEmailFromSession());
             finformData.append('option', 'create');
             finformData.append('title', title);
             finformData.append('formdata', formdata);
             finformData.append('lastDate', lastDate);
             finformData.append('pfile', pfile);
-            axios.post('http://192.168.77.250:8000/EventForm.php', finformData)
-                .then(response => {
+            finformData.append('constraint',JSON.stringify(constraint));
+            finformData.append('visibility',visibility);
+            axios
+                .post('http://localhost:8000/EventForm.php', finformData)
+                .then((response) => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do
                         console.log("Event data inserted successfully");
                         navigate("/admin/Events");
-                        
                     } else {
                         // Show an alert message with the error message
                         alert(response.data.message);
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error("Error:", error);
                 });
-            }
-        
-        
-        
-        else{
-            window.confirm("There is no details in the form .Please give some input");
+        } else {
+            window.confirm("There is no details in the form. Please give some input");
         }
     };
+    
     const deletetag = (inputKey) => {
         setInputs(prevInputs => {
           const updatedInputs = prevInputs.map(input => {
@@ -305,7 +317,6 @@ const EventFormCreation = () => {
                         </label>
                         <Input
                             type='text'
-                            className='form-control '
                             id='title'
                             value={title}
                             onChange={(e) => setTitle(e.target.value) } required
@@ -327,6 +338,8 @@ const EventFormCreation = () => {
         lastDate={lastDate}
         getTodayDate={getTodayDate}
         handleLastDateChange={handleLastDateChange}
+        setConstraint={setConstraint}
+        setvisibility={setvisibility}
       />
                 </Card>
                 <Card 
@@ -335,7 +348,7 @@ const EventFormCreation = () => {
             >
                         <div className='row'>
                             <Input
-                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark  rounded-0'
                                 type='text' placeholder='Label'
                                 value={"Name"}
                                 required disabled
@@ -355,7 +368,7 @@ const EventFormCreation = () => {
             >
                         <div className='row'>
                             <Input
-                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark  rounded-0'
                                 type='text' placeholder='Label'
                                 value={"Roll No"}
                                 required disabled
@@ -378,7 +391,7 @@ const EventFormCreation = () => {
             >
                         <div className='row'>
                             <Input
-                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark form-control rounded-0'
+                                className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark  rounded-0'
                                 type='text' placeholder='Label'
                                 value={input.label}
                                 onChange={(e) =>
@@ -409,12 +422,12 @@ const EventFormCreation = () => {
                             {['radio', 'checkbox'].includes(input.selectedType) && (
                                 <div>
                                     {renderOptions(input.key, input.selectedType)}
-                                    <FiPlusCircle size={25} onClick={() => addOption(input.key)} />
+                                    <PlusCircleOutlined  size={25} onClick={() => addOption(input.key)} />
                                 </div>
                             )}
                         </div>
                         <div className='float-end'>
-                            <FiTrash2 color='dark'style={{cursor:"pointer"}} size={25} onClick={() => deletetag(input.key)} />
+                            <DeleteOutlined color='dark'style={{cursor:"pointer"}} size={25} onClick={() => deletetag(input.key)} />
                         </div>
                     </Card>
                 ))}

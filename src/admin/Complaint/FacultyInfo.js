@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Result, Typography } from "antd";
-import { FiCheck } from "react-icons/fi";
-import { RxCross2 } from "react-icons/rx";
+import { Button, Result } from "antd";
+import {CloseOutlined,CheckOutlined} from '@ant-design/icons';
 import axios from "axios";
 import { Descriptions } from "antd";
-import CryptoJS from "crypto-js";
 import { message} from 'antd';
+import { getEmailFromSession } from "../EmailRetrieval";
 
 const FacultyInfo = () => {
   const location = useLocation();
@@ -19,14 +18,14 @@ const FacultyInfo = () => {
   const togglePopup = () => {
     setIsModalVisible(!isModalVisible);
   };
-
+  const email=getEmailFromSession();
   const handleAccept = () => {
     const confirmed = window.confirm('Are you sure you want to accept the complaint?');
     if (confirmed) {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://192.168.77.250:8000/ForwardComplaint2.php", { Complaint_Id: info.Complaint_Id,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/ForwardComplaint2.php", { Complaint_Id: info.Complaint_Id,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -50,12 +49,12 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://192.168.77.250:8000/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
         setTimeout(() => {
-          navigate("/admin/Complaints");
+          navigate("/admin/Faculty");
         }, 2000);
       })
       .catch((error) => {
@@ -67,25 +66,15 @@ const FacultyInfo = () => {
       });
     }
   };
-  const Email = sessionStorage.getItem('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
-  const email = bytes.toString(CryptoJS.enc.Utf8);
 
   return (
     <div className="vh-100">
-      <div className="row">
-        <div className="row border-bottom pb-3">
-          <div className="col-lg-12">
-            <Typography className="fs-2 fw-bolder fst-italic">Complaint Info</Typography>
-            <br />
-            <Typography className=" fst-italic no-wrap">Here is the Info of the complaint arrived</Typography>
-          </div>
-        </div>
-      </div>
       {info?
       <>
 <Descriptions bordered title="Complaint Data"   column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1}} labelStyle={{fontStyle:'oblique'}} >
-            
+              
+            <Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
+            <Descriptions.Item label="Roll No">{info.Roll_No}</Descriptions.Item>
             <Descriptions.Item label="Courses">{info.Subjectname}</Descriptions.Item>
             <Descriptions.Item label="Faculty">{info.FacultyName}</Descriptions.Item>
             <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>
@@ -100,13 +89,13 @@ const FacultyInfo = () => {
         <div className="row h-auto">
           <div className="col-6">
             <Button type="primary"  size="large" onClick={handleAccept}>
-              <FiCheck />
-              Acceptksudbffsdb
+              <CheckOutlined />
+              Accept
             </Button>
           </div>
           <div className="col-6">
             <Button danger size="large" type="primary" onClick={handleReject}>
-              <RxCross2 />
+              < CloseOutlined/>
               Reject
             </Button>
           </div>

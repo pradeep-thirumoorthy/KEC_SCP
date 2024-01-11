@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CryptoJS from 'crypto-js';
 import { Button, Input, Space, Table, Typography } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const Facultyview = () => {
   const [data, setData] = useState([]);
@@ -21,14 +21,6 @@ const Facultyview = () => {
     console.log(data)
     
   }, []);
-
-
-
-  const getEmailFromCookies = () => {
-    const Email = sessionStorage.getItem('AdminEmail');
-    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-    return bytes.toString(CryptoJS.enc.Utf8);
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -38,11 +30,11 @@ const Facultyview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/viewFacComp.php';
+    const apiUrl = 'http://localhost:8000/viewFacComp.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email: getEmailFromCookies(),
+      email: getEmailFromSession(),
     };
 
     axios
@@ -159,7 +151,6 @@ const Facultyview = () => {
     <>
       <div className="row">
         <div className="App">
-          <Typography.Title level={1}>Faculty Complaints</Typography.Title>
           <div className="d-flex justify-content-around">
           
 

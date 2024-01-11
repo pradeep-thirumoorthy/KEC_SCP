@@ -1,0 +1,89 @@
+{
+    "departments": [
+      {
+        "name": "CSE",
+        "blocks": [
+          {
+            "name": "Lab",
+            "children": [
+              { "name": "CC1" },
+              { "name": "CC2" },
+              { "name": "CC3" },
+              { "name": "CC4" },
+              { "name": "CC5" },
+              { "name": "CC6" },
+              { "name": "CC7" },
+              { "name": "CC8" },
+              { "name": "CC9" },
+              { "name": "CC10" },
+              { "name": "CC11" },
+              { "name": "CC12" }
+              
+            ]
+          },
+          {
+            "name": "Class",
+            "children": [
+                { "name": "S01" },
+                { "name": "S02" },
+                { "name": "S03" },
+                { "name": "S04" },
+                { "name": "S05" },
+                { "name": "S06" },
+                { "name": "S07" },
+                { "name": "S08" },
+                { "name": "S09" },
+                { "name": "S10" },
+                { "name": "F01" },
+                { "name": "F02" },
+                { "name": "F03" },
+                { "name": "F04" },
+                { "name": "F05" },
+                { "name": "F06" },
+                { "name": "F07" },
+                { "name": "F08" },
+                { "name": "F09" },
+                { "name": "F10" },
+                { "name": "G01" },
+                { "name": "G02" },
+                { "name": "G03" },
+                { "name": "G04" },
+                { "name": "G05" },
+                { "name": "G06" },
+                { "name": "G07" },
+                { "name": "G08" },
+                { "name": "G09" },
+                { "name": "G10" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "EIE",
+        "blocks": [
+          {
+            "name": "Lab",
+            "children": []
+          },
+          {
+            "name": "Class",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "IT",
+        "blocks": [
+          {
+            "name": "Lab",
+            "children": []
+          },
+          {
+            "name": "Class",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+  

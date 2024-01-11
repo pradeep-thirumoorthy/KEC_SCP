@@ -19,9 +19,14 @@ const FacultyHistory= () => {
  
   const columns = [
     {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
+      title: 'Faculty Name',
+      dataIndex: 'FacultyName',
+      key: 'FacultyName',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'Description',
+      key: 'Description',
     },
     {
       title: 'Type',
@@ -62,7 +67,8 @@ const FacultyHistory= () => {
     key: item.id, // Assuming 'id' is the key in your data
     Email: item.email,
     Type: item.Type,
-    
+    FacultyName:item.FacultyName,
+    Description:item.Description,
     Date: item.info1,
     Status: item.Status,
   })).reverse();
@@ -74,7 +80,7 @@ const FacultyHistory= () => {
   const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
   const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/FacultyHistory.php';
+    const apiUrl = 'http://localhost:8000/FacultyHistory.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

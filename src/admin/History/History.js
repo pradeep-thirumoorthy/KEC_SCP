@@ -2,8 +2,8 @@ import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import CryptoJS from 'crypto-js';
 import { Badge, Button, Radio,Table, Typography} from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 const History= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,9 +19,9 @@ const History= () => {
  
   const columns = [
     {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
+      title: 'Roll No',
+      dataIndex: 'Roll_No',
+      key: 'Roll_No',
     },
     {
       title: 'Type',
@@ -60,7 +60,7 @@ const History= () => {
   })
   .map((item) => ({
     key: item.id, // Assuming 'id' is the key in your data
-    Email: item.email,
+    Roll_No: item.Roll_No,
     Type: item.Type,
     
     Date: item.info1,
@@ -70,11 +70,9 @@ const History= () => {
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = sessionStorage.getItem('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+  const email=getEmailFromSession();
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/History.php';
+    const apiUrl = 'http://localhost:8000/History.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

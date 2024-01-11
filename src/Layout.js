@@ -1,6 +1,7 @@
 import { Layout,Button,Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { FiFileText, FiTrello, FiPieChart, FiCheckCircle, FiLayers, FiLogOut, FiUser } from 'react-icons/fi';
+
+import {FileTextOutlined,ProjectOutlined,GroupOutlined,PieChartOutlined,CheckCircleOutlined,LogoutOutlined,IdcardOutlined} from '@ant-design/icons';
 import { useAuth } from './admin/Authenticate/AuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import CryptoJS from 'crypto-js';
@@ -129,7 +130,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse"
                                     aria-expanded="true"
                                 >
-                                    <FiPieChart size={25} />Dash
+                                    <PieChartOutlined style={{ fontSize: '20px', color: '#08c' }} />Dash
                                 </Button>
                             <Accordion.Collapse eventKey="dashboard">
                                 
@@ -155,14 +156,14 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
-                                    <FiTrello size={25}/>Complaint
+                                    <ProjectOutlined style={{ fontSize: '20px', color: '#08c' }} />Complaint
                                 </Button>
                             
                             <Accordion.Collapse eventKey="complaints">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2 py-2list-unstyled small d-block list-group">
                                         <li><Link  href="#overview"  className="link-light text-white-50 w-100 btn m-0 p-0">Overview</Link></li>
-                                        <li><Link  href="/admin/Complaints/MoreInfo"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
+                                        <li><Link  href="/admin/Complaints/MoreInfo" className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Complaints/MoreInfo' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Details</Link></li>
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -182,7 +183,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse1"
                                     aria-expanded="false"
                                 >
-                                    <FiTrello size={25}/>Faculty
+                                    <ProjectOutlined style={{ fontSize: '20px', color: '#08c' }} />Faculty
                                 </Button>
                             
                             <Accordion.Collapse eventKey="Faculty">
@@ -209,15 +210,13 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse2"
                                     aria-expanded="false"
                                 >
-                                    <FiFileText size={25} />Events
+                                    <FileTextOutlined style={{ fontSize: '20px', color: '#08c' }} />Events
                                 </Button>
                             
                             <Accordion.Collapse eventKey="events">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li>
-                                            <Link  href='/admin/Events/Fullview' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/Fullview' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Fullview</Link>
-                                            </li><li>
+                                      <li>
                                             <Link  href='/admin/Events/EventFormCreation' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Events/EventFormCreation' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Create</Link>
                                             </li>
                                             <li>
@@ -244,17 +243,17 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse3"
                                     aria-expanded="false"
                                 >
-                                    <FiCheckCircle  size={25}/>Activity
+                                    <CheckCircleOutlined  style={{ fontSize: '20px', color: '#08c' }} />Activity
                                 </Button>
                             
                             <Accordion.Collapse eventKey="activity">
                                 
                                     <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><Link  href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
+                                        <li><Link  href="/admin/Activity/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Details</Link></li>
                                         
-                                        <li><Link  href="/admin/Activity/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
+                                        {(checkedEmail)?<><li><Link  href="/admin/Activity/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
                                         
-                                        <li><Link  href="/admin/Activity/Faculty/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Panel</Link></li>
+                                        <li><Link  href="/admin/Activity/Faculty/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/Activity/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Panel</Link></li></>:<></>}
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -274,17 +273,14 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
-                                    <FiLayers  size={25}/>History
+                                    <GroupOutlined  style={{ fontSize: '20px', color: '#08c' }} />History
                                 </Button>
                             
                             <Accordion.Collapse eventKey="history">
                                 
                             <ul className="btn-toggle-nav py-2 py-2list-unstyled small d-block list-group">
-                                        <li><Link  href="/admin/History/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>MoreInfo</Link></li>
-                                        
-                                        <li><Link  href="/admin/History/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
-                                        
-                                        <li><Link  href="/admin/History/Faculty/Panel"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Faculty/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Panel</Link></li>
+                                        {(checkedEmail)?<><li><Link  href="/admin/History/Faculty"  className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/admin/History/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
+                                        </>:<></>}
                                     </ul>
                                 
                             </Accordion.Collapse>
@@ -304,7 +300,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                                     data-bs-target="#home-collapse4"
                                     aria-expanded="false"
                                 >
-                                    <FiUser  size={25}/>Account
+                                    <IdcardOutlined  style={{ fontSize: '20px', color: '#08c' }} />Account
                                 </Button>
                             
                             <Accordion.Collapse eventKey="PersonalInfo">
@@ -330,7 +326,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                           <li><hr className="dropdown-divider"></hr></li><li><Button className="dropdown-item btn" onClick={() => setTheme(selectedTheme === 'dark' ? 'light' : 'dark')}>
         {selectedTheme} Theme
       </Button></li>
-                          <li><Button className="dropdown-item" href="#" onClick={handlelogout}><FiLogOut className='mx-2'/>Sign out</Button></li>
+                          <li><Button className="dropdown-item" href="#" onClick={handlelogout}><LogoutOutlined className='mx-2'/>Sign out</Button></li>
                       </ul>
                   </div>
         </div>

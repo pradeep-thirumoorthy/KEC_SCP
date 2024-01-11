@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CryptoJS from 'crypto-js';
-import { Button, Input, Space, Table, Typography } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const Complaintsview = () => {
   const location = useLocation();
@@ -33,7 +33,7 @@ const Complaintsview = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://192.168.77.250:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -45,12 +45,6 @@ const Complaintsview = () => {
           console.error('Error fetching admin data:', error);
         })
   };
-
-  const getEmailFromCookies = () => {
-    const Email = sessionStorage.getItem('AdminEmail');
-    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-    return bytes.toString(CryptoJS.enc.Utf8);
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -60,11 +54,11 @@ const Complaintsview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/viewComp.php';
+    const apiUrl = 'http://localhost:8000/viewComp.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email: getEmailFromCookies(),
+      email: getEmailFromSession(),
     };
 
     axios
@@ -215,9 +209,6 @@ const Complaintsview = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="App">
-          <Typography.Title level={1}>Complaints</Typography.Title>
           <div className="d-flex justify-content-around">
             <div>
               <label>Start Date:</label>
@@ -250,8 +241,6 @@ const Complaintsview = () => {
           </form>
 
           {loading ? <p>Loading...</p> : <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
-        </div>
-      </div>
     </>
   );
 };

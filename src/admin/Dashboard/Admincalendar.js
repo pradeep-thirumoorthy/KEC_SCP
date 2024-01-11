@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Calendar, Modal, Button, List, Pagination } from 'antd';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
+import { getEmailFromSession } from '../EmailRetrieval';
 const Admincalendar = () => {
     
     const [modalVisible, setModalVisible] = useState(false);
@@ -54,12 +54,9 @@ const Admincalendar = () => {
       
     const filterData = async () => {
         try {
-          const Email = sessionStorage.getItem('AdminEmail');
-          const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-          const email = bytes.toString(CryptoJS.enc.Utf8);
-          const apiUrl = 'http://192.168.77.250:8000/AdminCalendar.php';
+          const apiUrl = 'http://localhost:8000/AdminCalendar.php';
           const params = {
-            email: email,
+            email: getEmailFromSession(),
           };
       
           const response = await axios.get(apiUrl, { params });

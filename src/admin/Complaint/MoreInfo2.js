@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Input, Modal, Result, Select, Typography } from "antd";
-import { FiCheck } from "react-icons/fi";
-import { TbArrowForwardUp } from "react-icons/tb";
-import { RxCross2 } from "react-icons/rx";
+import { Button, Input, Modal, Result, Select } from "antd";
+
+import {CheckOutlined,SendOutlined,CloseOutlined} from '@ant-design/icons';
 import axios from "axios";
 import { Descriptions } from "antd";
 import CryptoJS from "crypto-js";
@@ -16,25 +15,16 @@ const Forward2 = () => {
   const navigate = useNavigate();
   const [Upstream,setUpstream]=useState([]);
   const [Downstream,setDownstream]= useState([]);
-  const [fetchedNames, setFetchedNames] = useState({});
-  const [Designation, setDesignation] = useState("");
   const { info } = location.state || {};
   const [Faculty, setFaculty] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const key = 'updatable';
-  const handleDesignationChange = (value) => {
-    setDesignation(value);
-  };
 
   const handleFacultyChange = (value) => {
     setFaculty(value);
   };
   useEffect(() => {
-    fetchData();
-  }, [Designation, Faculty]);
-
-  const fetchData = () => {
-    const apiUrl = `http://192.168.77.250:8000/getdesignation - Copy.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
+    const apiUrl = `http://localhost:8000/getdesignation - Copy.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
 
 
     axios
@@ -94,7 +84,7 @@ setDownstream(subjects);
   .catch((error) => {
     console.error("Error fetching data:", error);
   });
-  };
+}, [Faculty, info.Batch, info.Class, info.Department, info.Level]);
 
 
   const togglePopup = () => {
@@ -108,7 +98,7 @@ setDownstream(subjects);
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://192.168.77.250:8000/ForwardComplaint.php", {
+        .post("http://localhost:8000/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -134,7 +124,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://192.168.77.250:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -158,7 +148,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://192.168.77.250:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -194,15 +184,6 @@ setDownstream(subjects);
 
   return (
     <div className="vh-100">
-      <div className="row">
-        <div className="row border-bottom pb-3">
-          <div className="col-lg-12">
-            <Typography className="fs-2 fw-bolder fst-italic">Complaint Info</Typography>
-            <br />
-            <Typography className=" fst-italic no-wrap">Here is the Info of the complaint arrived</Typography>
-          </div>
-        </div>
-      </div>
       {info?<ConfigProvider
   >
 <Descriptions title="Complaint Data"   column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered labelStyle={{fontStyle:'oblique'}} >
@@ -234,14 +215,14 @@ setDownstream(subjects);
         <div className="row h-auto">
           <div className="col-4">
             <Button style={{backgroundColor:'green'}} type="primary"  size="large" onClick={handleAccept}>
-              <FiCheck />
+              <CheckOutlined />
               Accept
             </Button>
           </div>
           <div className="col-4">
           {(info.Type === "Maintenance")?<></>:<>
             <Button size="large" type="primary"  onClick={togglePopup}>
-              <TbArrowForwardUp />
+              <SendOutlined />
               Forward
             </Button>
             <Modal
@@ -291,7 +272,7 @@ setDownstream(subjects);
           </div>
           <div className="col-4">
             <Button danger size="large" type="primary" onClick={handleReject}>
-              <RxCross2 />
+              <CloseOutlined />
               Reject
             </Button>
           </div>

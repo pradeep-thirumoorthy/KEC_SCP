@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { ConfigProvider, Descriptions, List, Typography } from 'antd';
+import {Descriptions, List, Typography } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const MAX_TIMEOUT = 10000;
 
@@ -13,15 +13,10 @@ const PersonalInfo = () => {
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const Email = sessionStorage.getItem('AdminEmail');
-
   useEffect(() => {
-    if (Email) {
-      const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-      const email = bytes.toString(CryptoJS.enc.Utf8);
 
       axios
-        .post('http://192.168.77.250:8000/Admin_info.php', `email=${encodeURIComponent(email)}`)
+        .post('http://localhost:8000/Admin_info.php', `email=${getEmailFromSession()}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -46,8 +41,7 @@ const PersonalInfo = () => {
       return () => {
         clearTimeout(timeoutId);
       };
-    }
-  }, [Email]);
+  }, []);
 
   if (isLoading) {
     return (

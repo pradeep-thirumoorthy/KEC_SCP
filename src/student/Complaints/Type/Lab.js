@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
-import {Breadcrumb, Radio, Select, TreeSelect, message,Typography } from 'antd';
-import { Button,} from 'antd'; // Import InputNumber instead of TextArea
+import {Breadcrumb, Radio, Select, TreeSelect, message } from 'antd';
+import { Button,} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { Option } from 'antd/es/mentions';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
+import { geteduEmailFromSession } from '../../Emailretrieval';
 const Faculty = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
@@ -18,10 +18,6 @@ const Faculty = () => {
   const [subject, setSubject] = useState({});
   const [SubjectInfo, setSubjectInfo] = useState([]);
   const [Batch, setBatch] = useState(0);
-  const Email = sessionStorage.getItem('StudentEmail');
-  const secretKey = 'student-_?info';
-  const bytes = CryptoJS.AES.decrypt(Email, secretKey);
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const [Loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
@@ -81,10 +77,25 @@ const Faculty = () => {
     // Add more subject-related categories here...
   ];
           
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('./blocks.json');
+        const jsonData = await response.json();
+        setData(jsonData);
+        console.log(jsonData);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://192.168.77.250:8000/studentInfo.php', `email=${encodeURIComponent(email)}`)
+      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -115,7 +126,7 @@ const Faculty = () => {
       .catch((error) => {
         console.error('Error fetching admin data:', error);
       });
-  }, [email]);
+  }, []);
   const handleLogin = () => {
     if ( description === '' || subject==='') {
       alert('Please fill in all required fields');
@@ -123,10 +134,10 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://192.168.77.250:8000/Type/Lab.php', {
+      .post('http://localhost:8000/Type/Lab.php', {
         name: name,
         rollno: rollno,
-        email: email,
+        email: geteduEmailFromSession(),
         description: description,
         department: department,
         Class: Class,
@@ -165,91 +176,10 @@ const Faculty = () => {
       },
     ]}
   />
-        <div className='row border-bottom pb-3'>
-          <div className='col-md-9 col-lg-10'>
-            <Typography className='fs-2 fw-bolder fst-italic'>Lab Entry:</Typography>
-            <br></br>
-            <Typography className=' fst-italic no-warp'>Enter your complaints based on Acadamics</Typography>
-          </div>
-        </div>
       </div>
       <div className='row form-group'>
         {
-        /* <div className='col-lg-6 col-sm-12 '>
-          <label className='entry'>Your Roll No</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Roll No'
-            name='rollno'
-            id='rollno'
-            
-  style={{ width: '80%' }}
-            value={rollno}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Name</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Name'
-            name='name'
-            id='name'
-            
-  style={{ width: '80%' }}
-            value={name}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Email</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Email'
-            name='email'
-            id='email'
-            
-  style={{ width: '80%' }}
-            value={email}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Department</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Department'
-            name='department'
-            id='department'
-            
-  style={{ width: '80%' }}
-            value={department}
-            disabled
-          ></Input>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <label className='entry mx-9 px-5'>Your Class</label>
-        </div>
-        <div className='col-lg-6 col-sm-12 '>
-          <Input
-            className='data mx-5 my-3  rounded-2 p-1'
-            placeholder='Department'
-            name='department'
-            id='department'
-            
-  style={{ width: '80%' }}
-            value={Class}
-            disabled
-          ></Input>
-        </div> */
+        
         }
         <>
             <div className='col-lg-6 col-sm-12 '>
@@ -316,6 +246,10 @@ const Faculty = () => {
             Submit
           </Button>
         </div>
+        {JSON.stringify(data)}
+        <div>
+      
+    </div>
       </div>
     </>
   );

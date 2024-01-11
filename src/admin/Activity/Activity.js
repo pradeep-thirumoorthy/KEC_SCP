@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Cookies from 'js-cookie';
-import CryptoJS from 'crypto-js';
 import { Button, Input, Space, Table,Typography } from 'antd';
+import { getEmailFromSession } from '../EmailRetrieval';
 
 const Activity = () => {
   const [data, setData] = useState([]);
@@ -35,7 +34,7 @@ const Activity = () => {
   const fetchAdminData = () => {
     
     axios
-        .post('http://192.168.77.250:8000/Designation.php', `email=${encodeURIComponent(getEmailFromCookies())}`)
+        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
         .then((response) => {
           const data = response.data;
           if (data) {
@@ -47,11 +46,6 @@ const Activity = () => {
           console.error('Error fetching admin data:', error);
         })
   };
-  const getEmailFromCookies = () => {
-    const Email = sessionStorage.getItem('AdminEmail');
-    const bytes = CryptoJS.AES.decrypt(Email, 'admin-_?info');
-    return bytes.toString(CryptoJS.enc.Utf8);
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -61,11 +55,11 @@ const Activity = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/viewComp2.php';
+    const apiUrl = 'http://localhost:8000/viewComp2.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email: getEmailFromCookies(),
+      email: getEmailFromSession(),
     };
 
     axios
@@ -217,8 +211,6 @@ const Activity = () => {
   return (
     <>
       <div className="row">
-        <div className="App">
-          <Typography.Title level={1}>Complaints:</Typography.Title>
           <div className="d-flex justify-content-around">
           
 
@@ -255,7 +247,6 @@ const Activity = () => {
           {loading ? <Typography.Title level={1}>Loading</Typography.Title> : 
           <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>
-      </div>
     </>
   );
 };

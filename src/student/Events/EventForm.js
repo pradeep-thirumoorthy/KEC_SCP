@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { EditOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 
 import { Card, Flex, Image, Typography} from 'antd';
 const MAX_TIMEOUT = 10000;
@@ -15,7 +15,7 @@ const FullEvents = () => {
   const [EventData, setEventData] = useState([]);
   const Email = sessionStorage.getItem('StudentEmail');
   const response = (id) => {
-    navigate("/student/events/EventInfo/" + id);
+    navigate("/student/Events/EventInfo/" + id);
   };
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://192.168.77.250:8000/EventInfoStudent.php?email=${email}`)
+      axios.get(`http://localhost:8000/EventInfoStudent.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -46,10 +46,10 @@ const FullEvents = () => {
 
 
   const renderEventCards = () => {
-    return EventData.map((item) => (
+    return EventData.PublicEvents.map((item) => (
       <Card 
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://192.168.77.250:8000/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
         ]}
@@ -67,31 +67,10 @@ const FullEvents = () => {
     ));
   };
   const renderEventCards2 = () => {
-    return EventData.map((item) => (
+    return EventData.ConditionalEvents.map((item) => (
       <Card 
         style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://192.168.77.250:8000/Upload/${item.event_id}.png`} />}
-        actions={[
-          <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
-        ]}
-        hoverable
-        key={item.event_id}
-      >
-        < Card.Meta  
-          title={item.Title}
-          description={<><p>Limit: {item.Limits}</p>
-          <p>Start Date: {item.Date}</p>
-          <p>Last Date: {item.IntervalTime}</p>
-          <p>Status: {item.Status === 'open' ? 'Open' : 'Closed'}</p></>}
-        />
-      </Card>
-    ));
-  };
-  const renderEventCards3 = () => {
-    return EventData.map((item) => (
-      <Card 
-        style={{ width: 300 }}
-        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://192.168.77.250:8000/Upload/${item.event_id}.png`} />}
+        cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
         actions={[
           <EditOutlined key="edit" onClick={() => response(item.event_id)} />,
         ]}
@@ -119,12 +98,14 @@ const FullEvents = () => {
         <div>
           <div className=" row ">
           </div>
-          <div className='row'>
             <Typography className='fs-2 fw-bolder fst-italic'>Public Events:</Typography>
             <Flex justify='center' align="center" wrap="wrap" gap="small">
         {renderEventCards()}
       </Flex>
-          </div>
+      <Typography className='fs-2 fw-bolder fst-italic'>Conditional Events:</Typography>
+            <Flex justify='center' align="center" wrap="wrap" gap="small">
+        {renderEventCards2()}
+      </Flex>
         </div>
       )}
     </>

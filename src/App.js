@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaintsview,EventFormCreation,Activity,Admincalendar,History,FullEvents,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+import { Login,ForgAdmPass,Dash,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
@@ -56,8 +56,8 @@ const App = () => {
       setIsLoading(false);
     }, 200);
     console.log("dark : "+darkMode);
-    const getEmailStatus = async () => {
-      const emailPresent = await checkEmail();
+    const getEmailStatus = () => {
+      const emailPresent = checkEmail();
       setIsEmailPresent(emailPresent);
     };
 
@@ -65,7 +65,7 @@ const App = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [darkMode]);
   
   const PrivateRoute = ({ element, redirectTo }) => {
     const { isAuthenticated } = useAuth();
@@ -87,7 +87,8 @@ const App = () => {
   };
   
   const AccessFac = ({ element}) => {
-    if (isEmailPresent) {
+    const data=isEmailPresent;
+    if (data) {
       return <>{element}</>;
     } else {
       return <FNF/>;
@@ -112,32 +113,6 @@ const App = () => {
     }
   };
 
-
-
-  const withLoader = (WrappedComponent) => {
-    return class extends React.Component {
-      state = {
-        loading: true,
-      };
-  
-      componentDidMount() {
-        // Simulate delay (replace with actual data fetching)
-        setTimeout(() => {
-          this.setState({ loading: false });
-        }, 1000);
-      }
-  
-      render() {
-        const { loading } = this.state;
-  
-        if (loading) {
-          return <div>Loading...</div>;
-        }
-  
-        return <WrappedComponent {...this.props} />;
-      }
-    };
-  };
   
     return (
       <div className={`${darkMode?'bg-black':''}`}
@@ -154,7 +129,7 @@ const App = () => {
         <StudentAuthProvider>
           <Routes>
             
-            <Route path="/" element={isLoading ? <LoadingScreen />:<Home />} />
+            <Route path="/" element={isLoading ? <LoadingScreen />:<Home/>} />
             <Route path="/about" element={isLoading ? <LoadingScreen />:<About/>} />
             <Route path='/contact' element={isLoading ? <LoadingScreen />:<Contact/>}/>
 
@@ -174,8 +149,7 @@ const App = () => {
                 
                 <Route path="/admin/Events" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Events />} data={['Events','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/Events/eventInfo/:eventId/modify" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventModifier  />} data={['Events','Here is your complaints arrived']}/>}/>}/>
-                <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventFormCreation  />} data={['Event Creation','Here is your complaints arrived']}/>}/>}/>
-                <Route path="/admin/Events/Fullview" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FullEvents  />} data={['Events','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventFormCreation  />} data={['Event Creation','Here is your complaints arrived']}/>}/>}/>\
                 <Route path="/admin/Events/eventInfo/:eventId/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Eventviewresp  />} data={['Event Responses','Here is your complaints arrived']}/>}/>}/>
                 
                 
@@ -225,7 +199,7 @@ const App = () => {
                   
                   
 
-                  <Route path='/student/EventForm' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<EventForm />} data={['Events','Here is your complaints arrived']}/>}/>}/>
+                  <Route path='/student/Events' element={isLoading ? <LoadingScreen />:<RedirectToStudentLogin element={<Layout2 element={<EventForm />} data={['Events','Here is your complaints arrived']}/>}/>}/>
                   
 
 

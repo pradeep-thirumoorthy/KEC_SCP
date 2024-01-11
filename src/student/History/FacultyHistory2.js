@@ -3,9 +3,8 @@ import axios from 'axios';
 import {useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import CryptoJS from 'crypto-js';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
-
+import { geteduEmailFromSession } from '../Emailretrieval';
 const FacultyHistory2= () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,22 +13,24 @@ const FacultyHistory2= () => {
   const [search, setSearch] = useState('');
   const [Filter,setFilter]= useState('');
   const navigate = useNavigate();
-  
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
-  const handleButtonClick=(rowData)=>
-  {
-    navigate('/student/History/Faculty/Panel', { state: { info: rowData ,Heading:'History'} });
-  };
   const handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
+  const handleButtonClick=(rowData)=>
+  {
+    navigate('/student/Activity/Faculty/Panel', { state: { info: rowData ,Heading:'Activity'} });
+  };
   useEffect(() => {
-    const hashValue = window.location.hash.replace('#', ''); // Get the hash value
+    const hashValue = window.location.hash.replace('#', '');
+    
     const [value1, value2] = hashValue.split('=');
-    if(value1!=='' && value1!==''){if(value2 !==''){
+    if(value1!=="" && value2!=="")
+    {
+    if(value2 !==''){
       if(value2==='Sent'){
         setFilter('Arrived');
       }
@@ -45,46 +46,17 @@ console.log('Value 2:', value2);
       });}}
     filterData();
   }, []);
+ 
   const columns = [
-    {
-      title: 'Email',
-      dataIndex: 'Email',
-      key: 'Email',
-    },
     {
       title: 'Type',
       dataIndex: 'Type',
       key: 'Type',
-      filters: [
-        {
-          text: 'Academic',
-          value: 'Academic',
-        },
-        {
-          text: 'Maintenance',
-          value: 'Maintenance',
-        },
-        {
-          text: 'Faculty',
-          value: 'Faculty',
-        },
-        {
-          text: 'Courses',
-          value: 'Courses',
-        },
-        {
-          text: 'Lab',
-          value: 'Lab',
-        },{
-          text: 'Others',
-          value: 'Others',
-        },
-      ],
-      filteredValue: filteredInfo.Type || null,
-      onFilter: (value, record) => record.Type.includes(value),
-      sorter: (a, b) => a.Type.length - b.Type.length,
-      sortOrder: sortedInfo.columnKey === 'Type' ? sortedInfo.order : null,
-      ellipsis: true,
+    },
+    {
+      title: 'Roll No',
+      dataIndex: 'Roll',
+      key: 'Roll',
     },
     {
       title: 'Date',
@@ -104,7 +76,7 @@ console.log('Value 2:', value2);
     key: 'Details',
     render: (_, record) => (
       <Space size="middle">
-        <Button onClick={() => {handleButtonClick(record.info);console.log(record.info)}}>More details</Button>
+        <Button onClick={() => handleButtonClick(record.info)}>More details</Button>
       </Space>
     ),
   });
@@ -122,33 +94,24 @@ console.log('Value 2:', value2);
   })
   .map((item) => ({
     key: item.id, // Assuming 'id' is the key in your data
-    Email: item.email,
+    Roll: item.Roll_No,
     Type: item.Type,
     
     Date: item.info1, // Assuming 'info1' is a property in your data
     info: item,
-    Status: item.Status,
+    Status: (item.Status==='Arrived')?'Sent':item.Status,
     Details: 'More',
   })).reverse();
-
-// Assuming 'data', 'search', 'Filter' are variables defined elsewhere.
-
-
-// Now, mappedTableData contains the data in the format of Tabledata
   const onChange = (e) => {
     setFilter(e.target.value);
     console.log(Filter);
   };
-  const Email = sessionStorage.getItem('StudentEmail');
-  console.log(Email);
-  const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
-  const email = bytes.toString(CryptoJS.enc.Utf8);
   const filterData = () => {
-    const apiUrl = 'http://192.168.77.250:8000/FacultyHistory2.php';
+    const apiUrl = 'http://localhost:8000/FacultyHistory2.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
-      email:email,
+      email:geteduEmailFromSession(),
     };
     
     axios.get(apiUrl, { params })
@@ -165,7 +128,7 @@ console.log('Value 2:', value2);
         <>
         <div className='row'>
                 <div className="App">
-      <Typography.Title level={1}>History:</Typography.Title>
+      <Typography.Title level={1}>Activity:</Typography.Title>
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
@@ -181,7 +144,10 @@ console.log('Value 2:', value2);
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         /></div>
+        <div className='d-block'>
+          <label></label>
         <Button className='filter' onClick={filterData}>Filter</Button>
+        </div>
       </div>
 
       <form>
@@ -199,18 +165,17 @@ console.log('Value 2:', value2);
         <p>Loading...</p>
       ) : (
         <>
-        
         <Radio.Group  onChange={onChange} defaultValue={Filter}>
       <Radio.Button value="">All</Radio.Button>
-      <Radio.Button value="Rejected">Rejected</Radio.Button>
       <Radio.Button value="Resolved">Resolved</Radio.Button>
+      <Radio.Button value="Rejected">Rejected</Radio.Button>
     </Radio.Group>
         </>
       )}
       
     </div>
+    <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange} z  pagination={false}/>;
               </div>
-              <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={mappedTableData}  pagination={false}/>
         </>
       );
    }
