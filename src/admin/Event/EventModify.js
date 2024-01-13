@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FNF from '../../FNF';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, Flex, Radio, Select, Typography } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 
 const MAX_TIMEOUT = 10000; // 10 seconds
 
 const EventModifier = () => {
-  const { eventId } = useParams();
+  
+  const location = useLocation();
+  const { EventId } = location.state || '';
   const [eventInfo, setEventInfo] = useState(null);
   const [eventExists, setEventExists] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +35,7 @@ const EventModifier = () => {
     }, MAX_TIMEOUT);
   
     axios
-      .get(`http://localhost:8000/Eventmodify.php?email=${email}&EventId=${eventId}`)
+      .get(`http://localhost:8000/Admin/Events/Eventmodify.php?email=${email}&EventId=${EventId}`)
       .then(response => {
         clearTimeout(timeoutId); // Clear the timeout since response was received
         const data = response.data;
@@ -67,7 +69,7 @@ const EventModifier = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [eventId, email]);
+  }, [EventId, email]);
 
   // Handle changes to the "Limit" input field
   const handleLimitChange = event => {
@@ -92,13 +94,13 @@ const EventModifier = () => {
   const handleSubmit = () => {
     const constraint = JSON.stringify([department,Batch,Class]);
     console.log(constraint);
-    axios.post('http://localhost:8000/modifyevent.php', {limit,lastDate,status,eventId,email,visibility,constraint},)
+    axios.post('http://localhost:8000/Admin/Events/Submitmodify.php', {limit,lastDate,status,EventId,email,visibility,constraint},)
       .then(response => {
         if (response.data.success) {
           window.confirm('successfully updated');
           navigate('/admin/events');
         } else {
-          window.confirm("you entered wrong date");
+          window.confirm(JSON.stringify(response.data));
         }
       })
       .catch(error => {
@@ -126,7 +128,7 @@ const EventModifier = () => {
   return (
     <>
       <div className='h-100'>
-          <Card  hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/Upload/${eventId}.png)`,
+          <Card  hoverable className='p-5 m-5  rounded-3' style={{backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(http://localhost:8000/Upload/${EventId}.png)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',}}>

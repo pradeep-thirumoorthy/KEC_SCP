@@ -62,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
                 mysqli_stmt_close($stmt);
             }
-        } elseif ($level == 1) {
+        } 
+        elseif ($level == 1) {
             $query = "SELECT Subject_1, Subject_2, Subject_3, Subject_4, Subject_5, Subject_6 FROM subject WHERE Batch = ? AND Class = ? AND Department = ?";
             $stmt = mysqli_prepare($conn, $query);
 
@@ -98,7 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
                 mysqli_stmt_close($stmt);
             }
-        } elseif ($level == 2) {
+        }
+        elseif ($level == 2) {
             $query = "SELECT HOD FROM subject WHERE Batch = ? AND Class = ? AND Department = ?";
             $stmt = mysqli_prepare($conn, $query);
 
@@ -134,7 +136,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 mysqli_stmt_close($stmt);
             }
         }
+        elseif ($level == 3) {
+            $query = "SELECT Year_Incharge FROM subject WHERE Batch = ? AND Class = ? AND Department = ?";
+            $stmt = mysqli_prepare($conn, $query);
 
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "sss", $batch, $class, $department);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+
+                if ($result) {
+                    while ($row = $result->fetch_assoc()) {
+                        $downstreamData[] = $row;
+                    }
+                } else {
+                    $downstreamData = [];
+                }
+                mysqli_stmt_close($stmt);
+            }
+        }
         $response = [
             'success' => true,
             'data' => [

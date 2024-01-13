@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import {Breadcrumb, Radio, TreeSelect, message } from 'antd';
+import {Breadcrumb, Col, Radio, Row, TreeSelect, message } from 'antd';
 import { Button,} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
@@ -57,7 +57,7 @@ const Faculty = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         console.log(data);
@@ -80,7 +80,7 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Others.php', {
+      .post('http://localhost:8000/Student/Complaints/Type/Others.php', {
         name: name,
         rollno: rollno,
         email: geteduEmailFromSession(),
@@ -108,21 +108,19 @@ const Faculty = () => {
   return (
     <>
     {contextHolder}
-      <div className=' row '>
-      <Breadcrumb
-    items={[
-      {
-        title: 'Student',
-      },
-      {
-        title: <Link  style={{textDecoration:'none'}} href="/student/Complaint">Complaint</Link>,
-      },
-      {
-        title:'Faculty',
-      },
-    ]}
-  />
-      </div>
+    <Row>
+      <Col span={24}>
+        <Breadcrumb>
+          <Breadcrumb.Item>Student</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaints">
+              Complaints
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Academic</Breadcrumb.Item>
+        </Breadcrumb>
+      </Col>
+    </Row>
       <div className='row form-group'>
         <div className='col-lg-6 col-sm-12 '>
           <label className='entry'>Your Option</label>

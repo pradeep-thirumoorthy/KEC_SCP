@@ -90,6 +90,8 @@ console.log('Value 2:', value2);
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
   if (Filter === '') {
@@ -140,7 +142,7 @@ console.log('Value 2:', value2);
     console.log(Filter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/StudentHistory.php';
+    const apiUrl = 'http://localhost:8000/Student/History/History.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

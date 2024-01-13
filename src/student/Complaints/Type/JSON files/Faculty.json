@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Difficulties in learning",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Can send materials / references on ongoing topics",
+        "value": "Can send materials / references on ongoing topics"
+      },
+      {
+        "title": "Can teach slower as we can't catch with their speed of teaching",
+        "value": "Can teach slower as we can't catch with their speed of teaching"
+      },
+      {
+        "title": "If teaching is done on the board, it's more convenient to us",
+        "value": "If teaching is done on the board, it's more convenient to us"
+      },
+      {
+        "title": "Can revise previous class topics for at least 5 mins",
+        "value": "Can revise previous class topics for at least 5 mins"
+      }
+    ]
+  },
+  {
+    "title": "Issues on tutorial",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Can post tutorial questions as soon as possible rather than delaying",
+        "value": "Can post tutorial questions as soon as possible rather than delaying"
+      },
+      {
+        "title": "Make students view their tutorial marks at regular intervals",
+        "value": "Make students view their tutorial marks at regular intervals"
+      },
+      {
+        "title": "It's good if the number of questions for tutorial is reduced",
+        "value": "It's good if the number of questions for tutorial is reduced"
+      }
+    ]
+  },
+  {
+    "title": "Examination-related Issues",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Provide study guides or sample questions for exams",
+        "value": "Provide study guides or sample questions for exams"
+      },
+      {
+        "title": "It's easy for us to revise all topics before the date of examination",
+        "value": "It's easy for us to revise all topics before the date of examination"
+      }
+    ]
+  }
+]

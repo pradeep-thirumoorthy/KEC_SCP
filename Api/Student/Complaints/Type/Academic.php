@@ -11,22 +11,8 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Expires: 0");
 
 
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
 
 
-// Connect to the database
-
-
-
-
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
 $conn = mysqli_connect($host, $user, $password, $database);date_default_timezone_set('Asia/Kolkata');
 if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
@@ -41,13 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rollno = isset($data['rollno']) ? $data['rollno'] : '';
     $email = isset($data['email']) ? $data['email'] : '';
     $description = isset($data['description']) ? $data['description'] : '';
-    $complainttype= "Courses";
+    $complainttype= "Academic";
     $department = isset($data['department']) ? $data['department'] : '';
     $Class = isset($data['Class']) ? $data['Class'] : '';
-    $Subject = isset($data['Subject']) ? $data['Subject'] : '';
     $Batch = isset($data['Batch']) ? $data['Batch'] : '';
-    $Subjectname = isset($data['Subjectname']) ? $data['Subjectname'] : '';
-    // Generate a unique 16-digit complaint ID
+    $Belonging= isset($data['Belonging']) ? $data['Belonging'] : '';
+    $allowedBelongings = ['Advisor1', 'Advisor2', 'Advisor3'];
+if (!in_array($Belonging, $allowedBelongings)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid Belonging value']);
+    exit;
+}
     do {
         $complaintid = bin2hex(random_bytes(8)); // Generates a random 16-character hexadecimal string
     
@@ -69,33 +58,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentDate = date('Y-m-d');
     $currentTime = date('H:i:s');
 
-    // Assuming $conn is your database connection
-    $query = "INSERT INTO complaints (Complaint_Id, Type, Description, Roll_No, email, Department, Status,  Name, Class, Forward_To,info1,info2,CreateTime,Batch,Extra)
-    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $query = "INSERT INTO complaints (Complaint_Id, Type, Description, Roll_No, email, Department, Status,  Name, Class, Forward_To,info1,info2,CreateTime,Batch)
+    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
 
     // Prepare the statement
     $stmt = mysqli_prepare($conn, $query);
     $complaintid=strval($complaintid);
     if ($stmt) {
-        $Subjectquery = "SELECT Advisor1, Advisor2, Advisor3, HOD, Year_incharge FROM subject WHERE Batch = ? AND Class = ?";
-        $Subjectstmt = mysqli_prepare($conn, $Subjectquery); // Use $Subjectquery here
-        mysqli_stmt_bind_param($Subjectstmt, "ss", $Batch, $Class);
-        mysqli_stmt_execute($Subjectstmt);
-        mysqli_stmt_store_result($Subjectstmt);
-        $Advisor1 = '';
-        $Advisor2 = '';
-        $Advisor3 = '';
-        $HOD = '';
-        $Year_incharge = '';
+      $Subjectquery = "SELECT ".$Belonging." FROM subject WHERE Batch = ? AND Class = ?";
+      $Subjectstmt = mysqli_prepare($conn, $Subjectquery);
+      mysqli_stmt_bind_param($Subjectstmt, "ss", $Batch, $Class);
+      mysqli_stmt_execute($Subjectstmt);
+      $belongingValue='';
+      $result = [];
+mysqli_stmt_store_result($Subjectstmt);
+$meta = mysqli_stmt_result_metadata($Subjectstmt);
+$params = [];
+while ($field = mysqli_fetch_field($meta)) {
+    $params[] = &$result[$field->name];
+}
+call_user_func_array([$Subjectstmt, 'bind_result'], $params);
 
-        if (mysqli_stmt_num_rows($Subjectstmt) === 1) {
-            mysqli_stmt_bind_result($Subjectstmt, $Advisor1, $Advisor2, $Advisor3, $HOD, $Year_incharge);
-            mysqli_stmt_fetch($Subjectstmt);
-        }
+if (mysqli_stmt_fetch($Subjectstmt)) {
+    $belongingValue = reset($result);
+}
+      mysqli_stmt_close($Subjectstmt);
+      
         $defaultStatus = 'Arrived';
-        
-        $defaultForwardTo = $Subject;
+        $defaultForwardTo = $belongingValue;
         $query_select_faculty_name = "SELECT Name FROM admin_info WHERE Email = ?";
         $stmt_select_faculty_name = mysqli_prepare($conn, $query_select_faculty_name);
         mysqli_stmt_bind_param($stmt_select_faculty_name, "s", $defaultForwardTo);
@@ -106,12 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_bind_result($stmt_select_faculty_name, $Faculty_Name);
             mysqli_stmt_fetch($stmt_select_faculty_name);
         }else{
-            $Faculty_Name = 'Default Faculty Name'; // Set a default value
+            $Faculty_Name = 'Default Faculty Name';
         }
         $info2 = '[{"Forwarded":["' . $Faculty_Name . '","' . date('Y-m-d H:i:s') . '"]}]';
 
         // Bind parameters to the placeholders
-        mysqli_stmt_bind_param($stmt, "sssssssssssssss", $complaintid, $complainttype, $description, $rollno, $email, $department, $defaultStatus, $name, $Class, $defaultForwardTo, $currentDate, $info2, $currentTime, $Batch,$Subjectname);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssss", $complaintid, $complainttype, $description, $rollno, $email, $department, $defaultStatus, $name, $Class, $defaultForwardTo, $currentDate, $info2, $currentTime, $Batch);
 
         // Execute the statement
         $result = mysqli_stmt_execute($stmt);
@@ -232,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </body>
                 </html>'
             ];
-            include './../Emailcomplaint.php';
+            include './../../../Emailcomplaint.php';
             $emailSent1 = sendEmail($emailParams1['to'], $emailParams1['subject'], $emailParams1['message']);
             echo json_encode(['success' => true, 'complaint_id' => $complaintid]);
         } else {

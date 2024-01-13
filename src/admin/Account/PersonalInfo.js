@@ -16,7 +16,7 @@ const PersonalInfo = () => {
   useEffect(() => {
 
       axios
-        .post('http://localhost:8000/Admin_info.php', `email=${getEmailFromSession()}`)
+        .post('http://localhost:8000/Admin/Dashboard/Admin_info.php', `email=${getEmailFromSession()}`)
         .then((response) => {
           const data = response.data;
           if (data) {

@@ -148,9 +148,9 @@ const App = () => {
                 
                 
                 <Route path="/admin/Events" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Events />} data={['Events','Here is your complaints arrived']}/>}/>}/>
-                <Route path="/admin/Events/eventInfo/:eventId/modify" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventModifier  />} data={['Events','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/Events/modify" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventModifier  />} data={['Events','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/Events/EventFormCreation" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<EventFormCreation  />} data={['Event Creation','Here is your complaints arrived']}/>}/>}/>\
-                <Route path="/admin/Events/eventInfo/:eventId/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Eventviewresp  />} data={['Event Responses','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/Events/response" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Eventviewresp  />} data={['Event Responses','Here is your complaints arrived']}/>}/>}/>
                 
                 
                 

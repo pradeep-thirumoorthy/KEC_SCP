@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Descriptions, Result, Timeline } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import './styles.css';
+import {CaretUpOutlined,CaretDownOutlined} from '@ant-design/icons';
 const TimelineComponent = ({ current,info }) => {
   const [timelineData, setTimeData] = useState([]);
   const [Pending,setPending] = useState(false);
@@ -27,8 +28,17 @@ const TimelineComponent = ({ current,info }) => {
             setPending(true);
             return {
               label: <div className='mx-5'>{value[1]}</div>,
-              children: <div className='mx-5'>Forwarded to {value[0]}<br /><br /><br /><br /></div>,
-              dot: <SendOutlined style={{ fontSize: '30px' }} />,
+              children: (
+                <div className='mx-5'>
+                  Forwarded to {value[0]}
+                  {value[2] === 'Upgraded' ? (
+                    <CaretUpOutlined style={{ fontSize: '20px', paddingLeft: '20px' }} />
+                  ) : value[2] === 'Downgraded' ? (
+                    <CaretDownOutlined style={{ fontSize: '20px', paddingLeft: '20px' }} />
+                  ) : null}
+                  <br /><br /><br /><br />
+                </div>
+              ),dot: <SendOutlined style={{ fontSize: '30px' }} />,
             };
           } else if (key === "Accepted") {
             setPending(false);

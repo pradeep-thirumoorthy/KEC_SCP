@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $batch = $studentInfoRow['Batch'];
         $class = $studentInfoRow['Class'];
         
-        $checkConstraintsQuery = "SELECT constraints FROM events WHERE event_id = '$eventId' ";
+        $checkConstraintsQuery = "SELECT constraints,visible FROM events WHERE event_id = '$eventId' ";
 
         $constraintsResult = mysqli_query($conn, $checkConstraintsQuery);
         
@@ -51,17 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             
             if ($constraintsRow) {
                 $constraint = json_decode($constraintsRow['constraints'], true);
-                
+                $visible = $constraintsRow['visible'];
                 $hasConstraints = false;
-                    if (($constraint[0] === $department && $constraint[1] === $batch && $constraint[2] === 'F')
-                    ) {
+                    if (($visible !== 'constraint'||($constraint[0] === 'Not Applied') ||
+                    ($constraint[0] === $department && $constraint[1] === 'Not Applied') ||
+                    ($constraint[0] === $department && $constraint[1] === $batch && $constraint[2] === 'Not Applied') ||
+                    ($constraint[0] === $department && $constraint[1] === $batch && $constraint[2] ===  $class)
+                    )) {
                         $hasConstraints = true;
                     }
-
-                echo json_encode(['success' => $hasConstraints, 'message' => $constraint[0],'a' => $constraint[1], 'b'=> $constraint[2],'ag' => $department, 'bc'=> ($constraint[0] === 'Not Applied') ||
-                ($constraint[0] === $department && $constraint[1] === 'Not Applied') ||
-                ($constraint[0] === $department && $constraint[1] === $batch && $constraint[2] === 'Not Applied') ||
-                ($constraint[0] === $department && $constraint[1] === $batch && $constraint[2] === 'F'),'bq'=> $batch]);
                 if ($hasConstraints) {
                 $checkStatusQuery = "SELECT Status, IntervalTime FROM events WHERE event_id = '$eventId'";
                 $statusResult = mysqli_query($conn, $checkStatusQuery);

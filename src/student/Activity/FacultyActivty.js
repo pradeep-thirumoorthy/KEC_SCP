@@ -1,18 +1,21 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import {useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
 import { geteduEmailFromSession } from '../Emailretrieval';
 const FacutlyActivity= () => {
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [search, setSearch] = useState('');
-  const [Filter,setFilter]= useState('');
   const navigate = useNavigate();
+  
+  const [Filter,setFilter]= useState('');
+  const { FilterState } = location.state || '';
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
   const handleChange = (pagination, filters, sorter) => {
@@ -25,25 +28,9 @@ const FacutlyActivity= () => {
     navigate('/student/Activity/Faculty/Panel', { state: { info: rowData ,Heading:'Activity'} });
   };
   useEffect(() => {
-    const hashValue = window.location.hash.replace('#', '');
+    if(FilterState){
+    if(FilterState){setFilter(FilterState);}}
     
-    const [value1, value2] = hashValue.split('=');
-    if(value1!=="" && value2!=="")
-    {
-    if(value2 !==''){
-      if(value2==='Sent'){
-        setFilter('Arrived');
-      }
-      else{
-    setFilter(value2);
-      }
-    }
-    console.log('Value 1:', value1);
-console.log('Value 2:', value2);
-    const filteredType = value1;
-    if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
-        Type: [filteredType],
-      });}}
     filterData();
   }, []);
  
@@ -52,6 +39,21 @@ console.log('Value 2:', value2);
       title: 'Type',
       dataIndex: 'Type',
       key: 'Type',
+      filters: [
+        {
+          text: 'Public',
+          value: 'Public',
+        },
+        {
+          text: 'Anonymous',
+          value: 'Anonymous',
+        },
+      ],
+      filteredValue: filteredInfo.Type || null,
+      onFilter: (value, record) => record.Type.includes(value),
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Type' ? sortedInfo.order : null,
+      ellipsis: true,
     },
     {
       title: 'Roll No',
@@ -62,6 +64,8 @@ console.log('Value 2:', value2);
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
   if (Filter === '') {
@@ -107,7 +111,7 @@ console.log('Value 2:', value2);
     console.log(Filter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/FacutlyActivity.php';
+    const apiUrl = 'http://localhost:8000/Student/Activity/FacutlyActivity.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

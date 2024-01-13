@@ -245,7 +245,7 @@ const EventFormCreation = () => {
             finformData.append('constraint',JSON.stringify(constraint));
             finformData.append('visibility',visibility);
             axios
-                .post('http://localhost:8000/EventForm.php', finformData)
+                .post('http://localhost:8000/Admin/Events/EventForm.php', finformData)
                 .then((response) => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do

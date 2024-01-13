@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Input, Space, Table, Typography } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 
 const Facultyview = () => {
@@ -30,7 +30,7 @@ const Facultyview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/viewFacComp.php';
+    const apiUrl = 'http://localhost:8000/Admin/Faculty/view.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
@@ -112,6 +112,8 @@ const Facultyview = () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
     {
       title: 'Details',

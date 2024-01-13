@@ -6,6 +6,7 @@ import { Button,} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
+import jsonData from './JSON files/Academic.json';
 import { geteduEmailFromSession } from '../../Emailretrieval';
 const Academic = () => {
   const [rollno, setRoll] = useState('');
@@ -17,72 +18,20 @@ const Academic = () => {
   
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
+
+  const[Belonging,setBelonging] = useState('Advisor1');
+
   const [Exceptional,setExceptional]=useState(false);
   const [Loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
 
-  const TreeData = [
-      {
-        title: 'Placement related issues',
-        disabled:true,
-        children: [
-          {
-            title: 'It\'s good to us if more hours for practicing coding is provided',
-            value: 'It\'s good to us if more hours for practicing coding is provided',
-          },
-         {
-            title:'Special concern for project is required',
-            value:'Special concern for project is required',
-         },
-          {
-            title:'Company specific questions are not posted regularly',
-            value:'Company specific questions are not posted regularly',
-         },
-         {
-            title: 'Students attending super PACC should be given special permission for rescheduling SPD related activities',
-            value: 'Students attending super PACC should be given special permission for rescheduling SPD related activities',
-          },
-        ],
-      },
-      {
-        title: 'Credit course / Honours related',
-        disabled:true,
-        children: [
-          {
-            title: 'Can reduce the time for credit class to 35 hours',
-            value: 'Can reduce the time for credit class to 35 hours',
-          },
-          {
-            title: 'It\'s convenient for us if the credit classes are scheduled on regular days like other Departments',
-            value: 'It\'s convenient for us if the credit classes are scheduled on regular days like other Departments',
-          },
-           {
-            title: 'Students attending honours should be given special permission for rescheduling SPD related activities ',
-            value: 'Students attending honours should be given special permission for rescheduling SPD related activities ',
-          },
-        ],
-      },
-    {
-        title: 'Examination-related Issues',
-        disabled: true,
-        children: [
-          {
-            title: 'Can change the CN tutorial on individual day rather than writing with other subjects',
-            value: 'Can change the CN tutorial on individual day rather than writing with other subjects',
-          },
-          {
-            title: 'It\'s useful to us if the answer key for tutorial is posted before examination',
-            value: 'It\'s useful to us if the answer key for tutorial is posted before examination',
-          },
-        ],
-      },
-    ];
+  const TreeData = jsonData;
           
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         console.log(data);
@@ -113,7 +62,7 @@ const Academic = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Academic.php', {
+      .post('http://localhost:8000/Student/Complaints/Type/Academic.php', {
         name: name,
         rollno: rollno,
         email: geteduEmailFromSession(),
@@ -121,16 +70,16 @@ const Academic = () => {
         department: department,
         Class: Class,
         Batch: Batch,
+        Belonging:Belonging,
       })
       .then((response) => {
         if (response.data.success) {
-          messageApi.open({
-            type: 'success',
-            content: 'Complaint submitted successfully',
-          });
-          navigate('/student/Activity');
+          messageApi.success('Complaint submitted successfully');
+          setTimeout(() => {
+            navigate('/student/Activity');
+          }, 1000);
         } else {
-          alert('Server error');
+          messageApi.warning('Please select the complaint');
           console.log(response.data);
         }
       })
@@ -148,19 +97,13 @@ const Academic = () => {
         <Breadcrumb>
           <Breadcrumb.Item>Student</Breadcrumb.Item>
           <Breadcrumb.Item>
-            <Link style={{ textDecoration: 'none' }} href="/student/Complaint">
-              Complaint
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaints">
+              Complaints
             </Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>Academic</Breadcrumb.Item>
         </Breadcrumb>
       </Col>
-        <Col>
-          <Typography className='fs-2 fw-bolder fst-italic'>Academic Entry:</Typography>
-          <Typography className='fst-italic no-wrap'>
-            Enter your complaints based on Academics
-          </Typography>
-        </Col>
     </Row>
     
     <Divider/>
@@ -169,7 +112,7 @@ const Academic = () => {
     <Typography>Options:</Typography>
   </Col>
   <Col align='center' span={responsiveSpan}>
-    <Radio.Group onChange={(e) => setExceptional(e.target.value)} value={Exceptional}>
+    <Radio.Group onChange={(e) => {setExceptional(e.target.value);setBelonging('Advisor1')}} value={Exceptional}>
       <Radio value={false}>Pre-defined</Radio>
       <Radio value={true}>Own</Radio>
     </Radio.Group>
@@ -184,7 +127,17 @@ const Academic = () => {
         showSearch
         style={{ width: '80%' }}
         value={description}
-        onChange={(value) => setDescription(value)}
+        onChange={(value,label ) => {
+          const selectedChild = TreeData.flatMap(parent => parent.children).find(child => child.value === value);
+
+          if (selectedChild) {
+            console.log(`Selected child value: ${value}`);
+            console.log(`Selected child label: ${label}`);
+            console.log(`Parent data: `, selectedChild.belongs);
+          }
+          setBelonging(selectedChild.belongs);
+          setDescription(value);
+}}
         treeData={TreeData}
         allowClear
         treeDefaultExpandAll // Set this to true
@@ -206,7 +159,6 @@ const Academic = () => {
     </Button>
   </Col>
 </Row>
-
   </>
   );
 };

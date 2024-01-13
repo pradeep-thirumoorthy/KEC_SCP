@@ -13,12 +13,6 @@ header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with yo
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-
-
 
 
 // Disable caching for the login response

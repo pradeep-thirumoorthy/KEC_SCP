@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import log from '../../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
-import { Descriptions, Image } from 'antd';
+import { Descriptions, Image, Typography } from 'antd';
 import axios from 'axios';
 import DashChart from './DashChart';
 import { geteduEmailFromSession } from '../Emailretrieval';
 
-
-// Use totalSent and totalResolved as needed
-// For instance, to display the total sent and resolved complaints:
 
 const StudentDash = () => {
 
@@ -23,9 +20,9 @@ const StudentDash = () => {
     fetchStudentData();
   }, []);
 
-  const fetchStudentData = async() => {
+  const fetchStudentData = () => {
 
-    await axios.get('http://localhost:8000/sdash.php', {
+   axios.get('http://localhost:8000/Student/Dashboard/Dashboard.php', {
       params: {
         email: geteduEmailFromSession()
       }
@@ -55,7 +52,7 @@ const StudentDash = () => {
 
   const linec = {
     overflowX: 'scroll',
-    background: 'linear-gradient(to left, #BFEFFF, #F0F8FF)',
+    backgroundColor:'grey',
     marginTop: '10px',
     fontFamily: 'poppins',
     borderRadius: '20px',
@@ -78,8 +75,8 @@ const StudentDash = () => {
           <div className="col-lg-12 d-flex flex-column-reverse flex-lg-row justify-content-between" style={linec}>
             <div className='content'>
               <p style={{ marginLeft: '10px' }}>{getCurrentDateTime()}</p>
-              <p style={{ fontSize: '50px' }}> Welcome back,{studentData.Name}</p>
-              <p style={{ marginTop: '20px', fontSize: '30px' }}> Welcome to the Student Complaint Portal (SCP). Register and manage complaints efficiently.</p>
+              <Typography.Title> Welcome back,{studentData.Name}</Typography.Title>
+              <Typography> Welcome to the Student Complaint Portal (SCP). Register and manage complaints efficiently.</Typography>
             </div>
             <div className='image'>
               <Image src={log}></Image>

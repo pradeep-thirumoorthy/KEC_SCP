@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import {Breadcrumb, Radio, TreeSelect, message } from 'antd';
+import {Breadcrumb, Col, Radio, Row, TreeSelect, message } from 'antd';
 import {Select, Button, } from 'antd'; // Import InputNumber instead of TextArea
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import FacultyData from './JSON files/Faculty.json'
 import Link from 'antd/es/typography/Link';
 import { geteduEmailFromSession } from '../../Emailretrieval';
 
@@ -25,72 +26,15 @@ const Faculty = () => {
   const [Exceptional,setExceptional] = useState(false);
   const navigate = useNavigate();
   const [Type,setType]=useState('Public');
-  console.log(Type);
   
-  const TreeData = [
-    {
-      title: 'Difficulties in learning',
-      disabled:true,
-      children: [
-        {
-          title: 'Can send materials / refrences on ongoing topics',
-          value: 'Can send materials / refrences on ongoing topics',
-        },
-       
-        {
-          title: 'Can teach slower as we can\'t catch with their speed of teaching',
-          value: 'Can teach slower as we can\'t catch with their speed of teaching',
-        },
-       {
-          title:'If teaching is done on board,It\'s more convinent to us',
-          value:'If teaching is done on board,It\'s more convinent to us',
-       },
-        {
-          title:'Can revise previous class topics for atleast 5 mins',
-          value:'Can revise previous class topics for atleast 5 mins',
-       },
-      ],
-    },
-    {
-      title: 'Issues on tutorial',
-      disabled:true,
-      children: [
-        {
-          title: 'Can post tutorial questions as soon as possible rather than delaying',
-          value: 'Can post tutorial questions as soon as possible rather than delaying',
-        },
-        {
-          title: 'Make students to view their tutorial marks in a regular interval of time',
-          value: 'Make students to view their tutorial marks in a regular interval of time',
-        },
-         {
-          title: 'It\'s good if the number of questions for tutorial is reduced',
-          value: 'It\'s good if the number of questions for tutorial is reduced',
-        },
-      ],
-    },
-  {
-      title: 'Examination-related Issues',
-      disabled: true,
-      children: [
-        {
-          title: 'Provide study guides or sample questions for exams',
-          value: 'Provide study guides or sample questions for exams',
-        },
-        {
-          title: 'It\'s easy for us to revise all topics before the date of examination',
-          value: 'It\'s easy for us to revise all topics before the date of examination',
-        },
-      ],
-    },
-  ];
+  const TreeData = FacultyData;
           
           
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -130,7 +74,7 @@ const Faculty = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Faculty.php', {
+      .post('http://localhost:8000/Student/Complaints/Type/Faculty.php', {
         name: (Type==='Public')?name:'--/--',
         rollno: (Type==='Public')?rollno:'--/--',
         email: geteduEmailFromSession(),
@@ -162,19 +106,19 @@ const Faculty = () => {
     <>
     {contextHolder}
       <div className=' row '>
-      <Breadcrumb
-    items={[
-      {
-        title: 'Student',
-      },
-      {
-        title: <Link  style={{textDecoration:'none'}} href="/student/Complaint">Complaint</Link>,
-      },
-      {
-        title:'Lab',
-      },
-    ]}
-  />
+      <Row>
+      <Col span={24}>
+        <Breadcrumb>
+          <Breadcrumb.Item>Student</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaints">
+              Complaints
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Faculty</Breadcrumb.Item>
+        </Breadcrumb>
+      </Col>
+    </Row>
       </div>
       <div className='row form-group'>
         {}

@@ -16,11 +16,11 @@ const Events = () => {
   const [EventData, setEventData] = useState([]);
   const Email = sessionStorage.getItem('AdminEmail');
   const response = (id) => {
-    navigate("/admin/Events/eventInfo/" + id + "/response");
+    navigate("/admin/Events/response", { state: { EventId: id } });
   };
 
   const modify = (id) => {
-    navigate("/admin/Events/eventInfo/" + id + "/modify");
+    navigate("/admin/Events/modify", { state: { EventId: id } });
   };
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Events = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/EventInfoAdmin.php?email=${getEmailFromSession()}`)
+      axios.get(`http://localhost:8000/Admin/Events/EventInfoAdmin.php?email=${getEmailFromSession()}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;

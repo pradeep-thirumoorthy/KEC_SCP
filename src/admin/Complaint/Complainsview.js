@@ -15,36 +15,17 @@ const Complaintsview = () => {
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const { Filter } = location.state || [];
-  const [adminData, setAdminData] = useState(null);
   const handleButtonClick = (rowData) => {
     navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
   };
   
   useEffect(() => {
-    console.log(adminData)
-    fetchAdminData();
     (Filter)?
     setFilteredInfo({Type: [Filter],}):setFilteredData();
     filterData();
     
     console.log(filteredInfo);
   }, []);
-
-  const fetchAdminData = () => {
-    
-    axios
-        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
-        .then((response) => {
-          const data = response.data;
-          if (data) {
-            setAdminData(data);
-            console.log(JSON.stringify(data))
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching admin data:', error);
-        })
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -54,7 +35,7 @@ const Complaintsview = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/viewComp.php';
+    const apiUrl = 'http://localhost:8000/Admin/Complaints/Complaints.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
@@ -172,6 +153,8 @@ const Complaintsview = () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
     {
       title: 'Details',

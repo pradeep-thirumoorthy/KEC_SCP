@@ -55,7 +55,7 @@ const Nfcalendar = () => {
       
     const filterData = async () => {
         try {
-          const apiUrl = 'http://localhost:8000/StudentCalendar.php';
+          const apiUrl = 'http://localhost:8000/Student/Dashboard/Calendar.php';
           const params = {
             email: geteduEmailFromSession(),
           };

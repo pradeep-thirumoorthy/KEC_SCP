@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Input, Modal, Result, Select } from "antd";
+import { Button, Input, Modal, Radio, Result, Select, Typography } from "antd";
 
 import {CheckOutlined,SendOutlined,CloseOutlined} from '@ant-design/icons';
 import axios from "axios";
@@ -15,7 +15,8 @@ const Forward2 = () => {
   const navigate = useNavigate();
   const [Upstream,setUpstream]=useState([]);
   const [Downstream,setDownstream]= useState([]);
-  const { info } = location.state || {};
+  const [upordown,setupordown]=useState('UpStream');
+  const { info} = location.state || {};
   const [Faculty, setFaculty] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const key = 'updatable';
@@ -24,8 +25,8 @@ const Forward2 = () => {
     setFaculty(value);
   };
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/getdesignation - Copy.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
-
+    if (info && info.Batch) {
+    const apiUrl = `http://localhost:8000/Admin/Complaints/Designation.php?department=${info.Department}&class=${info.Class}&batch=${info.Batch}&level=${info.Level}`;
 
     axios
   .get(apiUrl)
@@ -58,6 +59,7 @@ const Forward2 = () => {
       }
       const subjects = [];
 
+if(info.Level===1){
 for (let i = 1; i <= 6; i++) {
   const subjectKey = `Subject_${i}`;
   console.log(subjectKey, downstreamData);
@@ -67,13 +69,28 @@ for (let i = 1; i <= 6; i++) {
   if (subjectData) {
     const data = JSON.parse(subjectData);
     console.log('Subject:', data);
-    const subjectName = Object.keys(data)[0]; // Extract subject name
-    const subjectEmail = data[subjectName]; // Extract subject email
+    const subjectName = Object.keys(data)[0];
+    const subjectEmail = data[subjectName];
     subjects.push({ name: subjectName, email: subjectEmail });
   } else {
     console.log(`No data found for ${subjectKey}`);
   }
+}}
+else if(info.Level===2){
+  for (let i = 1; i <= 3; i++) {
+  const subjectKey = `Advisor${i}`;
+  console.log(subjectKey, downstreamData);
+  const subjectName = subjectKey;
+  const subjectEmail = downstreamData[0][subjectKey];
+  subjects.push({ name: subjectName, email: subjectEmail });
+}}
+else if(info.Level===3){
+  const subjectKey = `Year_Incharge`;
+  const subjectName = subjectKey;
+  const subjectEmail = downstreamData[0][subjectKey];
+  subjects.push({ name: subjectName, email: subjectEmail });
 }
+
 
 console.log(subjects);
 setDownstream(subjects);
@@ -84,7 +101,8 @@ setDownstream(subjects);
   .catch((error) => {
     console.error("Error fetching data:", error);
   });
-}, [Faculty, info.Batch, info.Class, info.Department, info.Level]);
+}
+}, [Faculty]);
 
 
   const togglePopup = () => {
@@ -98,22 +116,28 @@ setDownstream(subjects);
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/ForwardComplaint.php", {
+        .post("http://localhost:8000/Admin/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
+          upordown:upordown
         })
         .then((response) => {
-          // Delayed navigation after 2 seconds
+          if(response.data.success){
+          message.success({ content: 'Forwarded complaint successfully!', key, duration: 2 });
           setTimeout(() => {
             navigate("/admin/Complaints");
           }, 2000);
+        }
+        else{
+          message.warning({ content: response.data.message, key, duration: 2 });
+          console.log(response.data);
+        }
         })
         .catch((error) => {
           console.error("Error forwarding complaint:", error);
         })
         .finally(() => {
-          message.success({ content: 'Forwarded complaint successfully!', key, duration: 2 });
           setIsModalVisible(false);
         });
     }
@@ -124,7 +148,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/Admin/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -148,7 +172,7 @@ setDownstream(subjects);
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -165,7 +189,43 @@ setDownstream(subjects);
       });
     }
   };
+  const [options, setOptions] = useState([]);
 
+  useEffect(() => {
+    // Update options when upordown changes
+    const newOptions = [];
+
+    if (upordown === "UpStream") {
+      newOptions.length=0;
+      if (Upstream.length > 0) {
+        Upstream.forEach((item) => {
+          newOptions.push(
+            <Option key={item.email} value={item.email}>
+              {item.name}
+            </Option>
+          );
+        });
+      } else {
+        newOptions.push(<Option value="" disabled>No Names Available</Option>);
+      }
+    } else {
+      if (Downstream.length > 0) {
+        newOptions.length=0;
+        Downstream.forEach((item) => {
+          newOptions.push(
+            <Option key={item.email} value={item.email}>
+              {item.name}
+            </Option>
+          );
+        });
+      } else {
+        newOptions.push(<Option value="" disabled>No Names Available</Option>);
+      }
+    }
+    setOptions(newOptions);
+  }, [upordown, Upstream, Downstream]);
+  
+  
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -232,39 +292,20 @@ setDownstream(subjects);
   onCancel={handleCancel}
 >
   <div>
+    <Radio.Group onChange={(e)=>{setupordown(e.target.value);setFaculty('')}} defaultValue="a" style={{ marginTop: 16 }}>
+      <Radio.Button defaultChecked value="UpStream">UpStream</Radio.Button>
+      <Radio.Button value="DownStream">DownStream</Radio.Button>
+    </Radio.Group>
     
-    <div className="fs-3">UpStream:</div>
+    <Typography.Title level={3}>{upordown}</Typography.Title>
+    
     <Select style={{ width: "100%" }} value={Faculty} onChange={handleFacultyChange}>
-      <Option value="">NiL</Option>
-      {Upstream.length > 0 ? (
-        Upstream.map((item) => (
-          <Option key={item.email} value={item.email}>
-            {item.name}
-          </Option>
-        ))
-      ) : (
-        <Option value="" disabled>
-          No Names Available
-        </Option>
-      )}
-    </Select>
+    {options}
+</Select>
+
     <div className="fs-3">Forward To:</div>
     <Input type="text" value={Faculty} disabled/>
-    <div className="fs-3">Downstream:</div>
-    <Select style={{ width: "100%" }} value={Faculty} onChange={handleFacultyChange}>
-      <Option value="">NiL</Option>
-      {Downstream.length > 0 ? (
-        Downstream.map((item) => (
-          <Option key={item.email} value={item.email}>
-            {item.name}
-          </Option>
-        ))
-      ) : (
-        <Option value="" disabled>
-          No Names Available
-        </Option>
-      )}
-    </Select>
+    
   </div>
 </Modal>
 

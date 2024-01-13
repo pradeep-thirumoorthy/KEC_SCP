@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import {Radio, TreeSelect, message } from 'antd';
+import {Breadcrumb, Col, Radio, Row, TreeSelect, message } from 'antd';
+import CoursesData from './JSON files/Courses.json'
 import { Select, Button, } from 'antd'; // Import InputNumber instead of TextArea
-import { useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
+
+import Link from 'antd/es/typography/Link';
 import TextArea from 'antd/es/input/TextArea';
 import { geteduEmailFromSession } from '../../Emailretrieval';
 
@@ -24,66 +27,13 @@ const Courses = () => {
   const navigate = useNavigate();
   const [Exceptional,setExceptional]=useState(false);
   
-  const TreeData = [
-    {
-      title: 'Challenges in understanding subject materials.',
-      disabled:true,
-      children: [
-        {
-          title: 'Speed of teaching is more fast',
-          value: 'Difficulties in grasping complex concepts.',
-        },
-        {
-          title: 'Can reduce the number of tutorial questions',
-          value: 'Confusion due to unclear subject explanations.',
-        },
-        {
-          title: 'Can award more marks to tutorial questions',
-          value: 'Struggles with comprehending advanced topics.',
-        },
-        {
-          title: 'Can permit us to see tutorial marks within 2 weeks',
-          value: 'Difficulty in relating subject content to real-life scenarios.',
-        },
-        {
-          title: 'Can give notes as refrences ',
-          value: 'Problems in applying theoretical knowledge practically.',
-        },
-      ],
-    },
-    {
-      title: 'Issues related to subject materials and resources.',
-      disabled:true,
-      children: [
-        {
-          title: 'Lack of updated and relevant course textbooks.',value: 'Lack of updated and relevant course textbooks.',
-        },
-        {
-          title: 'Challenges in accessing online subject materials.',
-          value: 'Challenges in accessing online subject materials.',
-        },
-        {
-          title: 'Insufficient reference materials for in-depth learning.',
-          value: 'Insufficient reference materials for in-depth learning.',
-        },
-        {
-          title: 'Difficulty in finding subject-related research articles.',
-          value: 'Difficulty in finding subject-related research articles.',
-        },
-        {
-          title: 'Limited availability of subject-specific software or tools.',
-          value: 'Limited availability of subject-specific software or tools.',
-        },
-      ],
-    },
-    // Add more subject-related categories here...
-  ];
+  const TreeData = CoursesData;
           
           
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -124,7 +74,7 @@ const Courses = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Courses.php', {
+      .post('http://localhost:8000/Student/Complaints/Type/Courses.php', {
         name: name,
         rollno: rollno,
         email: geteduEmailFromSession(),
@@ -158,7 +108,19 @@ const Courses = () => {
       <div className='row form-group'>
         {}
         
-        
+        <Row>
+      <Col span={24}>
+        <Breadcrumb>
+          <Breadcrumb.Item>Student</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaints">
+              Complaints
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Courses</Breadcrumb.Item>
+        </Breadcrumb>
+      </Col>
+    </Row>
           <>
             <div className='col-lg-6 col-sm-12 '>
               <label className='entry mx-9 px-5'>Courses</label>

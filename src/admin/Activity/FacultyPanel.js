@@ -31,7 +31,7 @@ const ActivityFacultyPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id, mode: 'Update',Message:Update})
+      .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id, mode: 'Update',Message:Update})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity/Faculty');
@@ -46,7 +46,7 @@ const ActivityFacultyPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Complete the resolvation of the complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty:email,mode:'Resolve'})
+      .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty:email,mode:'Resolve'})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity/Faculty');

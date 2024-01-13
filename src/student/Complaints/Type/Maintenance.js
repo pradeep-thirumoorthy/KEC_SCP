@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Option } from 'antd/es/mentions';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
+import MaintenanceData from './JSON files/Maintenance.json';
 import { geteduEmailFromSession } from '../../Emailretrieval';
 const Maintenance = () => {
   const [rollno, setRoll] = useState('');
@@ -40,60 +41,7 @@ const Maintenance = () => {
     setDescription(`${count} ${item2}${countDescription} ${Status}`);
     }
   };
-  const TreeData = [
-    {
-      title: 'Challenges in understanding subject materials.',
-      disabled:true,
-      children: [
-        {
-          title: 'Difficulties in grasping complex concepts.',
-          value: 'Difficulties in grasping complex concepts.',
-        },
-        {
-          title: 'Confusion due to unclear subject explanations.',
-          value: 'Confusion due to unclear subject explanations.',
-        },
-        {
-          title: 'Struggles with comprehending advanced topics.',
-          value: 'Struggles with comprehending advanced topics.',
-        },
-        {
-          title: 'Difficulty in relating subject content to real-life scenarios.',
-          value: 'Difficulty in relating subject content to real-life scenarios.',
-        },
-        {
-          title: 'Problems in applying theoretical knowledge practically.',
-          value: 'Problems in applying theoretical knowledge practically.',
-        },
-      ],
-    },
-    {
-      title: 'Issues related to subject materials and resources.',
-      disabled:true,
-      children: [
-        {
-          title: 'Lack of updated and relevant course textbooks.',value: 'Lack of updated and relevant course textbooks.',
-        },
-        {
-          title: 'Challenges in accessing online subject materials.',
-          value: 'Challenges in accessing online subject materials.',
-        },
-        {
-          title: 'Insufficient reference materials for in-depth learning.',
-          value: 'Insufficient reference materials for in-depth learning.',
-        },
-        {
-          title: 'Difficulty in finding subject-related research articles.',
-          value: 'Difficulty in finding subject-related research articles.',
-        },
-        {
-          title: 'Limited availability of subject-specific software or tools.',
-          value: 'Limited availability of subject-specific software or tools.',
-        },
-      ],
-    },
-    // Add more subject-related categories here...
-  ];
+  const TreeData = MaintenanceData;
   const roomOptionsByFloor = {
     'Ground Floor': ['Room 1', 'Room 2', 'Room 3'],
     'First Floor': ['Room A', 'Room B', 'Room C'],
@@ -102,7 +50,7 @@ const Maintenance = () => {
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
     axios
-      .post('http://localhost:8000/studentInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -152,7 +100,7 @@ const Maintenance = () => {
     }
     setLoading(true);
     axios
-      .post('http://localhost:8000/Type/Maintenance.php', {
+      .post('http://localhost:8000/Student/Complaints/Type/Maintenance.php', {
         name: name,
         rollno: rollno,
         email: geteduEmailFromSession(),
@@ -189,19 +137,13 @@ const Maintenance = () => {
         <Breadcrumb>
           <Breadcrumb.Item>Student</Breadcrumb.Item>
           <Breadcrumb.Item>
-            <Link style={{ textDecoration: 'none' }} href="/student/Complaint">
-              Complaint
+            <Link style={{ textDecoration: 'none' }} href="/student/Complaints">
+              Complaints
             </Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>Maintenance</Breadcrumb.Item>
         </Breadcrumb>
       </Col>
-        <Col>
-          <Typography className='fs-2 fw-bolder fst-italic'>Maintenance Entry:</Typography>
-          <Typography className='fst-italic no-wrap'>
-            Enter your complaints based on Maintenance
-          </Typography>
-        </Col>
     </Row>
     <Divider/>
 

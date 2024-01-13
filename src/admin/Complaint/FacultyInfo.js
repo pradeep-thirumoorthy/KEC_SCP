@@ -25,7 +25,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/ForwardComplaint2.php", { Complaint_Id: info.Complaint_Id,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", { Complaint_Id: info.Complaint_Id,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -49,7 +49,7 @@ const FacultyInfo = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();

@@ -24,7 +24,7 @@
   "scripts": {
     "start": "concurrently \"npm run start-react\" \"npm run start-php\"",
     "start-react": "react-scripts start",
-    "start-php": "php -S localhost:8000 -t phpSCPfolder",
+    "start-php": "php -S localhost:8000 -t Api",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

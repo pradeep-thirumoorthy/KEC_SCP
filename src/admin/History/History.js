@@ -11,6 +11,14 @@ const History= () => {
   const [endDate, setEndDate] = useState('');
   const [search, setSearch] = useState('');
   const [Filter,setFilter]= useState('');
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  };
+  
   useEffect(() => {
     const hashValue = window.location.hash.replace('#', ''); // Remove the '#' character
     setSearch(hashValue);
@@ -27,11 +35,43 @@ const History= () => {
       title: 'Type',
       dataIndex: 'Type',
       key: 'Type',
+      filters: [
+        {
+          text: 'Academic',
+          value: 'Academic',
+        },
+        {
+          text: 'Maintenance',
+          value: 'Maintenance',
+        },
+        {
+          text: 'Faculty',
+          value: 'Faculty',
+        },
+        {
+          text: 'Courses',
+          value: 'Courses',
+        },
+        {
+          text: 'Lab',
+          value: 'Lab',
+        },{
+          text: 'Others',
+          value: 'Others',
+        },
+      ],
+      filteredValue: filteredInfo.Type || null,
+      onFilter: (value, record) => record.Type.includes(value),
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Type' ? sortedInfo.order : null,
+      ellipsis: true,
     },
     {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
   if (Filter === '') {
@@ -72,7 +112,7 @@ const History= () => {
   };
   const email=getEmailFromSession();
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/History.php';
+    const apiUrl = 'http://localhost:8000/Admin/History/History.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
@@ -138,7 +178,7 @@ const History= () => {
       
     </div>
               
-    <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} dataSource={mappedTableData}   pagination={false}/>;
+    <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange}  pagination={false}/>;
               </div>
         </>
       );

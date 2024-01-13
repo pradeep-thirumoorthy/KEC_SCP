@@ -13,15 +13,11 @@ const Activity = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  
-  const [adminData, setAdminData] = useState(null);
   const handleButtonClick=(rowData)=>
   {
     navigate('/admin/Activity/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
-    console.log(adminData)
-    fetchAdminData();
     const hashValue = window.location.hash.replace('#', '');
     const hashVal=hashValue.replace('%20',' ');
     const filteredType = hashVal;
@@ -30,22 +26,6 @@ const Activity = () => {
       });}
     filterData();
   }, []);
-
-  const fetchAdminData = () => {
-    
-    axios
-        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
-        .then((response) => {
-          const data = response.data;
-          if (data) {
-            setAdminData(data);
-            console.log(JSON.stringify(data))
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching admin data:', error);
-        })
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -55,7 +35,7 @@ const Activity = () => {
     setSortedInfo(sorter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/viewComp2.php';
+    const apiUrl = 'http://localhost:8000/Admin/Activity/view.php';
     const params = {
       start_date: startDate,
       end_date: endDate,
@@ -173,6 +153,8 @@ const Activity = () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
     {
       title: 'Details',

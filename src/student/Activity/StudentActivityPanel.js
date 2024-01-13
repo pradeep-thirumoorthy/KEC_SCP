@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Divider, Steps, Typography } from 'antd';
-import TimelineComponent2 from '../Timeline/TimelineComponent2';
 import TimelineComponent from '../Timeline/TimelineComponent';
 
 const StudentActivityPanel = () => {

@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Doughnut from './doughnut';
 import LineChart from './Linechart';
 import axios from 'axios';
-import { Calendar, Flex,Tooltip, Typography, theme } from 'antd';
+import { Calendar, Flex,Popover,Tooltip, Typography, theme } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { getEmailFromSession } from '../EmailRetrieval';
 const Dash = () => {
@@ -19,7 +19,7 @@ const Dash = () => {
   const [CalendarData,setCalendarData]=useState('');
   useEffect(() => {
       
-      axios.post('http://localhost:8000/dash.php', `email=${encodeURIComponent(getEmailFromSession())}`)
+      axios.post('http://localhost:8000/Admin/Dashboard/dash.php', `email=${encodeURIComponent(getEmailFromSession())}`)
         .then(response => {
           const data = response.data;
           if (data) {
@@ -32,7 +32,7 @@ const Dash = () => {
         const params = {
           email: getEmailFromSession(),
         };
-        axios.get('http://localhost:8000/minicalendar.php', {params})
+        axios.get('http://localhost:8000/Admin/Dashboard/minicalendar.php', {params})
         .then(response => {
           const data = response.data.data;
           if (data) {
@@ -79,11 +79,11 @@ const Dash = () => {
                   <Link href='/admin/dashboard/Calendar'>see Calendar</Link>
                   </Flex>
                   <div style={wrapperStyle}>
-                  <Tooltip title={selectedDate}>
+                  <Popover title={selectedDate}>
                     <div>
                   <Calendar fullscreen={false} onSelect={onSelect}/>
                   </div>
-                  </Tooltip>
+                  </Popover>
                   </div>
                   <Typography.Title level={1} id="reports">Complaints</Typography.Title>
                   <div className="table"></div>

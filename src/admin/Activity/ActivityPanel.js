@@ -16,6 +16,7 @@ const ActivityPanel = () => {
   const [Extra,setExtra]=useState({});
   useEffect(() => {
     if(info){
+      console.log(info);
     if (info.Type === "Maintenance") {
       const parsedExtra = JSON.parse(info.Extra);
       setExtra(parsedExtra);
@@ -31,7 +32,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
+      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email, mode: 'Update',Message:Update})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');
@@ -46,7 +47,7 @@ const ActivityPanel = () => {
     const confirmed = window.confirm('Are you sure you want to Complete the resolvation of the complaint?');
     if (confirmed) {
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
+      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info:info,Faculty:email,mode:'Resolve'})
       .then((response) => {
         console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity');

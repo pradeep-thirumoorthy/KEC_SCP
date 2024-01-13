@@ -98,7 +98,7 @@ const ForgetPass = () => {
         return false;
     }
     else{
-    axios.post('http://localhost:8000/ForgetStudentPass.php', { email: email, password: newPassword })
+    axios.post('http://localhost:8000/Student/ForgetPassword.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {

@@ -27,9 +27,9 @@ const ComplaintStatus = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/Complaint.php?email=${geteduEmailFromSession()}`)
+      .get(`http://localhost:8000/Student/Complaints/Complaint.php?email=${geteduEmailFromSession()}`)
       .then((response) => {
-        const data = response.data.data; // Assuming the data structure is as provided
+        const data = response.data.data;
         console.log(JSON.stringify(data));
         if (data) {
           setComplaintData(data);
@@ -60,7 +60,7 @@ const ComplaintStatus = () => {
                 hoverable
                 extra={
                   <>
-                    <Link  href={`/student/Complaint/${item.Type}`}>Entry</Link>
+                    <Link href={`/student/Complaints/${item.Type}`}>Entry</Link>
                   </>
                 }
               >
@@ -69,25 +69,25 @@ const ComplaintStatus = () => {
                     if (key !== 'Type') {
                       if(key==='Arrived'){
                         if(item.Type==='Faculty'){
-                          return <Card.Grid  onClick={()=>{navigate(`/student/Activity/Faculty#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
+                          return <Card.Grid  onClick={()=>{navigate('/student/Activity/Faculty',{ state: { FilterState: 'Arrived' }})}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
                         }
-                        return <Card.Grid  onClick={()=>{navigate(`/student/Activity#${item.Type}=Sent`)}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
+                        return <Card.Grid  onClick={()=>{navigate('/student/Activity',{ state: { FilterState: 'Arrived',TypeState:item.Type }})}} style={gridStyle}>Sent <br/>{value}</Card.Grid>;
                       }
                       else{
                         return <Card.Grid  onClick={()=>{
                           if(item.Type==='Faculty'){
                             if(key==='Accepted'){
-                              navigate(`/student/Activity/Faculty#${item.Type}=${key}`)
+                              navigate('/student/Activity/Faculty',{ state: { FilterState: key }})
                             }
                             else{
-                              navigate(`/student/History/Faculty#${item.Type}=${key}`)
+                              navigate('/student/History/Faculty', { state: { FilterState: key } })
                             }
                           }
                           else if(key==='Accepted'){
-                            navigate(`/student/Activity#${item.Type}=${key}`)
+                            navigate(`/student/Activity`, { state: { FilterState: key ,TypeState : item.Type} })
                           }
                           else{
-                            navigate(`/student/History#${item.Type}=${key}`)}}
+                            navigate('/student/History', { state: { FilterState: key ,TypeState : item.Type} })}}
                           } style={gridStyle}>{key} <br/>{value}</Card.Grid>;
                         
                       }

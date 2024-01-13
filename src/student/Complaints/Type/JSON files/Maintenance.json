@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Medical related issues",
+    "disabled": true,
+    "children": [
+      {
+        "title": "There are no tablets available in the first aid kit for emergency purposes",
+        "value": "There are no tablets available in the first aid kit for emergency purposes"
+      },
+      {
+        "title": "It's better for us if girls in the hostel are allowed to stay there in any unavoidable situation even without prior permission",
+        "value": "It's better for us if girls in the hostel are allowed to stay there in any unavoidable situation even without prior permission"
+      }
+    ]
+  },
+  {
+    "title": "Class-related issues",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Classes are not swept regularly",
+        "value": "Classes are not swept regularly"
+      },
+      {
+        "title": "Projector is not working properly",
+        "value": "Projector is not working properly"
+      },
+      {
+        "title": "SPD, PST II, CST all comprise the same tasks like self-introduction, group discussion",
+        "value": "SPD, PST II, CST all comprise the same tasks like self-introduction, group discussion"
+      }
+    ]
+  }
+]

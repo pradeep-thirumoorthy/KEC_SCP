@@ -4,8 +4,8 @@ import { Button, Modal, Result, Select } from "antd";
 import {CheckOutlined,SendOutlined,CloseOutlined} from '@ant-design/icons';
 import axios from "axios";
 import { Descriptions } from "antd";
-import CryptoJS from "crypto-js";
 import { message,ConfigProvider } from 'antd';
+import { getEmailFromSession } from "../EmailRetrieval";
 
 const { Option } = Select;
 
@@ -31,7 +31,7 @@ const Forward = () => {
       return;
     }
 
-    const apiUrl = `http://localhost:8000/getdesignation.php?designation=${Designation}`;
+    const apiUrl = `http://localhost:8000/Admin/Complaints/Designation2.php?designation=${Designation}`;
 
     axios
       .get(apiUrl, { designation: Designation })
@@ -59,7 +59,7 @@ const Forward = () => {
       message.loading({ content: 'Forwarding...', key,duration:20 });
       
       axios
-        .post("http://localhost:8000/ForwardComplaint.php", {
+        .post("http://localhost:8000/Admin/ForwardComplaint.php", {
           info: info,
           Faculty: Faculty,
           mode: "Forward",
@@ -79,13 +79,14 @@ const Forward = () => {
         });
     }
   };
+  const email = getEmailFromSession();
   const handleAccept = () => {
     const confirmed = window.confirm('Are you sure you want to accept the complaint?');
     if (confirmed) {
       
     message.loading({ content: 'Processing...', key,duration:20 });
         axios
-            .post("http://localhost:8000/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
+            .post("http://localhost:8000/Admin/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
                 console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
@@ -109,7 +110,7 @@ const Forward = () => {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
         togglePopup();
@@ -139,9 +140,6 @@ const Forward = () => {
     }
   }
   }, [info]);
-  const Email = sessionStorage.getItem('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
-  const email = bytes.toString(CryptoJS.enc.Utf8);
 
   return (
     <div className="vh-100">

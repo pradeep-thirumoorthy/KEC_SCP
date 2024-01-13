@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Challenges in understanding subject materials.",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Difficulties in grasping complex concepts.",
+        "value": "Difficulties in grasping complex concepts."
+      },
+      {
+        "title": "Confusion due to unclear subject explanations.",
+        "value": "Confusion due to unclear subject explanations."
+      },
+      {
+        "title": "Struggles with comprehending advanced topics.",
+        "value": "Struggles with comprehending advanced topics."
+      },
+      {
+        "title": "Difficulty in relating subject content to real-life scenarios.",
+        "value": "Difficulty in relating subject content to real-life scenarios."
+      },
+      {
+        "title": "Problems in applying theoretical knowledge practically.",
+        "value": "Problems in applying theoretical knowledge practically."
+      }
+    ]
+  },
+  {
+    "title": "Issues related to subject materials and resources.",
+    "disabled": true,
+    "children": [
+      {
+        "title": "Lack of updated and relevant course textbooks.",
+        "value": "Lack of updated and relevant course textbooks."
+      },
+      {
+        "title": "Challenges in accessing online subject materials.",
+        "value": "Challenges in accessing online subject materials."
+      },
+      {
+        "title": "Insufficient reference materials for in-depth learning.",
+        "value": "Insufficient reference materials for in-depth learning."
+      },
+      {
+        "title": "Difficulty in finding subject-related research articles.",
+        "value": "Difficulty in finding subject-related research articles."
+      },
+      {
+        "title": "Limited availability of subject-specific software or tools.",
+        "value": "Limited availability of subject-specific software or tools."
+      }
+    ]
+  }
+]

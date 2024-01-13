@@ -13,32 +13,13 @@ const AdminFacultyActivity = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  
-  const [adminData, setAdminData] = useState(null);
   const handleButtonClick=(rowData)=>
   {
     navigate('/admin/Activity/Faculty/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
-    fetchAdminData();
     filterData();
   }, []);
-
-  const fetchAdminData = () => {
-    
-    axios
-        .post('http://localhost:8000/Designation.php', `email=${encodeURIComponent(getEmailFromSession())}`)
-        .then((response) => {
-          const data = response.data;
-          if (data) {
-            setAdminData(data);
-            console.log(JSON.stringify(data))
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching admin data:', error);
-        })
-  };
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -166,6 +147,8 @@ const AdminFacultyActivity = () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
     {
       title: 'Details',

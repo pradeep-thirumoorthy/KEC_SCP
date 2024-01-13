@@ -34,7 +34,7 @@ if (!$conn) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $eventId = isset($data['eventId']) ? $data['eventId'] : '';
+    $eventId = isset($data['EventId']) ? $data['EventId'] : '';
     $email = isset($data['email']) ? $data['email'] : '';
     $lastDate = isset($data['lastDate']) ? $data['lastDate'] : '';
     $limit = isset($data['limit']) ? $data['limit'] : '';
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($visibility === 'Public' || $visibility === 'Private'){
         $constraint='';
     }
-    if ($eventId === '' || $email === '' || $lastDate === '' || $limit === '' || $status === '' || $visibility === '') {
+    if ($eventId === '' || $email === '' || $lastDate === '' || $limit === '' ) {
         echo json_encode(['success' => false, 'message' => 'Please provide eventId, email, lastDate, limit, and status']);
         exit;
     }

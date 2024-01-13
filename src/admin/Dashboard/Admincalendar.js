@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Calendar, Modal, Button, List, Pagination } from 'antd';
+import { Badge, Calendar, Modal, Button, List, Pagination, Flex } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getEmailFromSession } from '../EmailRetrieval';
@@ -54,7 +54,7 @@ const Admincalendar = () => {
       
     const filterData = async () => {
         try {
-          const apiUrl = 'http://localhost:8000/AdminCalendar.php';
+          const apiUrl = 'http://localhost:8000/Admin/Dashboard/AdminCalendar.php';
           const params = {
             email: getEmailFromSession(),
           };
@@ -141,16 +141,11 @@ const Admincalendar = () => {
             <List className="events">
               {getPaginatedEvents().map((item, index) => (
                 <List.Item key={index}>
-                  <Badge status={item.type} text={item.content + ' : ' + item.Description} />
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      handleButtonClick(item.info);
-                      console.log(item.info);
-                    }}
-                  >
+                  <Flex wrap='wrap'>
+                  <Badge status={item.type} text={item.content + ' : ' + item.Description} /></Flex>
+                  {(item.info.Status !== 'Resolved' && item.info.Status !=='Rejected')?<Button type="primary" onClick={() => {handleButtonClick(item.info); console.log(item.info);}}>
                     View
-                  </Button>
+                  </Button>:<></>}
                 </List.Item>
               ))}
             </List>

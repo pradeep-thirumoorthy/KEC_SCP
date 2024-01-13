@@ -8,7 +8,7 @@ const LineChart = () => {
 
   useEffect(() => {
     // Axios GET request to fetch data
-    const apiUrl = 'http://localhost:8000/Linechart.php';
+    const apiUrl = 'http://localhost:8000/Admin/Dashboard/Linechart.php';
     const email = getEmailFromSession();
     
     axios

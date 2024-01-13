@@ -1,6 +1,6 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import {useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
@@ -11,8 +11,11 @@ const StudentActivity= () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [search, setSearch] = useState('');
-  const [Filter,setFilter]= useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const [Filter,setFilter]= useState('');
+  const { FilterState } = location.state || {};
+  const { TypeState } = location.state || {};
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
   // function nextpage(){
@@ -28,25 +31,10 @@ const StudentActivity= () => {
     navigate('/student/Activity/Panel', { state: { info: rowData ,Heading:'Activity'} });
   };
   useEffect(() => {
-    const hashValue = window.location.hash.replace('#', '');
-    
-    const [value1, value2] = hashValue.split('=');
-    if(value1!=="" && value2!=="")
-    {
-    if(value2 !==''){
-      if(value2==='Sent'){
-        setFilter('Arrived');
-      }
-      else{
-    setFilter(value2);
-      }
-    }
-    console.log('Value 1:', value1);
-console.log('Value 2:', value2);
-    const filteredType = value1;
-    if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
-        Type: [filteredType],
-      });}}
+    if(FilterState){setFilter(FilterState);}
+    if(TypeState){
+    setFilteredInfo({Type: [TypeState],});}
+    console.log(TypeState,FilterState);
     filterData();
   }, []);
  
@@ -95,6 +83,8 @@ console.log('Value 2:', value2);
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
+      sorter: (a, b) => a.Type.length - b.Type.length,
+      sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
   if (Filter === '') {
@@ -140,7 +130,7 @@ console.log('Value 2:', value2);
     console.log(Filter);
   };
   const filterData = () => {
-    const apiUrl = 'http://localhost:8000/StudentActivity.php';
+    const apiUrl = 'http://localhost:8000/Student/Activity/Activity.php';
     const params = {
       start_date: startDate,
       end_date: endDate,

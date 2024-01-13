@@ -9,7 +9,7 @@ const DashChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/Complaint.php?email=${geteduEmailFromSession()}`);
+        const response = await axios.get(`http://localhost:8000/Student/Complaints/Complaint.php?email=${geteduEmailFromSession()}`);
         const data = response.data.data;
         if (data) {
           setComplaintData(data);

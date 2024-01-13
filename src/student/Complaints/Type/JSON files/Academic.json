@@ -1,0 +1,66 @@
+[
+      {
+        "title": "Placement related issues",
+        "disabled": true,
+        "children": [
+          {
+            "title": "It's good to us if more hours for practicing coding is provided",
+            "value": "It's good to us if more hours for practicing coding is provided",
+            "belongs": "Advisor3"
+          },
+          {
+            "title": "Special concern for the project is required",
+            "value": "Special concern for the project is required",
+            "belongs": "Advisor3"
+          },
+          {
+            "title": "Company-specific questions are not posted regularly",
+            "value": "Company-specific questions are not posted regularly",
+            "belongs": "Advisor3"
+          },
+          {
+            "title": "Students attending super PACC should be given special permission for rescheduling SPD related activities",
+            "value": "Students attending super PACC should be given special permission for rescheduling SPD related activities",
+            "belongs": "Advisor3"
+          }
+        ]
+      },
+      {
+        "title": "Credit course / Honours related",
+        "disabled": true,
+        "children": [
+          {
+            "title": "Can reduce the time for credit class to 35 hours",
+            "value": "Can reduce the time for the credit class to 35 hours",
+            "belongs": "Advisor2"
+          },
+          {
+            "title": "It's convenient for us if the credit classes are scheduled on regular days like other Departments",
+            "value": "It's convenient for us if the credit classes are scheduled on regular days like other Departments",
+            "belongs": "Advisor2"
+          },
+          {
+            "title": "Students attending honours should be given special permission for rescheduling SPD related activities",
+            "value": "Students attending honours should be given special permission for rescheduling SPD related activities",
+            "belongs": "Advisor2"
+          }
+        ]
+      },
+      {
+        "title": "Examination-related Issues",
+        "disabled": true,
+        "children": [
+          {
+            "title": "Can change the CN tutorial on an individual day rather than writing with other subjects",
+            "value": "Can change the CN tutorial on an individual day rather than writing with other subjects",
+            "belongs": "Advisor1"
+          },
+          {
+            "title": "It's useful to us if the answer key for the tutorial is posted before the examination",
+            "value": "It's useful to us if the answer key for the tutorial is posted before the examination",
+            "belongs": "Advisor1"
+          }
+        ]
+      }
+    ]
+  

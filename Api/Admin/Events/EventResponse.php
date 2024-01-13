@@ -13,22 +13,7 @@ header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with yo
 header("Access-Control-Allow-Methods: GET"); // Change to GET
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Disable caching for the response
 
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-
-
-
-
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
 $conn = mysqli_connect($host, $user, $password, $database);
 if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
@@ -42,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Create a prepared statement to check the availability of the code
     $selectQuery = "SELECT * FROM events WHERE event_id = ? AND email = ?";
     $stmt = mysqli_prepare($conn, $selectQuery);
-
+    
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "is", $eventid, $email);
+    mysqli_stmt_bind_param($stmt, "ss", $eventid, $email);
 
     // Execute the prepared statement
     mysqli_stmt_execute($stmt);
@@ -57,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $responseQuery = "SELECT Response,TimeStop,Email FROM events_response WHERE Event_Id = ?";
         $responseStmt = mysqli_prepare($conn, $responseQuery);
         // Bind the Event_Id parameter
-        mysqli_stmt_bind_param($responseStmt, "i", $eventid);
+        mysqli_stmt_bind_param($responseStmt, "s", $eventid);
 
         // Execute the prepared statement
         mysqli_stmt_execute($responseStmt);

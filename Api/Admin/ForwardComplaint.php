@@ -11,7 +11,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Expires: 0");
 
 // Connect to the database
-$conn = mysqli_connect($host, $user, $Faculty, $database);
+$conn = mysqli_connect($host, $user, $password, $database);
 
 if (!$conn) {
     die('Connection failed: ' . mysqli_connect_error());
@@ -32,11 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Depending on the mode, perform the corresponding database update
     // Assuming $info2 contains the existing info2 JSON string
     
-    include 'EmailFunctions.php';
+    include './../../EmailFunctions.php';
     if ($mode === 'Forward') {
         $Faculty = isset($data['Faculty']) ? $data['Faculty'] : '';
-    
-        if ($Faculty === '') {
+        $upordown = isset($data['upordown']) ? $data['upordown'] : '';
+        $Level = isset($info['Level']) ? $info['Level'] : -1;
+        if($upordown==='UpStream'){
+            $Level=$Level+1;
+        }
+        else{
+            $Level=$Level-1;
+        }
+        if ($Faculty === '' || $upordown === '') {
             echo json_encode(['success' => false, 'message' => 'Please enter Faculty']);
             exit;
         }
@@ -65,16 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
                 // Parse the existing info2 JSON string into an array
                 $info2_array = json_decode($existing_info2, true);
-    
+                $value=($upordown==='UpStream')?'Upgraded':'Downgraded';
                 // Add the new dictionary value to the array
-                $info2_array[] = ['Forwarded' => [$Faculty_Name, date('Y-m-d H:i:s')]]; // Assuming date('Y-m-d') gives the current date
+                $info2_array[] = ['Forwarded' => [$Faculty_Name, date('Y-m-d H:i:s'),$value]]; // Assuming date('Y-m-d') gives the current date
     
                 // Convert the modified array back to a JSON string
                 $updated_info2 = json_encode($info2_array);
     
                 // Update the info2 column in the database
-                $stmt_update_info2 = mysqli_prepare($conn, "UPDATE complaints SET Forward_To = ?, info2 = ? WHERE Complaint_Id = ?");
-                mysqli_stmt_bind_param($stmt_update_info2, "sss", $Faculty, $updated_info2, $Complaint_Id);
+                $stmt_update_info2 = mysqli_prepare($conn, "UPDATE complaints SET Forward_To = ?, info2 = ? ,Level=? WHERE Complaint_Id = ?");
+                mysqli_stmt_bind_param($stmt_update_info2, "ssis", $Faculty, $updated_info2,$Level, $Complaint_Id);
                 $result = mysqli_stmt_execute($stmt_update_info2);
     
                 if ($result) {

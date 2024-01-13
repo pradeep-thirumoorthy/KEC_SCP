@@ -27,7 +27,7 @@ const FullEvents = () => {
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/EventInfoStudent.php?email=${email}`)
+      axios.get(`http://localhost:8000/Student/Events/EventInfoStudent.php?email=${email}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;

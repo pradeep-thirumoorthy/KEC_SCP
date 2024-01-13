@@ -66,7 +66,7 @@ const YourComponent = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8000/doughnet.php';
+    const apiUrl = 'http://localhost:8000/Admin/Dashboard/donut.php';
     const email = getEmailFromSession();
 
     axios

@@ -28,7 +28,7 @@ const EventInfoWrapper = () => {
     }, MAX_TIMEOUT);
 
     axios
-      .get(`http://localhost:8000/getEventInfo.php?eventId=${eventId}&email=${email}`)
+      .get(`http://localhost:8000/Student/Events/EventInfo.php?eventId=${eventId}&email=${email}`)
       .then(response => {
         clearTimeout(timeoutId);
         const data = response.data;
@@ -85,7 +85,7 @@ const EventInfoWrapper = () => {
     e.preventDefault();
 
     if (Formdata && Formdata.inputs && Formdata.inputs.length !== 0) {
-      axios.post('http://localhost:8000/StudentEventResponse.php', { formdata: JSON.stringify(userInputData), email, eventId })
+      axios.post('http://localhost:8000/Student/Events/Submit.php', { formdata: JSON.stringify(userInputData), email, eventId })
         .then(response => {
           if (response.data.success) {
             console.log("Event data inserted successfully");
