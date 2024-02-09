@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Input, Space, Table } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 
 const Facultyview = () => {
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -13,14 +14,19 @@ const Facultyview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
+  const {FilterState,TypeState} = location.state || [];
   const handleButtonClick = (rowData) => {
     navigate('/admin/Faculty/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
+    if(FilterState){
+      setFilteredInfo({Type: [FilterState],});}
     filterData();
+    console.log(FilterState,TypeState);
     console.log(data)
     
   }, []);
+  
   
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});

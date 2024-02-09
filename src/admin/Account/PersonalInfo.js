@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import axios from 'axios';
-import {Descriptions, List, Typography } from 'antd';
+import {Descriptions, List } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 
 const MAX_TIMEOUT = 10000;
@@ -60,7 +60,6 @@ const PersonalInfo = () => {
           </div>
         ) : (
           <div className="table-responsive">
-            <Typography.Title className="p-5 fs-2 text-center">Personal Info</Typography.Title>
             
             <Descriptions title="User Info" bordered column={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
               <Descriptions.Item label="Name">{adminData.adminInfo.Name}</Descriptions.Item>

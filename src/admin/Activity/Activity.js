@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Input, Space, Table,Typography } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 
 const Activity = () => {
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -13,17 +14,15 @@ const Activity = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
+  const {TypeState} = location.state ||[];
   const handleButtonClick=(rowData)=>
   {
     navigate('/admin/Activity/Panel', { state: { info: rowData } });
   };
   useEffect(() => {
-    const hashValue = window.location.hash.replace('#', '');
-    const hashVal=hashValue.replace('%20',' ');
-    const filteredType = hashVal;
-    if(hashVal==='Maintenance'||hashVal==='Academic'||hashVal==='Lab'||hashVal==='Courses'||hashVal==='Faculty'||hashVal==='Others'){    setFilteredInfo({
-        Type: [filteredType],
-      });}
+    if(TypeState){
+      setFilteredInfo({Type: [TypeState],});
+    }
     filterData();
   }, []);
   
@@ -196,22 +195,21 @@ const Activity = () => {
           <div className="d-flex justify-content-around">
           
 
-            <div>
-              <label>Start Date:</label>
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div>
-              <label>End Date:</label>
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
+          <div>
+        <Typography>Start Date:</Typography>
+        <Input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        /></div>
+        <div>
+        <Typography>End Date:</Typography>
+        <Input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        </div>
             <Button className="filter mt-3" onClick={filterData}>
               Filter
             </Button>

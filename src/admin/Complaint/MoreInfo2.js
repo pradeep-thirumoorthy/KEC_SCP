@@ -33,7 +33,7 @@ const Forward2 = () => {
   .then((response) => {
     const responseData = response.data;
     console.log(responseData); // Check the structure of the response
-
+    console.log(response);
     if (responseData.success) {
       const subjectsData = responseData.data; // Accessing the entire 'data' object
       const upstreamData = subjectsData.Upstream; // Accessing 'Upstream' array
@@ -47,7 +47,6 @@ const Forward2 = () => {
         upstreamData.forEach((subjectObj) => {
           Object.keys(subjectObj).forEach((subjectKey) => {
             const email = subjectObj[subjectKey];
-            console.log(`Subject: ${subjectKey}, Email: ${email}`);
       
             // Push transformed objects into a new array
             processedData.push({ name: subjectKey, email: email });
@@ -59,23 +58,23 @@ const Forward2 = () => {
       }
       const subjects = [];
 
-if(info.Level===1){
-for (let i = 1; i <= 6; i++) {
-  const subjectKey = `Subject_${i}`;
-  console.log(subjectKey, downstreamData);
-
-  const subjectData = downstreamData[0][subjectKey];
-  console.log(subjectData); // Access data based on Subject_i key
-  if (subjectData) {
-    const data = JSON.parse(subjectData);
-    console.log('Subject:', data);
-    const subjectName = Object.keys(data)[0];
-    const subjectEmail = data[subjectName];
-    subjects.push({ name: subjectName, email: subjectEmail });
-  } else {
-    console.log(`No data found for ${subjectKey}`);
-  }
-}}
+      if (info.Level === 1) {
+      
+        downstreamData.forEach((data, index) => {
+          console.log('Data:', data);
+          const subjectData = data;
+      
+          if (subjectData) {
+            subjects.push(subjectData);
+          } else {
+            console.log(`No data found for index ${index}`);
+          }
+        });
+      
+        console.log('Subjects values:', subjects);
+      }
+      
+      
 else if(info.Level===2){
   for (let i = 1; i <= 3; i++) {
   const subjectKey = `Advisor${i}`;
@@ -92,7 +91,7 @@ else if(info.Level===3){
 }
 
 
-console.log(subjects);
+console.log("Downstream Subjects",subjects);
 setDownstream(subjects);
     } else {
       alert("Invalid response from the server.");
@@ -192,7 +191,6 @@ setDownstream(subjects);
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    // Update options when upordown changes
     const newOptions = [];
 
     if (upordown === "UpStream") {
@@ -210,10 +208,11 @@ setDownstream(subjects);
       }
     } else {
       if (Downstream.length > 0) {
+        console.log(Downstream.length)
         newOptions.length=0;
         Downstream.forEach((item) => {
           newOptions.push(
-            <Option key={item.email} value={item.email}>
+            <Option key={item.name} value={item.email}>
               {item.name}
             </Option>
           );
@@ -222,6 +221,7 @@ setDownstream(subjects);
         newOptions.push(<Option value="" disabled>No Names Available</Option>);
       }
     }
+    console.log(Downstream);
     setOptions(newOptions);
   }, [upordown, Upstream, Downstream]);
   
@@ -262,6 +262,7 @@ setDownstream(subjects);
             <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
             <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>
             <Descriptions.Item label="Date">{info.info1}</Descriptions.Item>
+            <Descriptions.Item label="level">{info.Complaint_Id}</Descriptions.Item>
             {(info.Type === "Maintenance")?<>
             <Descriptions.Item label="Category">{Extra.category}</Descriptions.Item>
             <Descriptions.Item label="Floor">{Extra.Floor}</Descriptions.Item>
@@ -292,16 +293,17 @@ setDownstream(subjects);
   onCancel={handleCancel}
 >
   <div>
-    <Radio.Group onChange={(e)=>{setupordown(e.target.value);setFaculty('')}} defaultValue="a" style={{ marginTop: 16 }}>
-      <Radio.Button defaultChecked value="UpStream">UpStream</Radio.Button>
-      <Radio.Button value="DownStream">DownStream</Radio.Button>
-    </Radio.Group>
-    
-    <Typography.Title level={3}>{upordown}</Typography.Title>
-    
-    <Select style={{ width: "100%" }} value={Faculty} onChange={handleFacultyChange}>
-    {options}
+  <Radio.Group onChange={(e) => { setFaculty(""); setOptions([]); setupordown(e.target.value); }} defaultValue="a" style={{ marginTop: 16 }}>
+  <Radio.Button defaultChecked value="UpStream">UpStream</Radio.Button>
+  <Radio.Button value="DownStream">DownStream</Radio.Button>
+</Radio.Group>
+
+<Typography.Title level={3}>{upordown}</Typography.Title>
+
+<Select style={{ width: "100%" }} value={Faculty} onChange={handleFacultyChange}>
+  {options}
 </Select>
+
 
     <div className="fs-3">Forward To:</div>
     <Input type="text" value={Faculty} disabled/>

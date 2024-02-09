@@ -8,6 +8,7 @@ import { Option } from 'antd/es/mentions';
 import TextArea from 'antd/es/input/TextArea';
 import Link from 'antd/es/typography/Link';
 import MaintenanceData from './JSON files/Maintenance.json';
+import departmentData from './blocks.json';
 import { geteduEmailFromSession } from '../../Emailretrieval';
 const Maintenance = () => {
   const [rollno, setRoll] = useState('');
@@ -22,7 +23,6 @@ const Maintenance = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [Loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [Floor,setFloor]=useState('');
   const navigate = useNavigate();
   const [description_1,setDescription_1]=useState('');
   const [category,setcategory]=useState("Classroom");
@@ -48,12 +48,10 @@ const Maintenance = () => {
     'Second Floor': ['Room X', 'Room Y', 'Room Z'],
   };
   useEffect(() => {
-    // Define the Axios POST request to fetch admin data
     axios
       .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
-        const data2 = response.data.subject_info;
         console.log(data);
         if (data) {
           setName(data.Name);
@@ -62,20 +60,6 @@ const Maintenance = () => {
           setClass(data.Class);
           setBatch(data.Batch);
           setGender(data.Gender);
-          // Extract and display subject information
-          const subjects = [];
-
-          // Loop through properties in data2
-          for (let i = 1; i <= 6; i++) {
-            const subjectKey = `Subject_${i}`;
-            if (data2[subjectKey]) {
-              const subjectData = JSON.parse(data2[subjectKey]);
-              const subjectName = Object.keys(subjectData)[0]; // Extract subject name
-              const subjectEmail = subjectData[subjectName]; // Extract subject email
-              subjects.push({ name: subjectName, email: subjectEmail });
-            }
-          }
-          console.log(subjects);
         }
       })
       .catch((error) => {
@@ -93,8 +77,21 @@ const Maintenance = () => {
       };
 
   }, [Gender]);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [selectedFloor, setSelectedFloor] = useState('');
+  const [selectedClass, setSelectedClass] = useState('');
+
+
+  const handleFloorChange = (value) => {
+    setSelectedFloor(value);
+    setSelectedClass('');
+  };
+
+  const handleClassChange = (value) => {
+    setSelectedClass(value);
+  };
   const handleLogin = () => {
-    if ( description === '' ||description_1 ===''||Floor === '') {
+    if ( description === '' ||description_1 ===''||selectedFloor === '') {
       alert('Please fill in all required fields');
       return;
     }
@@ -108,7 +105,7 @@ const Maintenance = () => {
         department: department,
         Class: Class,
         Batch: Batch,
-        Extra :JSON.stringify({'category':category,'Floor':Floor,'data':description_1})
+        Extra :JSON.stringify({'category':category,'Floor':selectedFloor,'data':description_1})
       })
       .then((response) => {
         if (response.data.success) {
@@ -165,36 +162,69 @@ const Maintenance = () => {
         </Col>
         <Col align='center' span={responsiveSpan}>
         <Col className='mx-5 my-3'  style={{width:'80%'}}>
-          <div className='my-2'>
-          <Typography className='entry px-5 mx-3'>Floor:</Typography>
-          <Select style={{ width: '60%' }} onChange={(e)=>{setFloor(e);setDescription_1();if(category==='Restroom'){setDescription_1(Gender)}}} value={Floor}>
-            <Option value='Ground Floor'>Ground Floor</Option>
-            <Option value='First Floor'>First Floor</Option>
-            <Option value='Second Floor'>Second Floor</Option>
-          </Select>
-          
-          </div>
         </Col>
         
+          <Col className='mx-5 my-3' style={{ width: '80%' }}>
+            <div className='my-2'>
+              <Typography className='mx-3'>Department:</Typography>
+              <Select
+                style={{ width: '60%' }}
+                value={department}
+                disabled
+              >
+                {Object.keys(departmentData).map((department) => (
+                  <Option key={department} value={department}>
+                    {department}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </Col>
+
+          {department && (
+            <>
+              <Col className='mx-5 my-3' style={{ width: '80%' }}>
+                <div className='my-2'>
+                  <Typography className='mx-3'>Floor:</Typography>
+                  <Select
+                    style={{ width: '60%' }}
+                    onChange={handleFloorChange}
+                    value={selectedFloor}
+                  >
+                    {Object.keys(departmentData[department]).map((floor) => (
+                      <Option key={floor} value={floor}>
+                        {floor}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+              </Col>
+              {category === 'Classroom' && (
+        <>
+              {selectedFloor && (
+                <Col className='mx-5 my-3' style={{ width: '80%' }}>
+                  <div className='my-2'>
+                    <Typography className='mx-3'>Class:</Typography>
+                    <Select
+                      style={{ width: '60%' }}
+                      onChange={handleClassChange}
+                      value={selectedClass}
+                    >
+                      {departmentData[department][selectedFloor].map((classRoom) => (
+                        <Option key={classRoom} value={classRoom}>
+                          {classRoom}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                </Col>
+              )}
+            </>
+          )}
+        </>
+      )}
       {category==='Classroom'?<>
       
-      <Col className='mx-5 my-3' style={{ width: '80%' }}>
-  <div className='my-2'>
-    <Typography className='mx-3'>Class:</Typography>
-    <Select
-      style={{ width: '60%' }}
-      onChange={(value) => setDescription_1(value)}
-      value={description_1}
-    >
-      {roomOptionsByFloor[Floor] &&
-        roomOptionsByFloor[Floor].map((room, index) => (
-          <Option key={index} value={room}>
-            {room}
-          </Option>
-        ))}
-    </Select>
-  </div>
-</Col>
 </>:
         (category==='Restroom')?<>
         <div>

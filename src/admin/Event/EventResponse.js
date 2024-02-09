@@ -5,8 +5,9 @@ import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { Table, Segmented, Descriptions, ConfigProvider, Empty, Result, Button } from 'antd';
+import { Table, Segmented, Descriptions, Empty, Result, Button, Card } from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
+import * as XLSX from 'xlsx';
 
 const Eventviewresp = () => {
   const [adminData, setAdminData] = useState([]);
@@ -14,12 +15,14 @@ const Eventviewresp = () => {
   const location = useLocation();
   const { EventId } = location.state || '';
   const [selectedOption, setSelectedOption] = useState('List');
+  const [Title,getTitle]=useState('');
    useEffect(() => {
     console.log(EventId);
     const fetchData = async () => {
         try {
           const response = await axios.get(`http://localhost:8000/Admin/Events/EventResponse.php?email=${getEmailFromSession()}&EventId=${EventId}`);
-          const data = response.data;
+          const data = response.data.responses;
+          getTitle(response.data.title);
           if (Array.isArray(data) && data.length > 0) {
             const parsedData = data.map((item) => ({
               ...item,
@@ -36,6 +39,76 @@ const Eventviewresp = () => {
   
     fetchData();
   }, []);
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  };
+  
+  const columnsTable = [
+    {
+      title: 'S.no',
+      dataIndex: 'S.no',
+      key: 'S.no',
+    },
+    ...(adminData.length > 0
+      ? Object.keys(adminData[0]?.Response).map((key, index) => ({
+          title: key,
+          dataIndex: `${key}`,
+          key: `${key}`,
+        }))
+      : []),
+      {
+        title: 'Time Record',
+        dataIndex: 'Time Record',
+        key: 'Time Record',
+        filteredValue: filteredInfo['Time Record'] || null,
+        onFilter: (value, record) => record['Time Record'].includes(value),
+        sorter: (a, b) => {
+          const dateA = new Date(a['Time Record']);
+          const dateB = new Date(b['Time Record']);
+          return dateA - dateB;
+        },
+        sortOrder: sortedInfo.columnKey === 'Time Record' ? sortedInfo.order : null,
+        ellipsis: true,
+      },
+  ];
+  const DateDisplay = ({ dateString }) => {
+    // Parse the ISO date string
+    const parsedDate = new Date(dateString);
+  
+    // Format the date as "dd MMM yyyy HH:mm:ss"
+    const formattedDate = parsedDate.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  
+    return formattedDate;
+  };
+  
+  
+  const dataTable = adminData.length > 0
+  ? adminData.map((item, index) => ({
+      'S.no': index + 1,
+      ...(adminData.length > 0
+        ? Object.entries(item.Response).reduce((acc, [key, value]) => {
+            acc[`${key}`] = value;
+            return acc;
+          }, {})
+        : {}),
+      'Time Record':DateDisplay({ dateString: item.ResponseTime }),
+    }))
+  : [];
+
+  const handleExport = () => {
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(dataTable);
+    XLSX.utils.book_append_sheet(wb, ws,Title);
+    XLSX.writeFile(wb, Title+'.xlsx');
+  };
   
 
   const handleOptionChange = (value) => {
@@ -58,7 +131,6 @@ const Eventviewresp = () => {
       >
       </Result></>
       ) : (
-        // If EventId is not an empty string, execute the rest of the return statement
         <div>
           <Segmented
             options={[
@@ -74,75 +146,33 @@ const Eventviewresp = () => {
             value={selectedOption}
             onChange={handleOptionChange}
           />
-
-          {/* The rest of your return statement based on the value of selectedOption */}
           {selectedOption === 'List' ? (
             <div className="table-responsive w-100">
-              
-              <Table rowKey={(record) => record.uid}scroll={{x:1000}} style={{height:'100vh'}}
-            columns={[
-              {
-                title: 'S.no',
-                dataIndex: 'S.no',
-                key: 'S.no',
-              },
-              ...(adminData.length > 0
-                ? Object.keys(adminData[0]?.Response).map((key, index) => ({
-                    title: key,
-                    dataIndex: `Response.${key}`,
-                    key: `Response.${key}`,
-                  }))
-                : []),
-              {
-                title: 'Time Record',
-                dataIndex: 'Time Record',
-                key: 'Time Record',
-              },
-            ]}
+              <Button onClick={handleExport}>Export</Button>
+              <Table rowKey={(record) => record.uid}scroll={{x:1000}}
+            columns={columnsTable}
+            onChange={handleChange}
             dataSource={
-              adminData.length > 0
-                ? adminData.map((item, index) => ({
-                    key: index,
-                    'S.no': index + 1,
-                    ...(adminData.length > 0
-                      ? Object.entries(item.Response).reduce((acc, [key, value]) => {
-                          acc[`Response.${key}`] = value;
-                          return acc;
-                        }, {})
-                      : {}),
-                    'Time Record': item.TimeStop,
-                  }))
-                : []
+              dataTable
             }
             pagination={false}
           />            </div>
           ) : (
             <div>
-              <div className=''>
-                {/* Your Form content */}
+              <div>
                 {adminData.length > 0 ? (
-                  <div className=' py-3'>
+                  <div>
                     {adminData.map((item, index) => (
-                      <div className='bg-white mx-5' key={index}>
-                        <ConfigProvider
-                          theme={{
-                            token: {
-                              colorFillAlter: '#f8f8f8',
-                            },
-                          }}
-                        >
+                      <Card extra={<DateDisplay dateString={item.ResponseTime}/>} title={`Response ${index + 1}`} key={index}>
                           <Descriptions
-                            title={`Response${index + 1}:`}
                             column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}
                           >{Object.keys(item.Response).map((key, subIndex) => (
                             <Descriptions.Item key={subIndex} label={key}>
                               {item.Response[key]}
                             </Descriptions.Item>
                           ))}
-                          <Descriptions.Item label="Time Record">{item.TimeStop}</Descriptions.Item>
-                        </Descriptions>
-                        </ConfigProvider>
-                      </div>
+                          </Descriptions>
+                      </Card>
                     ))}
                   </div>
                 ) : (

@@ -1,14 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
+
+include './main.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -351,7 +344,7 @@ function StudentAccept($conn, $Faculty, $info) {
                         </head>
                         <body>
                             <div class="container">
-                                <h1>Complaint Forwarding Notice</h1>
+                                <h1>Accept Complaint Notice</h1>
                                 <hr/>
                                 <div class="body">
                                     
@@ -469,7 +462,7 @@ function StudentReject($conn, $Faculty, $info) {
                         </head>
                         <body>
                             <div class="container">
-                                <h1>Complaint Forwarding Notice</h1>
+                                <h1>Reject Complaint Notice</h1>
                                 <hr/>
                                 <div class="body">
                                     
@@ -586,57 +579,47 @@ function StudentComplete($conn, $Faculty, $info) {
                               </style>
                         </head>
                         <body>
-                            <div class="container">
-                                <h1>Complaint Forwarding Notice</h1>
-                                <hr/>
-                                <div class="body">
-                                    
-                                    <br/>
-                                    <p>Dear '.$facultyName.',<br/>
-                                    <br>
-                                    I hope this message finds you well. I am forwarding a complaint that has been raised by a student. The details of the complaint are as follows:<br/>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <td>Student Name</td>
-                                            <td>:</td>
-                                            <td>'.$studentname.'</td>
-                                        </tr>
-                                        <tr>
-                                      <td>RollNo</td>
-                                      <td>:</td>
-                                      <td>'.$studentrollno.'</td>
-                                  </tr>
-                                  
-                                  <tr>
-                                      <td>Complaint Type</td>
-                                      <td>:</td>
-                                      <td>'.$complainttype.'</td>
-                                  </tr>
-                                    </table>
-                                    <br>
-                                    </p>
-                                    <p>
-                                        As the faculty member responsible for handling such matters, I kindly request your attention to this complaint. Our priority is to ensure a swift and fair resolution to address the student\'s concerns.<br/>
-                                        <br>
-                                        Thank you for bringing this matter to our attention, and we appreciate your patience as we work to resolve it.
-                                        <br><br>
-                                        Forwarded by:
-                                        <table>
-                                            <tr>
-                                                <td>Name</td>
-                                                <td>:</td>
-                                                <td>Your Name</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Position</td>
-                                                <td>:</td>
-                                                <td>Your Position</td>
-                                            </tr>
-                                        </table>
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="container">
+                        <h1>Complaint Resolved Notice</h1>
+                        <hr/>
+                        <div class="body">
+                            <br/>
+                            <p>Dear '.$facultyName.',<br/>
+                            <br>
+                            I hope this message finds you well. The complaint you raised has been successfully resolved. Here are the details:<br/>
+                            <br>
+                            <table>
+                                <tr>
+                                    <td>Student Name</td>
+                                    <td>:</td>
+                                    <td>'.$studentname.'</td>
+                                </tr>
+                                <tr>
+                                    <td>RollNo</td>
+                                    <td>:</td>
+                                    <td>'.$studentrollno.'</td>
+                                </tr>
+                                <tr>
+                                    <td>Complaint Type</td>
+                                    <td>:</td>
+                                    <td>'.$complainttype.'</td>
+                                </tr>
+                            </table>
+                            <br>
+                            </p>
+                            <p>
+                                We are pleased to inform you that the issue has been resolved to the satisfaction of the student. Your prompt attention to this matter is greatly appreciated.
+                                <br><br>
+                                Thank you for your cooperation in ensuring a smooth resolution process.
+                                <br><br>
+                                Best regards,
+                                <br><br>
+                                Your Name
+                                <br>
+                                Your Position
+                            </p>
+                        </div>
+                    </div>
                         </body>
                         </html>
                         '

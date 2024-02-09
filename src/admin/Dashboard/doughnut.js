@@ -51,7 +51,7 @@ const DoughnutChart = ({ data }) => {
     donutPlot.on('element:dblclick', (evt) => {
       const { data } = evt;
       console.log(data.data.url);
-      navigate('/admin/Complaints',{ state: { Filter: data.data.url } });
+      navigate('/admin/Complaints/overview',{ state: { TypeState: data.data.url } });
     });
 
     return () => {

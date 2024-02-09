@@ -50,14 +50,6 @@ const StudentDash = () => {
   }, []);
 
 
-  const linec = {
-    overflowX: 'scroll',
-    backgroundColor:'grey',
-    marginTop: '10px',
-    fontFamily: 'poppins',
-    borderRadius: '20px',
-    color: 'black',
-  };
 
 
   const getCurrentDateTime = () => {
@@ -72,7 +64,7 @@ const StudentDash = () => {
         <h3 style={{ fontFamily: "monospace" }}>Loading...</h3>
       ) : (
         <>
-          <div className="col-lg-12 d-flex flex-column-reverse flex-lg-row justify-content-between" style={linec}>
+          <div className="col-lg-12 d-flex flex-column-reverse flex-lg-row justify-content-between">
             <div className='content'>
               <p style={{ marginLeft: '10px' }}>{getCurrentDateTime()}</p>
               <Typography.Title> Welcome back,{studentData.Name}</Typography.Title>

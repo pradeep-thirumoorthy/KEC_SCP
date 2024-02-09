@@ -1,38 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type");
 
-// Replace these credentials with your actual database credentials
+include './../../main.php';
 
 
-// Connect to the database
-
-
-
-
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-$conn = mysqli_connect($host, $user, $password, $database);
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-// Endpoint to handle fetching complaints by both type and status
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $email = $_GET['email'];
 
@@ -68,7 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data[] = $typeData;
     }
 
-    $facultyData = array('Type' => 'Faculty');
+    $query = "SELECT COUNT(*) AS email_count FROM subject WHERE HOD = ? OR Year_Incharge = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "ss", $email, $email);
+
+    // Execute the query
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $emailCount = $row['email_count'];
+
+        if ($emailCount > 0) {
+            $facultyData = array('Type' => 'Faculty');
 
     foreach ($statuses as $status) {
         $query = "SELECT COUNT(*) AS Count FROM faculty_complaints WHERE Email = ? AND Status = ?";
@@ -92,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $data[] = $facultyData;
 
+        }
+    }
+    
     echo json_encode(['success' => true, 'data' => array_values($data)]);
 }
 // Close the database connection

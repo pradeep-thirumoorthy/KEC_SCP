@@ -1,11 +1,10 @@
-import { Button, Layout ,Typography} from 'antd';
+import { Avatar, Button, Collapse, ConfigProvider, Layout ,List,Popover,Typography} from 'antd';
 import React, { useState, useEffect } from 'react';
 import {FileTextOutlined,ProjectOutlined,GroupOutlined,PieChartOutlined,CheckCircleOutlined,LogoutOutlined} from '@ant-design/icons';
 import { useStudentAuth } from './Authenticate/StudentAuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Accordion from 'react-bootstrap/Accordion';
 import Link from 'antd/es/typography/Link';
 import { Footer, Header } from 'antd/es/layout/layout';
 import { geteduEmailFromSession } from './Emailretrieval';
@@ -19,7 +18,7 @@ const Layout2 = ({element,data=[]}) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const {Title}=Typography;
 
-
+    
   const [selectedTheme, setSelectedTheme] = useState('light');
   const setTheme = (theme) => {
     window.location.reload();
@@ -27,7 +26,64 @@ const Layout2 = ({element,data=[]}) => {
     localStorage.setItem('theme', theme);
   };
 
-
+  const panels = [
+    {
+      key: 'dashboard',
+      icon: <PieChartOutlined style={{ fontSize: '20px', color: '#08c' }} />,
+      title: 'Dashboard',
+      links: [
+        { href: "#overview", text: "Overview" },
+        { href: "#updates", text: "Updates" },
+        { href: "/student/dashboard/Calendar", text: "Calendar", key: 'calendar' },
+      ],
+    },
+    {
+      key: 'Complaints',
+      icon: <ProjectOutlined style={{ fontSize: '20px', color: '#08c' }} />,
+      title: 'Complaints',
+      links: [
+        
+        { href: "/student/Complaints/Academic", text: "Academic", key: 'Academic' },
+        { href: "/student/Complaints/Maintenance", text: "Maintenance", key: 'Maintenance' },
+        { href: "/student/Complaints/Courses", text: "Courses", key: 'Courses' },
+        { href: "/student/Complaints/Lab", text: "Lab", key: 'Lab' },
+        { href: "/student/Complaints/Others", text: "Others", key: 'Others' },
+        { href: "/student/Complaints/Faculty", text: "Faculty", key: 'Faculty' },
+      ],
+    },
+    {
+      key: 'Events',
+      icon: <FileTextOutlined style={{ fontSize: '20px', color: '#08c' }} />,
+      title: 'Events',
+      links: [
+        { href: "/student/Events/EventFormCreation", text: "Form Creation", key: 'formCreation' },
+        { href: "#updates", text: "Create Form" },
+        { href: "#reports", text: "Reports" },
+      ],
+    },
+    {
+      key: 'Activity',
+      icon: <CheckCircleOutlined style={{ fontSize: '20px', color: '#08c' }} />,
+      title: 'Activity',
+      links: [
+        { href: '/student/Activity/Panel', text: "Detail" },
+        { href: '/student/Activity/Faculty', text: "Faculty" },
+        { href: "#updates", text: "Updates" },
+        { href: "#reports", text: "Reports" },
+      ],
+    },
+    {
+      key: 'History',
+      icon: <GroupOutlined style={{ fontSize: '20px', color: '#08c' }} />,
+      title: 'History',
+      links: [
+        { href: '/student/History/Panel', text: "Detail" },
+        { href: '/student/History/Faculty', text: "Faculty" },
+        { href: "#reports", text: "Reports" },
+      ],
+    },
+  ];
+  
 
   const isWideLayout = window.innerWidth > 991;
   useEffect(() => {
@@ -39,12 +95,9 @@ const Layout2 = ({element,data=[]}) => {
     const foldersToCheck = [
         '/student/dashboard',
         '/student/Complaints',
-        '/student/ComplaintEntry',
         '/student/Events',
         '/student/Activity',
         '/student/History',
-        '/student/Updates',
-        '/student/createPost',
     ];
     const dropdownStatesUpdates = {};
 
@@ -80,12 +133,40 @@ const logo = {
     width: '50px',
     height: '50px',
 };
+const {Panel} =Collapse;
 const FullUsername = geteduEmailFromSession();
 const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
+const menuItems = [
+  { title: 'Home', link: '/' },
+  { title: 'About', link: '/about' },
+  { title: 'Contact', link: '/contact' },
+  { title: `${selectedTheme} Theme`, onClick: () => setTheme(selectedTheme === 'dark' ? 'light' : 'dark') },
+  { title: 'Sign out', onClick: handlelogout, icon: <LogoutOutlined className='mx-2' /> },
+];
+const content = (
+  <List
+    size="small"
+    dataSource={menuItems}
+    renderItem={(item) => (
+      <List.Item>
+        {item.link ? (
+          <Link className="dropdown-item text-center" href={item.link}>
+            {item.title}
+          </Link>
+        ) : (
+          <Button type='link' onClick={item.onClick}>
+            {item.icon}
+            {item.title}
+          </Button>
+        )}
+      </List.Item>
+    )}
+  />
+);
   return (
     
     <Layout>
-      <Sider theme={(selectedTheme==='light')?'dark':'light'} style={{height:'100vh',position:'fixed',zIndex:'5'}}
+      <Sider theme='dark' style={{height:'100vh',position:'fixed',zIndex:'5'}}
         breakpoint="lg"
         collapsedWidth="0"
       >
@@ -98,163 +179,78 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
                   </Link>
               </div>
               <hr className={`bg-white`}></hr>
-              <ul className={`sidebar_1 nav nav-pills flex-column mb-auto w-100`}>
-                  <li className={`nav-item w-100 `}>
-
-                  <Accordion  activeKey={dropdownStates['/student/dashboard'] ? 'dashboard' : null}>
-                        
-                                <Button
-                                    type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/dashboard'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
-                                    onClick={() => handledirect('/student/dashboard')}
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#home-collapse"
-                                    aria-expanded="true"
-                                >
-                                    <PieChartOutlined size={25} /><div className=''>Dashboard</div>
-                                </Button>
-                            <Accordion.Collapse eventKey="dashboard">
-                                
-                                    <ul className={`btn-toggle-nav list-unstyled pb-1 small d-block list-group w-100`}>
-                                        <li><Link  href="#overview" className={`link-light text-white-50 w-100 btn px-0 px-lg-0 `}>Overview</Link></li>
-                                        <li><Link  href="#updates" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Updates</Link></li>
-                                        <li><Link  href='/student/dashboard/Calendar' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/dashboard/Calendar' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Calendar</Link></li>
-                                        
-                                    </ul>
-                                
-                            </Accordion.Collapse>
-                    </Accordion>
-                  </li>
-                  <li className={`nav-item w-100 `}>
-                    <Accordion activeKey={dropdownStates['/student/Complaints'] ? 'complaints' : null}>
-                        
-                            
-                                <Button 
-                                    type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Complaints'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
-                                    onClick={() => handledirect('/student/Complaints')}
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#home-collapse1"
-                                    aria-expanded="false"
-                                >
-                                    <ProjectOutlined size={25}/><div className=''>Complaints</div>
-                                </Button>
-                            
-                            <Accordion.Collapse eventKey="complaints">
-                                
-                                    <ul className={`btn-toggle-nav list-unstyled pb-1 small d-block list-group w-100`}>
-                                    <li><Link  href='/student/Complaints/Academic' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Academic' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Academic</Link></li>
-                                    <li><Link  href='/student/Complaints/Maintenance' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Maintenance' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Maintenance</Link></li>
-                                    <li><Link  href='/student/Complaints/Lab' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Lab' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Lab</Link></li>
-                                    <li><Link  href='/student/Complaints/Courses' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Courses' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Courses</Link></li>
-                                    <li><Link  href='/student/Complaints/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Respective Faculty</Link></li>
-                                    <li><Link  href='/student/Complaints/Others' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Complaints/Others' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Others</Link></li>
-                                    </ul>
-                                
-                            </Accordion.Collapse>
-                    </Accordion>
-                </li>
-                {/* Events */}
-                <li className={`nav-item w-100 `}>
-                    <Accordion activeKey={dropdownStates['/student/Events'] ? 'events' : null}>
-                        
-                            
-                                <Button
-                                    type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Events'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
-                                    onClick={() => handledirect('/student/Events')}
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#home-collapse2"
-                                    aria-expanded="false"
-                                >
-                                    <FileTextOutlined size={25} /><div className=''>Event</div>
-                                </Button>
-                            
-                            <Accordion.Collapse eventKey="events">
-                                
-                                    <ul className={`btn-toggle-nav list-unstyled small d-block list-group`}>
-                                        <li>
-                                            
-                                        <Link  href='/student/Events/EventFormCreation' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Events/EventFormCreation' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>FormCreation</Link></li>
-                                        <li><Link  href="#updates" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>CreateForm</Link></li>
-                                        <li><Link  href="#reports" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Reports</Link></li>
-                                    </ul>
-                                
-                            </Accordion.Collapse>
-                    </Accordion>
-                </li>
-                <li className={`nav-item w-100 `}>
-                    <Accordion activeKey={dropdownStates['/student/Activity'] ? 'activity' : null}>
-                        
-                            
-                                <Button
-                                    type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center px-0 ${dropdownStates['/student/Activity'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed`}
-                                    onClick={() => handledirect('/student/Activity')}
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#home-collapse3"
-                                    aria-expanded="false"
-                                >
-                                    <CheckCircleOutlined  size={25}/><div className=''>Activity</div>
-                                </Button>
-                            
-                            <Accordion.Collapse eventKey="activity">
-                                
-                                    <ul className={`btn-toggle-nav list-unstyled small d-block list-group`}>
-                                        <li><div href='/student/Activity/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
-                                        <li><Link href='/student/Activity/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/Activity/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
-                                        <li><Link  href="#updates" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Updates</Link></li>
-                                        <li><Link  href="#reports" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Reports</Link></li>
-                                    </ul>
-                                
-                            </Accordion.Collapse>
-                    </Accordion>
-                </li>
-                {/* Event */}
-                <li className={`nav-item w-100  `}>
-                    <Accordion activeKey={dropdownStates['/student/History'] ? 'history' : null}>
-                        
-                            
-                                <Button
-                                    type="Button"
-                                    className={`btn btn-toggle d-flex justify-content-center align-items-center d-flex justify-content-center align-items-center  px-0 ${dropdownStates['/student/History'] ? 'bg-white text-dark' : 'bg-transparent text-light'} nav-link active w-100 align-items-center text-center rounded collapsed mb-2`}
-                                    onClick={() => handledirect('/student/History')}
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#home-collapse4"
-                                    aria-expanded="false"
-                                >
-                                    <GroupOutlined  size={25}/><div className=''>History</div>
-                                </Button>
-                            
-                            <Accordion.Collapse eventKey="history">
-                                
-                                    <ul className={`btn-toggle-nav list-unstyled small d-block list-group`}>
-                                        
-                                    <li><div href='/student/History/Panel' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/History/Panel' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Detail</div></li>
-                                    <li><Link href='/student/History/Faculty' className={` w-100 btn m-0 p-0 border-0 ${location.pathname === '/student/History/Faculty' ? 'text-white' : 'link-light text-white-50'}  active w-100 align-items-center text-center rounded collapsed`}>Faculty</Link></li>
-                                        <li><Link  href="#reports" className={`link-light text-white-50 w-100 btn px-0 px-lg-0`}>Reports</Link></li>
-                                    </ul>
-                                
-                            </Accordion.Collapse>
-                    </Accordion>
-                </li>
-              </ul>
+              <ConfigProvider
+                theme={{
+                  token: {
+                    Collapse: {
+                      padding:0,paddingXS:3,paddingSM:3,
+                    },
+                  },
+                }}
+              >
+              {panels.map((panel) => (
+                
+                <Collapse
+                  ghost
+                  accordion={true}
+                  activeKey={dropdownStates[`/student/${panel.key}`] ? [panel.key] : []}
+                  className={`w-100 align-items-center text-center ${
+                    location.pathname.includes(`/student/${panel.key}`) ? 'bg-white' : ''
+                  }`}
+                >
+                  <Panel
+                    style={{ padding: 0 }}
+                    collapsible='header'
+                    showArrow={false}
+                    header={
+                      <Button
+                        type='link'
+                        className={`w-100 align-items-center text-center ${
+                          location.pathname.includes(`/student/${panel.key}`)
+                            ? ''
+                            : 'text-white'
+                        } `}
+                      >
+                        {panel.icon} {panel.title}
+                      </Button>
+                    }
+                    key={panel.key}
+                    onClick={() => handledirect(`/student/${panel.key}`)}
+                  >
+                    <List
+                      size='small'
+                      style={{ padding: 0 }}
+                      dataSource={panel.links}
+                      renderItem={(item) => (
+                        <List.Item>
+                          <Link
+                            href={item.href}
+                            className={`w-100 align-items-center text-center ${
+                              location.pathname === item.href ||
+                              location.pathname.includes(item.key)
+                                ? 'text-black'
+                                : ' '
+                            } `}
+                          >
+                            {item.text}
+                          </Link>
+                        </List.Item>
+                      )}
+                    />
+                  </Panel>
+                </Collapse>
+              
+            ))}
+            
+            </ConfigProvider>
               <hr></hr>
-                  <div className="w-100 text-center">
-                      <Button className={`btn bg-transparent text-center link-light text-white-50 w-100 align-items-center d-flex justify-content-center`} id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                          <img src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3"></img>
-                              {tenUsername}
-                        </Button>
-                      <ul className="w-100 dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                          <li><Link  className="dropdown-item" href="/">Home</Link></li>
-                          <li><Link  className="dropdown-item" href="/about">About</Link></li>
-                          <li><Link  className="dropdown-item" href="/Contact">Contact</Link></li>
-                          <li><Button className="dropdown-item btn" onClick={() => setTheme(selectedTheme === 'dark' ? 'light' : 'dark')}>
-        {selectedTheme} Theme
-      </Button></li>
-                          <li><hr className="dropdown-divider"></hr></li>
-                          <li><Button className="dropdown-item" href="#" onClick={handlelogout}><LogoutOutlined className='mx-2'/>Sign out</Button></li>
-                      </ul>
+              <div className="w-100 text-center mt-auto mb-5 mb-sm-0">
+                    <Popover content={content} trigger="hover" placement="top">
+                      <Button className="btn bg-transparent text-center link-light text-white-50 w-100 align-items-center d-flex justify-content-center" id="dropdownUser2">
+                        <Avatar src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3" />
+                        {tenUsername}
+                      </Button>
+                    </Popover>
                   </div>
         </div>
       </Sider>

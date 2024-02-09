@@ -1,22 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
+
+include './../../main.php';
 
 
-$conn = mysqli_connect($host, $user, $password, $database);
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-// Endpoint to handle updating events_response
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $formdata = isset($data['formdata']) ? json_encode($data['formdata']) : '';
@@ -67,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 
                     if ($currentResponseCount < $eventLimit) {
                         // Insert the new row into the events_response table
-                        $insertQuery = "INSERT INTO events_response (Event_id, Response, Email, Timestop) VALUES ('$eventid', '$formdata', '$email', NOW())";
+                        $insertQuery = "INSERT INTO events_response (Event_id, Response, Email, ResponseTime) VALUES ('$eventid', '$formdata', '$email', NOW())";
                         $insertResult = mysqli_query($conn, $insertQuery);
 
                         if ($insertResult) {

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
 import './styled.css';
-import { Button, Card, Flex, Input, Layout, Typography} from 'antd';
+import { Button, Card, ConfigProvider, Flex, Input, Layout, Typography, theme} from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Reach from './Reach';
 import { getEmailFromSession } from '../EmailRetrieval';
@@ -57,16 +57,26 @@ const EventFormCreation = () => {
         return `${year}-${month}-${day}`;
       }
       const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        console.log(file);
-        if (file.type.startsWith('image/')) {
-            // Set the file in state if it's an image
-            psetfile(file);
-            setPreviewImage(URL.createObjectURL(file));
+        const files = e.target.files;
+    
+        if (files && files.length > 0) {
+            const file = files[0];
+    
+            if (file.type.startsWith('image/')) {
+                // Set the file in state if it's an image
+                psetfile(file);
+                setPreviewImage(URL.createObjectURL(file));
+            } else {
+                setPreviewImage('');
+                alert('Please upload an image file.');
+            }
         } else {
-            alert('Please upload an image file.');
+            
+            setPreviewImage('');
+            console.log('No file selected');
         }
     };
+    
     useEffect(() => {
         console.log(JSON.stringify(pfile));
         if (!generated) {
@@ -354,8 +364,8 @@ const EventFormCreation = () => {
                                 required disabled
                             />
                             <div className='w-25'></div>
-                            <select
-                                className="col-lg-6 w-25 "
+                            <select 
+                                className="col-lg-6 w-25 ant-input css-dev-only-do-not-override-16s6fz5 css-dev-only-do-not-override-1aoj0m0"
                                 value="Plain text" disabled
                             >
                             <option value="Plain text">Plain text</option>
@@ -375,7 +385,7 @@ const EventFormCreation = () => {
                             />
                             <div className='w-25'></div>
                             <select
-                                className="col-lg-6 w-25 "
+                                className="col-lg-6 w-25 ant-input css-dev-only-do-not-override-16s6fz5 css-dev-only-do-not-override-1aoj0m0"
                                 value="Plain text" disabled
                             >
                             <option value="Plain text">Plain text</option>
@@ -383,12 +393,25 @@ const EventFormCreation = () => {
                         </div>
                     </Card>
                 {inputs.slice(2).map((input, index) => (
+                    <ConfigProvider
+                    theme={{
+                      components: {
+                        Button: {
+                          colorPrimary: '#00b96b',
+                        },
+                        input: {
+                          colorPrimary: '#eb2f96',
+                        }
+                      },
+                    }}
+                  >
             <Card 
                 key={index} // Using index as the key for dynamic rendering
                 style={input.fading ? styles.tagFadeOut : {}}
                 hoverable
                 className={`px-md-5 px-sm-1 py-md-5 py-sm-1 my-5 mx-lg-5 mx-sm-1 rounded-3 ${input.fading ? 'tag-fade-out' : ''}`}
             >
+                
                         <div className='row'>
                             <Input
                                 className='col-lg-6 text-start  w-50 border-0 border-bottom border-dark  rounded-0'
@@ -405,7 +428,8 @@ const EventFormCreation = () => {
                             />
                             <div className='w-25'></div>
                             <select
-                                className="col-lg-6 w-25 "
+                            
+                                className="col-lg-6 w-25 ant-input css-dev-only-do-not-override-16s6fz5 css-dev-only-do-not-override-1aoj0m0"
                                 value={input.selectedType}
                                 onChange={(e) => handleSelectChange(e, input.key)}
                             >
@@ -427,9 +451,10 @@ const EventFormCreation = () => {
                             )}
                         </div>
                         <div className='float-end'>
-                            <DeleteOutlined color='dark'style={{cursor:"pointer"}} size={25} onClick={() => deletetag(input.key)} />
+                            <Button onClick={() => deletetag(input.key)} style={{display:'flex',alignItems:'center'}}><DeleteOutlined color='dark'style={{cursor:"pointer"}} size={25}  /></Button>
                         </div>
                     </Card>
+                    </ConfigProvider>
                 ))}
                 <div className='w-100'>
                 <Flex  justify={'flex-end'} >

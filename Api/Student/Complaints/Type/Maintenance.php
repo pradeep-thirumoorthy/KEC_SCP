@@ -1,38 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
 
 
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
+include './../../../main.php';
 
 
-// Connect to the database
-
-
-
-
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-$conn = mysqli_connect($host, $user, $password, $database);date_default_timezone_set('Asia/Kolkata');
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-// Endpoint to handle complaint submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
@@ -78,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($conn, $query);
     $complaintid=strval($complaintid);
     if ($stmt) {
-        $Subjectquery = "SELECT Maintenance FROM subject WHERE Batch = ? AND Class = ?";
+        $Subjectquery = "SELECT Maintenance FROM semester WHERE Batch = ? AND Class = ?";
         $Subjectstmt = mysqli_prepare($conn, $Subjectquery); // Use $Subjectquery here
         mysqli_stmt_bind_param($Subjectstmt, "ss", $Batch, $Class);
         mysqli_stmt_execute($Subjectstmt);

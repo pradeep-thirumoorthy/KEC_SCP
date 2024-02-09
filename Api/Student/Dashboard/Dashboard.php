@@ -1,23 +1,7 @@
 <?php
-// Allow requests from your React app's origin
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Methods: GET, POST");
-header("Access-Control-Allow-Headers: Content-Type");
 
-// Replace these credentials with your actual database credentials
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
+include './../../main.php';
 
-// Connect to the database
-$conn = mysqli_connect($host, $user, $password, $database);
-
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-// Endpoint to handle fetching data for your Doughnut chart
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $email = isset($_GET['email']) ? $_GET['email'] : ''; // Retrieve email from GET request
 

@@ -32,8 +32,12 @@ const Courses = () => {
           
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
+    const params = {
+      email:geteduEmailFromSession(),
+      Type:'Courses',
+    }
     axios
-      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .get('http://localhost:8000/Student/Complaints/FetchInfo2.php', {params})
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -46,21 +50,8 @@ const Courses = () => {
           setBatch(data.Batch);
           console.log("Data : "+JSON.stringify(data2));
           // Extract and display subject information
-          const subjects = [];
-
-          // Loop through properties in data2
-          for (let i = 1; i <= 6; i++) {
-            const subjectKey = `Subject_${i}`;
-            if (data2[subjectKey]) {
-              const subjectData = JSON.parse(data2[subjectKey]);
-              console.log('Subject:', subjectData);
-              const subjectName = Object.keys(subjectData)[0]; // Extract subject name
-              const subjectEmail = subjectData[subjectName]; // Extract subject email
-              subjects.push({ name: subjectName, email: subjectEmail });
-            }
-          }
-          console.log(subjects);
-          setSubjectInfo(subjects);
+          console.log(data2);
+          setSubjectInfo(data2);
         }
       })
       .catch((error) => {
@@ -73,6 +64,7 @@ const Courses = () => {
       return;
     }
     setLoading(true);
+    console.log(subject);
     axios
       .post('http://localhost:8000/Student/Complaints/Type/Courses.php', {
         name: name,
@@ -133,19 +125,19 @@ const Courses = () => {
                 
               placeholder="Select the Subject"
   style={{ width: '80%' }}
-                value={subject.email}
+                value={subject.name}
                 onChange={(value) =>
                   setSubject({
                     ...subject,
-                    email: value,
-                    name: SubjectInfo.find((info) => info.email === value)?.name || '',
+                    email: SubjectInfo.find((info) => info.name === value)?.email,
+                    name: value || '',
                   })
                 }
                 allowClear
               >
                 
                 {SubjectInfo.map((subjectInfo, index) => (
-                  <Option key={index} value={subjectInfo.email}>
+                  <Option key={index} value={subjectInfo.name}>
                     {subjectInfo.name}
                   </Option>
                 ))}

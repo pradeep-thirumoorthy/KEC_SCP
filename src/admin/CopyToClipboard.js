@@ -1,6 +1,6 @@
 import React from 'react';
 import ClipboardJS from 'clipboard';
-import { Alert, message,Button } from 'antd';
+import { message,Button } from 'antd';
 class CopyToClipboard extends React.Component {
   componentDidMount() {
     this.clipboard = new ClipboardJS(this.copyButton, {
@@ -11,7 +11,6 @@ class CopyToClipboard extends React.Component {
       message.success('Link is Copied');
     });
   }
-
   componentWillUnmount() {
     this.clipboard.destroy();
   }

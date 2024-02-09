@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import {Breadcrumb, Col, Radio, Row, Select, TreeSelect, message } from 'antd';
-import { Button,} from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { Option } from 'antd/es/mentions';
-import TextArea from 'antd/es/input/TextArea';
+import {Breadcrumb, Col, Radio, Row, TreeSelect, message } from 'antd';
+import LabData from './JSON files/Lab.json'
+import { Select, Button, } from 'antd'; // Import InputNumber instead of TextArea
+import {useNavigate } from 'react-router-dom';
+
 import Link from 'antd/es/typography/Link';
-import LabData from './JSON files/Lab.json';
+import TextArea from 'antd/es/input/TextArea';
 import { geteduEmailFromSession } from '../../Emailretrieval';
-const Faculty = () => {
+
+const { Option } = Select;
+
+
+const Lab = () => {
   const [rollno, setRoll] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState();
   const [department, setDepartment] = useState('');
   const [Class, setClass] = useState('');
-  
   const [subject, setSubject] = useState({});
   const [SubjectInfo, setSubjectInfo] = useState([]);
   const [Batch, setBatch] = useState(0);
@@ -23,11 +26,18 @@ const Faculty = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const [Exceptional,setExceptional]=useState(false);
+  
   const TreeData = LabData;
+          
+          
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
+    const params = {
+      email:geteduEmailFromSession(),
+      Type:'Lab',
+    }
     axios
-      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .get('http://localhost:8000/Student/Complaints/FetchInfo2.php', {params})
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
@@ -38,21 +48,10 @@ const Faculty = () => {
           setDepartment(data.Department);
           setClass(data.Class);
           setBatch(data.Batch);
-          const subjects = [];
-
-          // Loop through properties in data2
-          for (let i = 1; i <= 6; i++) {
-            const subjectKey = `Subject_${i}`;
-            if (data2[subjectKey]) {
-              const subjectData = JSON.parse(data2[subjectKey]);
-              console.log('Subject:', subjectData);
-              const subjectName = Object.keys(subjectData)[0]; // Extract subject name
-              const subjectEmail = subjectData[subjectName]; // Extract subject email
-              subjects.push({ name: subjectName, email: subjectEmail });
-            }
-          }
-          console.log(subjects);
-          setSubjectInfo(subjects);
+          console.log("Data : "+JSON.stringify(data2));
+          // Extract and display subject information
+          console.log(data2);
+          setSubjectInfo(data2);
         }
       })
       .catch((error) => {
@@ -60,20 +59,24 @@ const Faculty = () => {
       });
   }, []);
   const handleLogin = () => {
-    if ( description === '' || subject==='') {
+    if (description === ''|| !Object.keys(subject).length) {
       alert('Please fill in all required fields');
       return;
     }
     setLoading(true);
+    console.log(subject);
     axios
       .post('http://localhost:8000/Student/Complaints/Type/Lab.php', {
         name: name,
         rollno: rollno,
         email: geteduEmailFromSession(),
+        complainttype: "Lab",
         description: description,
         department: department,
         Class: Class,
+        Subject: subject.email,
         Batch: Batch,
+        Subjectname: subject.name,
       })
       .then((response) => {
         if (response.data.success) {
@@ -94,7 +97,10 @@ const Faculty = () => {
   return (
     <>
     {contextHolder}
-      <Row>
+      <div className='row form-group'>
+        {}
+        
+        <Row>
       <Col span={24}>
         <Breadcrumb>
           <Breadcrumb.Item>Student</Breadcrumb.Item>
@@ -107,13 +113,9 @@ const Faculty = () => {
         </Breadcrumb>
       </Col>
     </Row>
-      <div className='row form-group'>
-        {
-        
-        }
-        <>
+          <>
             <div className='col-lg-6 col-sm-12 '>
-              <label className='entry mx-9 px-5'>Subject</label>
+              <label className='entry mx-9 px-5'>Lab</label>
             </div>
             <div className='col-lg-6 col-sm-12 '>
               <Select
@@ -123,19 +125,19 @@ const Faculty = () => {
                 
               placeholder="Select the Subject"
   style={{ width: '80%' }}
-                value={subject.email}
+                value={subject.name}
                 onChange={(value) =>
                   setSubject({
                     ...subject,
-                    email: value,
-                    name: SubjectInfo.find((info) => info.email === value)?.name || '',
+                    email: SubjectInfo.find((info) => info.name === value)?.email,
+                    name: value || '',
                   })
                 }
                 allowClear
               >
                 
                 {SubjectInfo.map((subjectInfo, index) => (
-                  <Option key={index} value={subjectInfo.email}>
+                  <Option key={index} value={subjectInfo.name}>
                     {subjectInfo.name}
                   </Option>
                 ))}
@@ -176,12 +178,9 @@ const Faculty = () => {
             Submit
           </Button>
         </div>
-        <div>
-      
-    </div>
       </div>
     </>
   );
 };
 
-export default Faculty;
+export default Lab;

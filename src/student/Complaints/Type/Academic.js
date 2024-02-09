@@ -30,11 +30,14 @@ const Academic = () => {
           
   useEffect(() => {
     // Define the Axios POST request to fetch admin data
+    const params = {
+      email:geteduEmailFromSession()
+    }
     axios
-      .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
+      .get('http://localhost:8000/Student/Complaints/FetchInfo.php', {params})
       .then((response) => {
         const data = response.data.student_info;
-        console.log(data);
+        console.log(response.data);
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);

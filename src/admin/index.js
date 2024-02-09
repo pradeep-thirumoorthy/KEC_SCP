@@ -13,4 +13,5 @@ import PersonalInfo from "./Account/PersonalInfo";
 import Events from "./Event/Events";
 import FacultyInfo from "./Complaint/FacultyInfo";
 import Admincalendar from "./Dashboard/Admincalendar";
-export {Activity,ActivityPanel,Complaintsview,Dash,EventFormCreation,ForgAdmPass,History,EventModifier,Eventviewresp,Login,Forward,PersonalInfo,Events,FacultyInfo,Admincalendar};
+import Complaints from "./Complaint/Complaints";
+export {Activity,ActivityPanel,Complaints,Complaintsview,Dash,EventFormCreation,ForgAdmPass,History,EventModifier,Eventviewresp,Login,Forward,PersonalInfo,Events,FacultyInfo,Admincalendar};

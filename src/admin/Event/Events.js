@@ -6,12 +6,19 @@ import CopyToClipboard from '../CopyToClipboard';
 import { useNavigate } from 'react-router';
 import { FileDoneOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Card, Empty, Flex, Image, Typography} from 'antd';
+import { Card, Empty, Image, Typography} from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 const MAX_TIMEOUT = 10000;
 
 const Events = () => {
   const navigate = useNavigate();
+  function myFunction() {
+    var copyText = document.getElementById("myInput");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    alert("Copied the text: " + copyText.value);
+  }
   const [isLoading, setIsLoading] = useState(true);
   const [EventData, setEventData] = useState([]);
   const Email = sessionStorage.getItem('AdminEmail');
@@ -46,13 +53,13 @@ const Events = () => {
   }, [Email]);
 
 
-  const renderEventCards = (visible) => {
-    const filteredEventData = EventData.filter((item) => visible === item.visible);
+  const renderEventCards = (visible,Status) => {
+    const filteredEventData = EventData.filter((item) => visible === item.visible && Status === item.Status);
   
     if (filteredEventData.length > 0) {
       return filteredEventData.map((item) => (
         <Card 
-          style={{ width: 300 }}
+          style={{minWidth:300}}
           cover={<Image alt="example" width={'100%'} height={'200px'} src={`http://localhost:8000/Upload/${item.event_id}.png`} />}
           actions={[
             <SettingOutlined key="setting" onClick={() => modify(item.event_id)} />,
@@ -84,7 +91,13 @@ const Events = () => {
   };
   
   
-
+  const wrapper = {
+    display: 'flex',
+    overflowX: 'scroll',
+    whiteSpace: 'nowrap',
+    gap: '20px',scrollbarColor: 'rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.5)',
+    scrollbarWidth: 'thin'
+  };
   return (
     <>
       {isLoading ? (
@@ -94,22 +107,39 @@ const Events = () => {
       ) : (
         <div>
           <div className=" row ">
-            {/* Header section remains the same */}
           </div>
           <div className='row'>
             
           <Typography.Title level={1} >Public Events:</Typography.Title>
-            <Flex justify='center' align="center" wrap="wrap" gap="small">
-        {renderEventCards('Public')}
-      </Flex>
+          <Typography.Title level={3} >Open:</Typography.Title>
+            <div style={wrapper}>
+              {renderEventCards('Public','open')}
+            </div>
+            
+          <Typography.Title level={3} >Closed:</Typography.Title>
+            <div style={wrapper}>
+              {renderEventCards('Public','closed')}
+            </div>
       <Typography.Title level={1} >Conditional Events:</Typography.Title>
-            <Flex justify='center' align="center" wrap="wrap" gap="small">
-        {renderEventCards('constraint')}
-      </Flex>
+          <Typography.Title level={3} >Open:</Typography.Title>
+            <div style={{ overflowX: 'auto' }}>
+            <div style={wrapper}>
+              {renderEventCards('constraint','open')}
+            </div>
+            </div>
+          <Typography.Title level={3} >Closed:</Typography.Title>
+            <div style={wrapper}>
+              {renderEventCards('constraint','closed')}
+            </div>
       <Typography.Title level={1} >Private Events:</Typography.Title>
-            <Flex justify='center' align="center" wrap="wrap" gap="small">
-        {renderEventCards('Private')}
-      </Flex>
+          <Typography.Title level={3} >Open:</Typography.Title>
+            <div style={wrapper}>
+              {renderEventCards('Private','open')}
+            </div>
+          <Typography.Title level={3} >Closed:</Typography.Title>
+            <div style={wrapper}>
+              {renderEventCards('Private','closed')}
+            </div>
           </div>
         </div>
       )}

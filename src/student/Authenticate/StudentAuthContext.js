@@ -27,9 +27,9 @@ export function StudentAuthProvider({ children }) {
 
   const studentLogin = (email) => {
     setIsStudentAuthenticated(true);
-    Cookies.set('isStudentAuthenticated', true, { expires: 1 });
+    Cookies.set('isStudentAuthenticated', true, { domain: 'localhost', path: '/portal', expires: 1,HttpOnly:true, secure: true, sameSite: 'strict' });
     const encryptedEmail = CryptoJS.AES.encrypt(email, 'student-_?info').toString();
-    Cookies.set('StudentEmail', encryptedEmail, { expires: 1 });
+    Cookies.set('StudentEmail', encryptedEmail, { domain: 'localhost', path: '/portal', expires: 1,HttpOnly:true, secure: true, sameSite: 'strict' });
     sessionStorage.setItem('StudentEmail', encryptedEmail);
     Cookies.remove('AdminEmail');
   };

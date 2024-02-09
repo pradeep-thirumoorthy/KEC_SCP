@@ -1,9 +1,7 @@
 import React from 'react';
-import { Button, Typography } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import {Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 const Home= () => {
-  const navigate = useNavigate();
       return (
         <>
         <div>

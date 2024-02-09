@@ -1,23 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
 
-// Connect to the database
-$conn = mysqli_connect($host, $user, $password, $database);
 
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
+include './../main.php';
 
-// Endpoint to handle login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $info = isset($data['info']) ? $data['info'] : '';
@@ -32,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Depending on the mode, perform the corresponding database update
     // Assuming $info2 contains the existing info2 JSON string
     
-    include './../../EmailFunctions.php';
+    include './../EmailFunctions.php';
     if ($mode === 'Forward') {
         $Faculty = isset($data['Faculty']) ? $data['Faculty'] : '';
         $upordown = isset($data['upordown']) ? $data['upordown'] : '';
@@ -221,6 +206,7 @@ else if ($mode === 'Reject') {
                 $result_info4 = mysqli_stmt_execute($stmt_update_info4);
 
                 if ($result_info4) {
+                    StudentReject($conn,$Faculty,$info);
                     echo json_encode(['success' => true, 'message' => $Complaint_Id]);
                 } else {
                     echo json_encode(['success' => false, 'message' => 'Failed to update info4']);
@@ -318,7 +304,7 @@ else if ($mode === 'Resolve') {
         $result = mysqli_stmt_execute($stmt_update_info4);
 
         if ($result) {
-            StudentAccept($conn, $Faculty, $info);
+            StudentComplete($conn, $Faculty, $info);
             echo json_encode(['success' => true, 'message' => $Complaint_Id]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Server error']);

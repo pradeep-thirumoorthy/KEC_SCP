@@ -1,40 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: GET"); // Change to GET
-header("Access-Control-Allow-Headers: Content-Type");
 
-// Disable caching for the response
+include './../../main.php';
 
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-
-
-
-
-// Disable caching for the login response
-
-// Replace these credentials with your actual database credentials
-
-
-// Connect to the database
-$conn = mysqli_connect($host, $user, $password, $database);
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
-}
-
-// Endpoint to handle retrieving events_response
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $eventid = isset($_GET['EventId']) ? $_GET['EventId'] : '';
     $email = isset($_GET['email']) ? $_GET['email'] : '';

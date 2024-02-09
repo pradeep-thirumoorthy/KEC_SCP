@@ -9,11 +9,11 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+import { Login,ForgAdmPass,Dash,Complaints,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
-import Layout1 from './Layout';
+import Layout1 from './admin/Layout';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Layout2 from './student/Layout2';
@@ -24,7 +24,6 @@ import { EventInfoWrapper, StudentHistory } from './student';
 import { ConfigProvider, Spin,theme } from 'antd';
 import Facultyview from './admin/Complaint/Facultyview';
 import checkEmail from './FacultyAccess';
-import CSVReaderComponent from './master_admin/upload';
 import FacutlyActivity from './student/Activity/FacultyActivty';
 import AdminFacultyActivity from './admin/Activity/FacultyActivity';
 import ActivityFacultyPanel from './admin/Activity/FacultyPanel';
@@ -86,13 +85,20 @@ const App = () => {
     }
   };
   
-  const AccessFac = ({ element}) => {
-    const data=isEmailPresent;
-    if (data) {
-      return <>{element}</>;
-    } else {
-      return <FNF/>;
-    }
+  const AccessFac = ({ element }) => {
+    const [isEmailPresent, setIsEmailPresent] = useState(false);
+  
+      useEffect(() => {
+        checkEmail().then((isFaculty) => {
+          setIsEmailPresent(isFaculty);
+        });
+      }, []);
+  
+      if (isEmailPresent) {
+        return <>{element}</>;
+      } else {
+        return <FNF />;
+      }
   };
   const RedirectToAdmLogin = ({ element}) => {
     const { isAuthenticated} = useAuth();
@@ -143,7 +149,8 @@ const App = () => {
             <Route path="/admin/dashboard" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<Layout1 element={<Dash  />} data={['Dashboard','Here is your complaints arrived']}/>}/>}/>
             <Route path="/admin/dashboard/Calendar" element={isLoading ? <LoadingScreen />:<PrivateRoute element={<Layout1 element={<Admincalendar  />} data={['Calendar','Here is your complaints arrived']}/>}/>}/>
                 
-                <Route path="/admin/Complaints" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Complaintsview  />} data={['Complaints','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/Complaints" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Complaints />} data={['Complaints','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/Complaints/Overview" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Complaintsview  />} data={['Complaints','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/Complaints/MoreInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Forward2  />} data={['Complaint Information','Here is your complaints arrived']}/>}/>}/>
                 
                 
@@ -160,8 +167,8 @@ const App = () => {
                 <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo  />} data={['Account','Here is your complaints arrived']}/>}/>}/>
                 
 
-                <Route path="/admin/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview  />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>}/>
-                <Route path="/admin/Faculty/Panel" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<FacultyInfo  />} data={['Faculty Panel','Here is your complaints arrived']}/>}/>}/>}/>
+                <Route path="/admin/Faculty" element={isLoading ? <></>:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview  />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>}/>
+                <Route path="/admin/Faculty/Panel" element={isLoading ? <></>:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<FacultyInfo  />} data={['Faculty Panel','Here is your complaints arrived']}/>}/>}/>}/>
                 
                 
                 
@@ -173,7 +180,7 @@ const App = () => {
                 
                 
                 
-                <Route path='/master/admin/' element={<CSVReaderComponent/>}/>
+                
 
 
 

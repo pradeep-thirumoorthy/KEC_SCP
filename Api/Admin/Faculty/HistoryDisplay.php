@@ -1,35 +1,34 @@
 <?php
 
 
-
 include './../../main.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $startDate = $_GET['start_date'];
     $endDate = $_GET['end_date'];
-    $Handler=$_GET['email'];
+    $Forward_To=$_GET['email'];
     if (!empty($startDate) || !empty($endDate)) {
     
         if (empty($startDate)) {
-            $query = "SELECT * FROM faculty_complaints WHERE info1 <= ? AND Handler = ? AND (Status='Rejected' OR Status='Resolved')";
+            $query = "SELECT Complaint_Id, Roll_No, Type, info1, Status FROM faculty_complaints WHERE info1 <= ? AND Forward_To = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ss", $endDate, $Handler);
+            mysqli_stmt_bind_param($stmt, "ss", $endDate, $Forward_To);
         }
         elseif (empty($endDate)) {
-            $query = "SELECT * FROM faculty_complaints WHERE info1 >= ? AND Handler = ?  AND (Status='Rejected' OR Status='Resolved')";
+            $query = "SELECT Complaint_Id, Roll_No, Type, info1, Status FROM faculty_complaints WHERE info1 >= ? AND Forward_To = ?  AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "ss", $startDate, $Handler);
+            mysqli_stmt_bind_param($stmt, "ss", $startDate, $Forward_To);
         }
         else {
-            $query = "SELECT * FROM faculty_complaints WHERE info1 BETWEEN ? AND ? AND Handler = ? AND (Status='Rejected' OR Status='Resolved')";
+            $query = "SELECT Complaint_Id, Roll_No, Type, info1, Status FROM faculty_complaints WHERE info1 BETWEEN ? AND ? AND Forward_To = ? AND (Status='Rejected' OR Status='Resolved')";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $Handler);
+            mysqli_stmt_bind_param($stmt, "sss", $startDate, $endDate, $Forward_To);
         }
     }
     else{
-        $query = "SELECT * FROM faculty_complaints WHERE Handler = ?  AND (Status='Rejected' OR Status='Resolved')";
+        $query = "SELECT Complaint_Id, Roll_No, Type, info1, Status FROM faculty_complaints WHERE Forward_To = ?  AND (Status='Rejected' OR Status='Resolved')";
         $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "s", $Handler);
+        mysqli_stmt_bind_param($stmt, "s", $Forward_To);
     }
 
 

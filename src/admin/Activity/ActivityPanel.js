@@ -66,7 +66,6 @@ const ActivityPanel = () => {
   >
 <Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{fontStyle:'oblique'}} >
             <Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
-            <Descriptions.Item label="Complaint_Id">{info.Complaint_Id}</Descriptions.Item>
             <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
             <Descriptions.Item label="Email">{info.email}</Descriptions.Item>
             <Descriptions.Item label="Type">{info.Type}</Descriptions.Item>

@@ -14,21 +14,23 @@ const Complaintsview = () => {
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  const { Filter } = location.state || [];
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const { TypeState } = location.state || [];
   const handleButtonClick = (rowData) => {
     navigate('/admin/Complaints/MoreInfo', { state: { info: rowData } });
   };
   
   useEffect(() => {
-    (Filter)?
-    setFilteredInfo({Type: [Filter],}):setFilteredData();
+    if(TypeState){
+      setFilteredInfo({Type: [TypeState],});}
+
+    console.log(filteredInfo);
     filterData();
     
     console.log(filteredInfo);
   }, []);
   
-  const [filteredInfo, setFilteredInfo] = useState({});
-  const [sortedInfo, setSortedInfo] = useState({});
   const handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
@@ -223,7 +225,8 @@ const Complaintsview = () => {
             />
           </form>
 
-          {loading ? <p>Loading...</p> : <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
+          {loading ? <p>Loading...</p> : 
+          <Table rowKey={(record) => record.uid}scroll={{x:1000}} columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
     </>
   );
 };

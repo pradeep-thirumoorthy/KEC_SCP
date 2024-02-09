@@ -293,7 +293,7 @@ INSERT INTO `events` (`Id`, `Email`, `Limits`, `Formdata`, `event_id`, `Interval
 CREATE TABLE `events_response` (
   `Id` int(11) NOT NULL,
   `Event_Id` varchar(32) NOT NULL,
-  `Timestop` datetime NOT NULL,
+  `ResponseTime` datetime NOT NULL,
   `Response` varchar(10000) NOT NULL,
   `Email` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -302,7 +302,7 @@ CREATE TABLE `events_response` (
 -- Dumping data for table `events_response`
 --
 
-INSERT INTO `events_response` (`Id`, `Event_Id`, `Timestop`, `Response`, `Email`) VALUES
+INSERT INTO `events_response` (`Id`, `Event_Id`, `ResponseTime`, `Response`, `Email`) VALUES
 (4, 'd8b9a4d4555525f6dcf2f04de2773f1d', '2023-09-05 09:36:01', '\"{\"NAme\":\"Sabarish\",\"Hello\":\"Wanted\"}\"', 'sabarishv.21cse@kongu.edu'),
 (16, '11f5ff6e3dc5307ab7640d26141c3817', '2023-09-05 14:22:05', '\"{\"Name\":\"GhostTamil GhostTamil\",\"Roll No\":\"sd,jsndkjsdff\",\"Gender\":\"Male\"}\"', 'sabarishv.21cse@kongu.edu'),
 (17, '11f5ff6e3dc5307ab7640d26141c3817', '2023-09-05 22:34:08', '\"{\"Name\":\"Aplle\",\"Roll No\":\"1111111\",\"Gender\":\"Male\"}\"', 'santhoshm.21cse@kongu.edu'),
