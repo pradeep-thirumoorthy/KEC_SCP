@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { Button, Card, Col, Image, Input, Row, Typography } from 'antd';
+import { Button, Card, Col, Image, Input, Row, Typography,message as Message } from 'antd';
 import log from '../../images/4841115.jpg';
 import logo from '../../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png'
 import  { LeftCircleOutlined } from '@ant-design/icons';
@@ -24,9 +24,8 @@ const ForgetPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://localhost:8000/ForgetStudentOTP.php', {
+      .post('http://localhost:8000/Student/sendOTP.php', {
         to: email,
-        subject: 'Forget password',
       })
       .then((response) => {
         setMessage(response.data.message);
@@ -61,10 +60,7 @@ const ForgetPass = () => {
   };
 
   const isValidEmail = (email) => {
-    // Implement your email validation logic here
-    // You can use a regular expression or any other method
-    // Return true if email is valid, false otherwise
-    return true; // Placeholder, replace with your logic
+    return true;
   };
 
   const handleOtpInputChange = (e) => {
@@ -79,26 +75,27 @@ const ForgetPass = () => {
       setMessageotp('OTP is not Valid');
     }
   };
+      
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(newPassword.length==="")
+  const handleSubmit = () => {
+    if(newPassword.length=="")
     {
-        alert('Enter newPassword')
+      
+        Message.warning({ content: "Enter 'Password'", duration: 2 });
         return false;
     }
-     else if(confirmPassword.length==="")
+     else if(confirmPassword.length=="")
     {
-        alert('Enter confirmPassword')
+      Message.warning({ content: "Enter 'Confirm Password'", duration: 2 });
         return false;
     }
     else if(confirmPassword.length!==newPassword.length||newPassword!==confirmPassword)
     {
-        alert('Password mismatch')
+        Message.warning({ content: 'Password is Mismatch', duration: 2 });
         return false;
     }
     else{
-    axios.post('http://localhost:8000/Student/ForgetPassword.php', { email: email, password: newPassword })
+      axios.post('http://localhost:8000/Student/ForgetPassword.php', { email: email, password: newPassword })
       .then(response => {
         // Assuming the server returns a success message or user object upon successful login
         if (response.data.success) {
@@ -106,10 +103,10 @@ const ForgetPass = () => {
             
             console.log(response.data);
             
-            alert('Password is Updated');
-            navigate('/student/login');
+            Message.success({ content: 'Password is Updated', duration: 2 });
+            navigate('/admin/login');
         } else {
-          window.confirm('Invalid username or password. Do you want to try again?');
+          Message.error({ content: 'Invalid username or password. Do you want to try again?', duration: 2 });
         }
       })
       .catch(error => {

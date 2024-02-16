@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'antd/es/typography/Link';
 import { Footer, Header } from 'antd/es/layout/layout';
 import { getEmailFromSession } from './EmailRetrieval';
-import checkEmail from '../FacultyAccess';
+import checkEmail from './FacultyAccess';
 const {  Content, Sider } = Layout;
 const Layout1 = ({element,data=[]}) => {
     const navigate = useNavigate();
@@ -278,7 +278,7 @@ const content = (
             textAlign: 'center',
           }}
         >
-          Kongu Grievance System
+          @Kongu Complaint System
         </Footer>
       </Layout>
     </Layout>

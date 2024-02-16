@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaints,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo } from './admin';
+import { Login,ForgAdmPass,Dash,Complaints,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo,checkEmail,Report } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
@@ -23,7 +23,6 @@ import Forward2 from './admin/Complaint/MoreInfo2';
 import { EventInfoWrapper, StudentHistory } from './student';
 import { ConfigProvider, Spin,theme } from 'antd';
 import Facultyview from './admin/Complaint/Facultyview';
-import checkEmail from './FacultyAccess';
 import FacutlyActivity from './student/Activity/FacultyActivty';
 import AdminFacultyActivity from './admin/Activity/FacultyActivity';
 import ActivityFacultyPanel from './admin/Activity/FacultyPanel';
@@ -34,7 +33,6 @@ import FacultyActivitypanel from './student/Activity/FacultyActivitypanel';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  const [isEmailPresent, setIsEmailPresent] = useState(false);
 
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('theme');
@@ -55,12 +53,6 @@ const App = () => {
       setIsLoading(false);
     }, 200);
     console.log("dark : "+darkMode);
-    const getEmailStatus = () => {
-      const emailPresent = checkEmail();
-      setIsEmailPresent(emailPresent);
-    };
-
-    getEmailStatus();
     return () => {
       clearTimeout(timer);
     };
@@ -163,6 +155,7 @@ const App = () => {
                 
                 <Route path="/admin/History" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<History />} data={['History','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/History/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FacultyHistory />} data={['Faculty History','Here is your complaints arrived']}/>}/>}/>
+                <Route path="/admin/History/Reports" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Report />} data={['Report','You can Download the list of complaints']}/>}/>}/>
                 
                 <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo  />} data={['Account','Here is your complaints arrived']}/>}/>}/>
                 

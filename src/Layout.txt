@@ -361,7 +361,7 @@ const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." :
             textAlign: 'center',
           }}
         >
-          Kongu Grievance System
+          Kongu Complaint System
         </Footer>
       </Layout>
     </Layout>

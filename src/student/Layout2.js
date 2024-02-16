@@ -284,7 +284,7 @@ const content = (
             textAlign: 'center',
           }}
         >
-          Kongu Grievance System
+          @Kongu Complaint System
         </Footer>
       </Layout>
     </Layout>

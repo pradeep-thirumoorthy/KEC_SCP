@@ -8,7 +8,7 @@ const FNF = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Display content after 1 second
+    }, 1000);
 
     return () => {
       clearTimeout(timer);
@@ -21,7 +21,7 @@ const FNF = () => {
     <section className="fnf-container">
       {isLoading ? (
         <div className="loading">
-          <Typography.Title level={3}><Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /></Typography.Title>
+          <Typography.Title level={3}><Spin spinning={true} fullscreen /></Typography.Title>
         </div>
       ) : (
         <div className="error-content">

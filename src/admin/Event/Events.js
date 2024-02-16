@@ -95,7 +95,8 @@ const Events = () => {
     display: 'flex',
     overflowX: 'scroll',
     whiteSpace: 'nowrap',
-    gap: '20px',scrollbarColor: 'rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.5)',
+    gap: '20px',
+    scrollbarColor: 'rgba(255, 255, 255, 0.5) rgba(100, 100, 100, 0.5)',
     scrollbarWidth: 'thin'
   };
   return (

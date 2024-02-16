@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { Button, Typography } from 'antd';
+import { Button, Card, Col, Image, Input, Row, Typography,message as Message } from 'antd';
+import log from '../../images/4841115.jpg';
+import logo from '../../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png'
+import  { LeftCircleOutlined } from '@ant-design/icons';
 const ForgAdmPass = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -21,7 +24,7 @@ const ForgAdmPass = () => {
     setNewPassword('');
     setSendButtonStatus('loading'); // Show loading message on the button
     axios
-      .post('http://localhost:8000/ForgetAdminOTP.php', {
+      .post('http://localhost:8000/Admin/sendOTP.php', {
         to: email,
         subject: 'Email Verification',
       })
@@ -77,19 +80,20 @@ const ForgAdmPass = () => {
   };
 
   const handleSubmit = () => {
-    if(newPassword.length==="")
+    if(newPassword.length=="")
     {
-        alert('Enter newPassword')
+      
+        Message.warning({ content: "Enter 'Password'", duration: 2 });
         return false;
     }
-     else if(confirmPassword.length==="")
+     else if(confirmPassword.length=="")
     {
-        alert('Enter confirmPassword')
+      Message.warning({ content: "Enter 'Confirm Password'", duration: 2 });
         return false;
     }
     else if(confirmPassword.length!==newPassword.length||newPassword!==confirmPassword)
     {
-        alert('Password mismatch')
+        Message.warning({ content: 'Password is Mismatch', duration: 2 });
         return false;
     }
     else{
@@ -101,10 +105,10 @@ const ForgAdmPass = () => {
             
             console.log(response.data);
             
-            alert('Password is Updated');
+            Message.success({ content: 'Password is Updated', duration: 2 });
             navigate('/admin/login');
         } else {
-          window.confirm('Invalid username or password. Do you want to try again?');
+          Message.error({ content: 'Invalid username or password. Do you want to try again?', duration: 2 });
         }
       })
       .catch(error => {
@@ -113,64 +117,77 @@ const ForgAdmPass = () => {
       
     }
   };
-
+  const back=()=>{
+    navigate(-1);
+  }
   return (
-    <div className='wrapper bg-secondary d-flex align-items-center justify-content-center w-100' >
-                <div className='login'>
+    <Card  hoverable className='m-lg-5 vh-100'>
+    <Row gutter={20} justify="center" className='w-100 ' align="middle">  
+                
+      <Col xs={24} lg={11}><Image src={log} preview={false}/>
+      <LeftCircleOutlined  style={{position:'inherit',fontSize:'30px'}} onClick={back}/></Col>
+      <Col xs={24} lg={11}>
+      <Col xs={24} className='text-center'>
+      
+        <Image src={logo} preview={false} height={50} width={50}/>
+        
       <Typography.Title level={2}>Admin Forget Password</Typography.Title>
-      <form className='needs-validation'>
-        <div className='form-group was-validated mb-2'>     
+      </Col>
+        <Row align={'middle'} justify={'end'} gutter={5} className='form-group was-validated'>
+                      <Col xs={17} sm={17}>
                         <label htmlFor='email' className='form-label'>Email Address</label>
-                        <input type='email' placeholder='Email' className='form-control' name='email' id='email' value={email}  onChange={handleEmailInputChange}  disabled={otpVerified} required></input>
+                        <Input type='email' placeholder='Email' className='form-control' name='email' id='email' value={email}  onChange={handleEmailInputChange}  disabled={otpVerified} required/>
                         <div className='invalid-feedback'>
                             Please enter the email
                         </div>
-                        <Button type="button" className='btn btn-success w-50 mt-2' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
+                        </Col>
+                        <Col xs={7} sm={7}>
+                        <Button type='primary' size='large' onClick={sendEmail} disabled={sendButtonStatus === 'loading'}>
                         {sendButtonStatus === 'loading' ? 'Loading...' : sendButtonStatus === 'sent' ? 'Resend OTP' : 'Send OTP'}
                         </Button>
-                    </div>
+                        </Col>
+                    </Row>
 
-      </form>
-      {message &&<p className='text-danger'>{message}</p>}
       
+      {message &&<p className='text-danger'>{message}</p>}
+      {messageotp && <p className='text-danger'>{messageotp}</p>}
       {!otpVerified && otp !== 0 && !isNaN(otp) && (
         <div className='form-group was-validated mb-2'>
           
           <label htmlFor='OTP' className='form-label'>Enter OTP</label>
-          <input className='form-control' name='password' id='password' type="text" value={enteredOtp} onChange={handleOtpInputChange} required></input>
+          <Input className='form-control' name='password' id='password' type="text" value={enteredOtp} onChange={handleOtpInputChange} required/>
           <div className='invalid-feedback'>Please enter the OTP</div>
-          <Button type="button" className='btn btn-success mt-2' onClick={verifyOtp}>Verify OTP</Button>
+          <Button type="primary" className='mt-2' onClick={verifyOtp}>Verify OTP</Button>
         </div>
       )}
-      {messageotp && <p className='text-danger'>{messageotp}</p>}
       {otpVerified && (
         <div>
-          <div className='form-group was-validated mb-2'>
+          <Row gutter={30} align={'middle'} justify={'center'}>
+          <Col xs={12} sm={12} className='form-group was-validated mb-2'>
                         <label htmlFor='password' className='form-label'>Password</label>
-                        <input className='form-control' name='password' id='password' type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required></input>
+                        <Input className='form-control' name='password' id='password' type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required/>
                         <div className='invalid-feedback'>
                             Please enter the Password
                         </div>
-          </div>
-          <div className='form-group was-validated mb-2'>
+          </Col>
+          <Col xs={12} sm={12} className='form-group was-validated mb-2'>
                         <label htmlFor='confirm password' className='form-label'>Confirm Password</label>
-                        <input className='form-control'type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required></input>
+                        <Input className='form-control'type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
                         <div className='invalid-feedback'>
                             Reenter Password
                         </div>
-                    </div>
-                    <div className='form-group form-check mb-2'>
-                       <input type='checkbox' className='form-check-input'></input>
-                        <label htmlFor='check' className='form-check-label'>Remember me</label>
-                    </div>
+                    </Col>
 
-          <Button type="button" className='btn btn-success w-100 mt-2' onClick={handleSubmit}>
-            Reset Password
-          </Button>
+          
+          <Button type="primary" onClick={handleSubmit} className=' mt-2'>Reset</Button>
+          </Row>
         </div>
+        
       )}
-    </div>
-    </div>
+      </Col>
+    
+    </Row>
+    </Card>
   );
 };
 

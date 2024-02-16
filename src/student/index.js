@@ -17,6 +17,11 @@ import Faculty from "./Complaints/Type/Faculty";
 import Courses from "./Complaints/Type/Courses";
 
 import Nfcalendar from "./Dashboard/calendar";
+import Layout2 from "./Layout2";
+
+import FacutlyActivity from './Activity/FacultyActivty';
+import FacultyHistory2 from './History/FacultyHistory2';
+import FacultyActivitypanel from './Activity/FacultyActivitypanel';
 export {Complaint,EventForm,ForgetPass,StudentActivity,StudentDash,StudentLogin,StudentHistory,EventInfoWrapper,StudentActivityPanel,
-    Academic,Maintenance,Others,Lab,Faculty,Courses,Nfcalendar
+    Academic,Maintenance,Others,Lab,Faculty,Courses,Nfcalendar,FacutlyActivity,FacultyHistory2,FacultyActivitypanel,Layout2
 };
