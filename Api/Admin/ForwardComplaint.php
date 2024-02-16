@@ -13,9 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => 'Please enter Complaint_Id']);
         exit;
     }
-
-    // Depending on the mode, perform the corresponding database update
-    // Assuming $info2 contains the existing info2 JSON string
     
     include './../EmailFunctions.php';
     if ($mode === 'Forward') {
@@ -156,9 +153,9 @@ else if ($mode === 'Accept') {
 
 else if ($mode === 'Reject') {
     $Faculty = isset($data['Faculty']) ? $data['Faculty'] : '';
-
-    if ($Faculty === '') {
-        echo json_encode(['success' => false, 'message' => 'Please enter Faculty']);
+    $statement = isset($data['statement']) ? $data['statement'] : '';
+    if ($Faculty === '' && $statement == '') {
+        echo json_encode(['success' => false, 'message' => 'Please enter the Responsible Reason']);
         exit;
     }
 
@@ -201,7 +198,7 @@ else if ($mode === 'Reject') {
             if ($result) {
                 // Update the info4 column with Faculty Name and timestamp
                 $stmt_update_info4 = mysqli_prepare($conn, "UPDATE complaints SET info4 = ?, Status='Rejected' WHERE Complaint_Id = ?");
-                $info4 = json_encode([$Faculty_Name, date('Y-m-d H:i:s')]);
+                $info4 = json_encode([$Faculty_Name, date('Y-m-d H:i:s'),$statement]);
                 mysqli_stmt_bind_param($stmt_update_info4, "ss", $info4, $Complaint_Id);
                 $result_info4 = mysqli_stmt_execute($stmt_update_info4);
 

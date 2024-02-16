@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Input, Modal, Radio, Result, Select, Typography } from "antd";
+import { Button, Input, Modal, Radio, Result, Select, Space, Typography } from "antd";
 
 import {CheckOutlined,SendOutlined,CloseOutlined} from '@ant-design/icons';
 import axios from "axios";
 import { Descriptions } from "antd";
 import CryptoJS from "crypto-js";
 import { message,ConfigProvider } from 'antd';
+import TextArea from "antd/es/input/TextArea";
+import { getEmailFromSession } from "../EmailRetrieval";
 
 const { Option } = Select;
 
@@ -19,7 +21,10 @@ const Forward2 = () => {
   const { info} = location.state || {};
   const [Faculty, setFaculty] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isRejectVisible, setIsRejectVisible] = useState(false);
+  const [RejectType,setRejectType]=useState("Default");
   const key = 'updatable';
+  const [Rejectstatement,setRejectstatement]=useState('');
 
   const handleFacultyChange = (value) => {
     setFaculty(value);
@@ -104,9 +109,12 @@ setDownstream(subjects);
 }, [Faculty]);
 
 
-  const togglePopup = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+const togglePopup = () => {
+  setIsModalVisible(!isModalVisible);
+};
+const togglePopup2 = () => {
+  setIsRejectVisible(!isRejectVisible);
+};
 
   const handleOk = () => {
     const confirmed = window.confirm("Are you sure you want to Forward the complaint?");
@@ -166,15 +174,19 @@ setDownstream(subjects);
     }
   };
   const handleReject = () => {
+    if(Rejectstatement === ''){
+      message.warning('Enter the valid Reason');
+      return false;
+    }
     const confirmed = window.confirm('Are you sure you want to Reject the complaint?');
     if (confirmed) {
       
     message.loading({ content: 'Processing...', key,duration:20 });
     axios
-      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
+      .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject',statement:Rejectstatement})
       .then((response) => {
         console.log("Rejected complaint successfully!", response.data);
-        togglePopup();
+        togglePopup2();
         setTimeout(() => {
           navigate("/admin/Complaints");
         }, 2000);
@@ -238,9 +250,7 @@ setDownstream(subjects);
     }
   }
   }, [info]);
-  const Email = sessionStorage.getItem('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+  const email = getEmailFromSession();
 
   return (
     <div className="vh-100">
@@ -314,10 +324,43 @@ setDownstream(subjects);
             </>}
           </div>
           <div className="col-4">
-            <Button danger size="large" type="primary" onClick={handleReject}>
+            <Button danger size="large" type="primary"  onClick={togglePopup2}>
               <CloseOutlined />
               Reject
             </Button>
+            <Modal
+              title="Reject Complaint"
+              visible={isRejectVisible}
+              onOk={handleReject}
+              onCancel={togglePopup2}
+            >
+              <div>
+              <Radio.Group onChange={(e) => { setRejectstatement("");setRejectType(e.target.value);console.log(RejectType)}} defaultValue="Default" style={{ marginTop: 16 }}>
+              <Radio.Button defaultChecked value="Default">Default</Radio.Button>
+              <Radio.Button value="Own">Own</Radio.Button>
+            </Radio.Group>
+
+            {(RejectType === 'Default') ? (
+        <Radio.Group
+        style={{ width: '100%' }}
+        value={Rejectstatement}
+        onChange={(e) => { setRejectstatement(e.target.value); }}
+      >
+        <Space style={{paddingLeft:'10px',borderLeft:'5px solid #1677ff',marginLeft:'10px',borderRadius:'3px'}} direction="vertical">
+          <Radio value="A1">A1</Radio>
+          <Radio value="A2">A2</Radio>
+          <Radio value="A3">A3</Radio>
+          <Radio value="A4">A4</Radio>
+        </Space>
+      </Radio.Group>
+      ) : (
+        <Input.TextArea
+          onChange={(e) => { setRejectstatement(e.target.value);}}
+        />
+      )}
+
+              </div>
+            </Modal>
           </div>
         </div>
       </div>

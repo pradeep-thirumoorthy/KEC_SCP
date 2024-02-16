@@ -118,7 +118,6 @@ const History= () => {
           );
         })
         .map((item, i) => {
-          // Parse the 'Extra' field as JSON
           const extraData = item.Extra ? JSON.parse(item.Extra) : {};
       
           return {

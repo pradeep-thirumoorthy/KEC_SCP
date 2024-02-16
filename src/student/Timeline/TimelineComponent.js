@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Descriptions, Result, Timeline } from 'antd';
+import { Descriptions, Flex, Result, Timeline, Typography } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import './styles.css';
 import {CaretUpOutlined,CaretDownOutlined} from '@ant-design/icons';
@@ -140,7 +140,14 @@ const TimelineComponent = ({ current,info }) => {
   <Result
   status={(info.Status==='Resolved')?"success":"error"}
   title={`${info.Status} by ${JSON.parse(info.info4)[0]}`}
-  subTitle={`At ${JSON.parse(info.info4)[1]}`}
+  subTitle={
+    <div className={`yourClassName`}>
+      At {JSON.parse(info.info4)[1]} <br />
+     <Flex><Typography.Title level={3}>Reason:</Typography.Title><Typography.Title level={5}>{info.Status === 'Rejected' && <div><br></br>{JSON.parse(info.info4)[2]}</div>}</Typography.Title></Flex>
+    </div>
+  }
+  
+  
 />
 
 ) : (
