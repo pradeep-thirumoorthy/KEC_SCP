@@ -1,7 +1,5 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Badge, Button, Input, Radio,Table, Typography, 
   // message
 } from 'antd';
@@ -241,8 +239,8 @@ const History= () => {
       </div>
           
       <form>
-        <input
-          className='my-3 form-control'
+        <Input
+          style={{margin:'30px 0px'}}
           type='search'
           placeholder='search name'
           value={search}

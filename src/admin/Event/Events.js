@@ -12,16 +12,9 @@ const MAX_TIMEOUT = 10000;
 
 const Events = () => {
   const navigate = useNavigate();
-  function myFunction() {
-    var copyText = document.getElementById("myInput");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value);
-    alert("Copied the text: " + copyText.value);
-  }
   const [isLoading, setIsLoading] = useState(true);
   const [EventData, setEventData] = useState([]);
-  const Email = sessionStorage.getItem('AdminEmail');
+  
   const response = (id) => {
     navigate("/admin/Events/response", { state: { EventId: id } });
   };
@@ -50,7 +43,7 @@ const Events = () => {
         .finally(() => {
           setIsLoading(false);
         });
-  }, [Email]);
+  }, []);
 
 
   const renderEventCards = (visible,Status) => {

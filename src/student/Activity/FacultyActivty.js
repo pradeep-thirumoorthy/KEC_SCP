@@ -1,8 +1,6 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
 import {useLocation, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Radio,Table,Space,Button, Input, Typography } from 'antd';
 import { geteduEmailFromSession } from '../Emailretrieval';
 const FacutlyActivity= () => {
@@ -156,7 +154,7 @@ const FacutlyActivity= () => {
 
       <form>
         <Input
-          className='my-3 form-control'
+          style={{margin:'30px 0px'}}
           type='search'
           placeholder='search name'
           value={search}

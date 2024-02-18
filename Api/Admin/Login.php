@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('Query failed: ' . mysqli_error($conn));
         echo json_encode(['success' => false, 'message' => 'Server error']);
     } else {
+
         if (mysqli_num_rows($result) === 1) {
             echo json_encode(['success' => true, 'message' => 'Login successful']);
         } else {

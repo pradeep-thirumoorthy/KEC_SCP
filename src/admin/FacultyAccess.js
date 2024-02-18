@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const checkEmail = () => {
   const storedEmail = sessionStorage.getItem('AdminEmail');
-  //console.log(storedEmail);
   if (storedEmail) {
     const decryptedEmail = CryptoJS.AES.decrypt(storedEmail, 'admin-_?info').toString(CryptoJS.enc.Utf8);
 

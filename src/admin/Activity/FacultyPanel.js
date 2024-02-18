@@ -5,6 +5,7 @@ import CryptoJS from "crypto-js";
 import axios from "axios";
 import { Button, ConfigProvider, Descriptions, Result, Typography} from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { getEmailFromSession } from "../EmailRetrieval";
 const ActivityFacultyPanel = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,9 +23,7 @@ const ActivityFacultyPanel = () => {
     }
   }
   }, [info]);
-  const Email = sessionStorage.getItem('AdminEmail');
-  const bytes = CryptoJS.AES.decrypt(Email, "admin-_?info");
-  const email = bytes.toString(CryptoJS.enc.Utf8);
+  const email = getEmailFromSession();
 
   const handleUpdate=()=>{
     //console.log(Update)

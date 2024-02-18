@@ -1,13 +1,12 @@
-import { Avatar, Button, Collapse, ConfigProvider, Layout ,List,Popover,Typography} from 'antd';
+import { Button, Collapse, ConfigProvider, Layout ,List,Popover,Typography} from 'antd';
 import React, { useState, useEffect } from 'react';
-import {FileTextOutlined,ProjectOutlined,GroupOutlined,PieChartOutlined,CheckCircleOutlined,LogoutOutlined} from '@ant-design/icons';
+import {FileTextOutlined,ProjectOutlined,GroupOutlined,PieChartOutlined,CheckCircleOutlined,LogoutOutlined,IdcardOutlined} from '@ant-design/icons';
 import { useStudentAuth } from './Authenticate/StudentAuthContext';
 import { useNavigate, useLocation } from 'react-router';
 import he from '../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'antd/es/typography/Link';
 import { Footer, Header } from 'antd/es/layout/layout';
-import { geteduEmailFromSession } from './Emailretrieval';
 const {  Content, Sider } = Layout;
 
 const Layout2 = ({element,data=[]}) => {
@@ -134,8 +133,6 @@ const logo = {
     height: '50px',
 };
 const {Panel} =Collapse;
-const FullUsername = geteduEmailFromSession();
-const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 const menuItems = [
   { title: 'Home', link: '/' },
   { title: 'About', link: '/about' },
@@ -205,6 +202,7 @@ const content = (
                     header={
                       <Button
                         type='link'
+                        onClick={() => handledirect(`/student/${panel.key}`)}
                         className={`w-100 align-items-center text-center ${
                           location.pathname.includes(`/student/${panel.key}`)
                             ? ''
@@ -215,7 +213,6 @@ const content = (
                       </Button>
                     }
                     key={panel.key}
-                    onClick={() => handledirect(`/student/${panel.key}`)}
                   >
                     <List
                       size='small'
@@ -247,8 +244,7 @@ const content = (
               <div className="w-100 text-center mt-auto mb-5 mb-sm-0">
                     <Popover content={content} trigger="hover" placement="top">
                       <Button className="btn bg-transparent text-center link-light text-white-50 w-100 align-items-center d-flex justify-content-center" id="dropdownUser2">
-                        <Avatar src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3" />
-                        {tenUsername}
+                        <IdcardOutlined style={{fontSize:30}}/>Account
                       </Button>
                     </Popover>
                   </div>

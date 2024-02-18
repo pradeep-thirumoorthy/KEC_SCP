@@ -2,51 +2,56 @@ import React, { useState, useEffect } from 'react';
 import Doughnut from './doughnut';
 import LineChart from './Linechart';
 import axios from 'axios';
-import { Calendar, Col,Descriptions,Popover,Row,Typography } from 'antd';
+import { Calendar, Col,Descriptions,Row,Tooltip,Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { getEmailFromSession } from '../EmailRetrieval';
 const Dash = () => {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().slice(0, 10);
+
   const [adminData, setAdminData] = useState({});
-  const [CalendarData,setCalendarData]=useState('');
+  const [CalendarData, setCalendarData] = useState('');
+
   useEffect(() => {
-      
-      axios.post('http://localhost:8000/Admin/Dashboard/dash.php', `email=${encodeURIComponent(getEmailFromSession())}`)
-        .then(response => {
-          const data = response.data;
-          if (data) {
-            setAdminData(data);
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching admin data:', error);
-        });
-        const params = {
-          email: getEmailFromSession(),
-        };
-        axios.get('http://localhost:8000/Admin/Dashboard/minicalendar.php', {params})
-        .then(response => {
-          const data = response.data.data;
-          if (data) {
-            setCalendarData(data);
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching admin data:', error);
-        });
+    axios
+      .post('http://localhost:8000/Admin/Dashboard/dash.php', `email=${encodeURIComponent(getEmailFromSession())}`)
+      .then((response) => {
+        const data = response.data;
+        if (data) {
+          setAdminData(data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching admin data:', error);
+      });
+
+    const params = {
+      email: getEmailFromSession(),
+    };
+    axios
+      .get('http://localhost:8000/Admin/Dashboard/minicalendar.php', { params })
+      .then((response) => {
+        const data = response.data.data;
+        if (data) {
+          setCalendarData(data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching admin data:', error);
+      });
   }, []);
 
-  const onSelect = (newValue) => {
-    const value = newValue.format('YYYY-MM-DD');
+  const onSelect = (value) => {
     let res = 0;
 
     if (CalendarData[value]) {
-        res = CalendarData[value];
+      res = CalendarData[value];
     }
 
-    setSelectedDate(newValue.format('YYYY-MM-DD') + " (" + res+" complaints)");
-}
-
-  const [selectedDate,setSelectedDate]=useState('');
+    return (value + " (" + res + " complaints)");
+  };
+  
+  const [selectedDate, setSelectedDate] = useState(onSelect(formattedDate));
   
   return (
     <>
@@ -88,11 +93,11 @@ const Dash = () => {
         <Col span={24}>
         <Row justify={'space-between'} data-bs-spy="scroll" data-bs-target="#home-collapse" data-bs-offset="0">
           <Col lg={8} md={8} sm={24}>
-          <Popover content={selectedDate}>
+          <Tooltip title={selectedDate}>
               <div>
-                <Calendar fullscreen={false} onSelect={onSelect} />
+                <Calendar fullscreen={false} onSelect={(v)=>{setSelectedDate(onSelect(v.format('YYYY-MM-DD')))}} />
               </div>
-            </Popover>
+              </Tooltip>
           </Col>
           <Col lg={15} md={15} sm={24}>
               <Descriptions title="User Info" bordered column={{ xs: 1, sm: 1, md: 1, lg: 1,xxl:1,xl:1 }}>

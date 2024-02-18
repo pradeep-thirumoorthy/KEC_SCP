@@ -7,27 +7,24 @@ import { useNavigate } from 'react-router';
 import { EditOutlined } from '@ant-design/icons';
 
 import { Card, Flex, Image, Typography} from 'antd';
+import { geteduEmailFromSession } from '../Emailretrieval';
 const MAX_TIMEOUT = 10000;
 
 const FullEvents = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [EventData, setEventData] = useState([]);
-  const Email = sessionStorage.getItem('StudentEmail');
   const response = (id) => {
     navigate("/student/Events/EventInfo/" + id);
   };
 
   useEffect(() => {
-    if (Email!=='') {
-      const bytes = CryptoJS.AES.decrypt(Email, 'student-_?info');
-      const email = bytes.toString(CryptoJS.enc.Utf8);
       const timeoutId = setTimeout(() => {
         setIsLoading(false); // Handle timeout
       }, MAX_TIMEOUT);
 
       // Make a request using Axios to fetch admin's Name based on the decrypted email
-      axios.get(`http://localhost:8000/Student/Events/EventInfoStudent.php?email=${email}`)
+      axios.get(`http://localhost:8000/Student/Events/EventInfoStudent.php?email=${geteduEmailFromSession()}`)
         .then(response => {
           clearTimeout(timeoutId);
           const data = response.data.data;
@@ -41,8 +38,7 @@ const FullEvents = () => {
         .finally(() => {
           setIsLoading(false);
         });
-    }
-  }, [Email]);
+  }, []);
 
 
   const renderEventCards = () => {

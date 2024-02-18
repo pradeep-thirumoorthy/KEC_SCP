@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { Card, Col, Flex,Typography } from 'antd';
+import { Card, Col, Flex } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Link from 'antd/es/typography/Link';
 import { getEmailFromSession } from '../EmailRetrieval';
 const Complaints = () => {
   const navigate=useNavigate();

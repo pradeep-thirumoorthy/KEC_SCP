@@ -1,8 +1,6 @@
 import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { Badge, Button, Radio,Table} from 'antd';
+import { Badge, Button, Input, Radio,Table} from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 import * as XLSX from 'xlsx';
 import { useLocation } from 'react-router-dom';
@@ -16,10 +14,8 @@ const FacultyHistory= () => {
   const [Filter,setFilter]= useState('');
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
-  const [selectedRows, setSelectedRows] = useState([]);
   const { FilterState} = location.state || [];
   const handleChange = (pagination, filters, sorter) => {
-    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -187,13 +183,6 @@ const FacultyHistory= () => {
       });
     
   }
-  const rowSelection = {
-    onChange: (skeys, sRows) => {
-      
-      setSelectedRows(sRows);
-      //console.log(selectedRows);
-    },
-  };
       return (
         <>
         <div className='row'>
@@ -217,8 +206,8 @@ const FacultyHistory= () => {
       </div>
 
       <form>
-        <input
-          className='my-3 form-control'
+        <Input
+          style={{margin:'30px 0px'}}
           type='search'
           placeholder='search name'
           value={search}
@@ -243,10 +232,6 @@ const FacultyHistory= () => {
     <Button onClick={()=>{exportHistory()}}>Export</Button> 
     </div>  
     <Table 
-    rowSelection={{
-      type: 'checkbox',
-      ...rowSelection,
-    }}
     rowKey={(record) => record.key}
     scroll={{x:1000}} columns={columns} dataSource={mappedTableData} onChange={handleChange}   pagination={false}/>;
               </div>

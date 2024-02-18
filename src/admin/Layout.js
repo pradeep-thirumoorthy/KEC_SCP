@@ -1,4 +1,4 @@
-import { Layout,Button,Typography, Collapse, List, ConfigProvider, Popover, Avatar } from 'antd';
+import { Layout,Button,Typography, Collapse, List, ConfigProvider, Popover } from 'antd';
 import React, { useState, useEffect } from 'react';
 
 import {FileTextOutlined,ProjectOutlined,GroupOutlined,PieChartOutlined,CheckCircleOutlined,LogoutOutlined,IdcardOutlined} from '@ant-design/icons';
@@ -8,7 +8,6 @@ import he from './../images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-s
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'antd/es/typography/Link';
 import { Footer, Header } from 'antd/es/layout/layout';
-import { getEmailFromSession } from './EmailRetrieval';
 import checkEmail from './FacultyAccess';
 const {  Content, Sider } = Layout;
 const Layout1 = ({element,data=[]}) => {
@@ -146,9 +145,6 @@ const panels = [
     ].filter(Boolean),
   },
 ].filter(Boolean);
-
-const FullUsername = getEmailFromSession();
-const tenUsername = FullUsername.length > 7 ? FullUsername.slice(0, 7) + "..." : FullUsername;
 const {Panel} = Collapse;
 const menuItems = [
   { title: 'Home', link: '/' },
@@ -235,8 +231,7 @@ const content = (
                   <div className="w-100 text-center mt-auto mb-5 mb-sm-0">
                     <Popover content={content} trigger="hover" placement="top">
                       <Button className="btn bg-transparent text-center link-light text-white-50 w-100 align-items-center d-flex justify-content-center" id="dropdownUser2">
-                        <Avatar src={he} alt="" width="32" height="32" className="rounded-circle me-2 border border-white border-3" />
-                        {tenUsername}
+                        <IdcardOutlined style={{fontSize:30}}/>Account
                       </Button>
                     </Popover>
                   </div>
