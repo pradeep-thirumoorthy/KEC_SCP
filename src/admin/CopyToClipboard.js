@@ -1,25 +1,22 @@
 import React from 'react';
-import ClipboardJS from 'clipboard';
-import { message,Button } from 'antd';
-class CopyToClipboard extends React.Component {
-  componentDidMount() {
-    this.clipboard = new ClipboardJS(this.copyButton, {
-      text: () =>this.props.textToCopy,
-    });
+import { message, Button } from 'antd';
 
-    this.clipboard.on('success', () => {
+class CopyToClipboard extends React.Component {
+  handleCopyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(this.props.textToCopy);
       message.success('Link is Copied');
-    });
-  }
-  componentWillUnmount() {
-    this.clipboard.destroy();
-  }
+    } catch (error) {
+      console.error('Error copying to clipboard:', error);
+      message.error('Failed to copy link to clipboard');
+    }
+  };
 
   render() {
     return (
-        <Button type='link' ref={(btn) => (this.copyButton = btn)}>
+      <Button type='link' onClick={this.handleCopyToClipboard}>
         Get Link
-        </Button>
+      </Button>
     );
   }
 }
