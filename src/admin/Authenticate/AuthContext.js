@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
       }
       else{
         setIsAuthenticated(false);
-        console.log("There is no more log");
+        //console.log("There is no more log");
       }
     }
   }, []);

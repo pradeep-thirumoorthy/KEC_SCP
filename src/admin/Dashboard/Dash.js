@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Doughnut from './doughnut';
 import LineChart from './Linechart';
 import axios from 'axios';
-import { Calendar, Col,Popover,Row,Typography } from 'antd';
+import { Calendar, Col,Descriptions,Popover,Row,Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { getEmailFromSession } from '../EmailRetrieval';
 const Dash = () => {
@@ -95,9 +95,13 @@ const Dash = () => {
             </Popover>
           </Col>
           <Col lg={15} md={15} sm={24}>
-              <div>
-                
-              </div>
+              <Descriptions title="User Info" bordered column={{ xs: 1, sm: 1, md: 1, lg: 1,xxl:1,xl:1 }}>
+              <Descriptions.Item label="Name">{adminData.Name}</Descriptions.Item>
+              <Descriptions.Item label="Designation">{adminData.Designation}</Descriptions.Item>
+              <Descriptions.Item label="Phone">{adminData.PhoneNo}</Descriptions.Item>
+              <Descriptions.Item label="Email">{adminData.Email}</Descriptions.Item>
+              <Descriptions.Item label="Department">{adminData.Department}</Descriptions.Item>
+            </Descriptions>
           </Col>
           </Row>
         </Col>

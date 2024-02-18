@@ -22,8 +22,8 @@ const Facultyview = () => {
     if(FilterState){
       setFilteredInfo({Type: [FilterState],});}
     filterData();
-    console.log(FilterState,TypeState);
-    console.log(data)
+    //console.log(FilterState,TypeState);
+    //console.log(data)
     
   }, []);
   
@@ -31,7 +31,7 @@ const Facultyview = () => {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -118,7 +118,7 @@ const Facultyview = () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-      sorter: (a, b) => a.Type.length - b.Type.length,
+      sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
       sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
     {
@@ -199,7 +199,6 @@ const Facultyview = () => {
             defaultExpandAllRows: true,
             expandRowByClick: true,
             showExpandColumn: false,
-            onExpand: (expanded, record) => console.log('Row toggled', record),
           }}
            sticky columns={columns} onChange={handleChange} dataSource={filteredData}  pagination={false} />}
         </div>

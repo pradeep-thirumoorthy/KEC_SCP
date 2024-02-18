@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Descriptions, Result, Timeline } from 'antd';
-import {ClockCircleOutlined,CarryOutOutlined, LoadingOutlined} from '@ant-design/icons';
+import {ClockCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import './styles.css';
 const TimelineComponent2 = ({ current,info }) => {
   const [timelineData, setTimeData] = useState([]);
   const [Pending,setPending] = useState(false);
   const [Extra,setExtra]=useState({});
   useEffect(() => {
-    console.log(info)
-    console.log(timelineData)
+    //console.log(info)
+    //console.log(timelineData)
   if(info){
     if (info.Type === "Maintenance") {
       const parsedExtra = JSON.parse(info.Extra);

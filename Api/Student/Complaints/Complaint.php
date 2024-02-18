@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $data[] = $typeData;
     }
 
-    $query = "SELECT COUNT(*) AS email_count FROM subject WHERE HOD = ? OR Year_Incharge = ?";
+    $query = "SELECT COUNT(*) AS email_count FROM semester WHERE HOD = ? OR Year_Incharge = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "ss", $email, $email);
 

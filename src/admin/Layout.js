@@ -30,7 +30,7 @@ const Layout1 = ({element,data=[]}) => {
     if (storedTheme) {
       setSelectedTheme(storedTheme);
     }
-    console.log(selectedTheme);
+    //console.log(selectedTheme);
     const foldersToCheck = [
         '/admin/dashboard',
         '/admin/Complaints',
@@ -83,7 +83,7 @@ const [isFaculty, setIsFaculty] = useState(false);
     checkEmail().then((isFaculty) => {
       setIsFaculty(isFaculty);
     });
-    console.log(isFaculty);
+    //console.log(isFaculty);
   }, []); 
 const panels = [
   {
@@ -142,14 +142,8 @@ const panels = [
     title: 'History',
     links: [
       isFaculty?{ href: "/admin/History/Faculty", text: "Faculty", key: 'faculty' }:null,
+      { href: "/admin/History/Report", text: "Reports", key: 'Report' }
     ].filter(Boolean),
-  },
-  {
-    key: 'PersonalInfo',
-    icon: <IdcardOutlined style={{ fontSize: '20px', color: '#08c' }} />,
-    title: 'Account',
-    links: [
-    ],
   },
 ].filter(Boolean);
 

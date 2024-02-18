@@ -29,9 +29,9 @@ const Complaints = () => {
     axios
       .get(`http://localhost:8000/Admin/Complaints/Complaint.php?email=${getEmailFromSession()}`)
       .then((response) => {
-        console.log(getEmailFromSession());
+        //console.log(getEmailFromSession());
         const data = response.data.data;
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         if (data) {
           setComplaintData(data);
         }

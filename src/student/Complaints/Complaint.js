@@ -30,7 +30,7 @@ const ComplaintStatus = () => {
       .get(`http://localhost:8000/Student/Complaints/Complaint.php?email=${geteduEmailFromSession()}`)
       .then((response) => {
         const data = response.data.data;
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         if (data) {
           setComplaintData(data);
         }

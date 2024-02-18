@@ -37,7 +37,7 @@ const Academic = () => {
       .get('http://localhost:8000/Student/Complaints/FetchInfo.php', {params})
       .then((response) => {
         const data = response.data.student_info;
-        console.log(response.data);
+        //console.log(response.data);
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);
@@ -83,7 +83,7 @@ const Academic = () => {
           }, 1000);
         } else {
           messageApi.warning('Please select the complaint');
-          console.log(response.data);
+          //console.log(response.data);
         }
       })
       .catch((error) => {
@@ -134,9 +134,9 @@ const Academic = () => {
           const selectedChild = TreeData.flatMap(parent => parent.children).find(child => child.value === value);
 
           if (selectedChild) {
-            console.log(`Selected child value: ${value}`);
-            console.log(`Selected child label: ${label}`);
-            console.log(`Parent data: `, selectedChild.belongs);
+            //console.log(`Selected child value: ${value}`);
+            //console.log(`Selected child label: ${label}`);
+            //console.log(`Parent data: `, selectedChild.belongs);
           }
           setBelonging(selectedChild.belongs);
           setDescription(value);

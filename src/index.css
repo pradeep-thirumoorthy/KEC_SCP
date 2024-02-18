@@ -11,6 +11,11 @@
 }
 body{
   overflow-x: hidden;
+  overscroll-behavior-block: none;
+}
+:root
+{
+  overscroll-behavior-block: none;
 }
 @media screen and (max-width: 700px) {
   .right{

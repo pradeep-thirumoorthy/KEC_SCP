@@ -13,7 +13,6 @@ import History from "./History/History";
 //Login
 import ForgAdmPass from "./Login/ForgAdmPass";
 import Login from "./Login/Login";
-import PersonalInfo from "./Account/PersonalInfo";
 //Complaint
 import Complaintsview from "./Complaint/Complainsview";
 import Complaints from "./Complaint/Complaints";
@@ -48,7 +47,6 @@ export {Layout1,
         History,
         FacultyHistory,AdminFacultyActivity,Facultyview,
         Events,EventFormCreation,EventModifier,Eventviewresp,
-        PersonalInfo,
         FacultyInfo,
         Report,checkEmail,
         Academic,Others,Maintenance,Faculty,Lab,Courses};

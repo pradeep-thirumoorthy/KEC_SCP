@@ -91,7 +91,7 @@ const Layout2 = ({element,data=[]}) => {
     if (storedTheme) {
       setSelectedTheme(storedTheme);
     }
-    console.log(selectedTheme);
+    //console.log(selectedTheme);
     const foldersToCheck = [
         '/student/dashboard',
         '/student/Complaints',

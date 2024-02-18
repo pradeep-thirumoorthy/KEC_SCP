@@ -31,40 +31,52 @@ const Courses = () => {
           
           
   useEffect(() => {
-    // Define the Axios POST request to fetch admin data
     const params = {
-      email:geteduEmailFromSession(),
-      Type:'Courses',
-    }
+      email: geteduEmailFromSession(),
+      Type: 'Courses',
+    };
+  
     axios
-      .get('http://localhost:8000/Student/Complaints/FetchInfo2.php', {params})
+      .get('http://localhost:8000/Student/Complaints/FetchInfo2.php', { params })
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
-        console.log(data);
+        const data3 = response.data.electives;
+  
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);
           setDepartment(data.Department);
           setClass(data.Class);
           setBatch(data.Batch);
-          console.log("Data : "+JSON.stringify(data2));
-          // Extract and display subject information
-          console.log(data2);
-          setSubjectInfo(data2);
+  
+          // Merge data2 and data3 based on a common identifier (e.g., course code or name)
+          const mergedSubjectInfo = [...data2, ...data3].reduce((acc, subject) => {
+            const existingSubject = acc.find((s) => s.name === subject.name);
+            if (existingSubject) {
+              existingSubject.email = subject.email;
+            } else {
+              acc.push({ name: subject.name, email: subject.email });
+            }
+            return acc;
+          }, []);
+  
+          //console.log("Merged Data: ", mergedSubjectInfo);
+          setSubjectInfo(mergedSubjectInfo);
         }
       })
       .catch((error) => {
         console.error('Error fetching admin data:', error);
       });
   }, []);
+  
   const handleLogin = () => {
     if (description === ''|| !Object.keys(subject).length) {
       alert('Please fill in all required fields');
       return;
     }
     setLoading(true);
-    console.log(subject);
+    //console.log(subject);
     axios
       .post('http://localhost:8000/Student/Complaints/Type/Courses.php', {
         name: name,
@@ -87,7 +99,7 @@ const Courses = () => {
           navigate('/student/Activity');
         } else {
           alert('Server error');
-          console.log(response.data);
+          //console.log(response.data);
         }
       })
       .catch((error) => {

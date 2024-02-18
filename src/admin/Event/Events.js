@@ -94,6 +94,7 @@ const Events = () => {
   const wrapper = {
     display: 'flex',
     overflowX: 'scroll',
+    overscrollBehaviourX:'smooth',
     whiteSpace: 'nowrap',
     gap: '20px',
     scrollbarColor: 'rgba(255, 255, 255, 0.5) rgba(100, 100, 100, 0.5)',

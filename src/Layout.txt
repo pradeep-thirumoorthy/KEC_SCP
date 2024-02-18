@@ -46,7 +46,7 @@ const Layout1 = ({element,data=[]}) => {
     if (storedTheme) {
       setSelectedTheme(storedTheme);
     }
-    console.log(selectedTheme);
+    //console.log(selectedTheme);
 
     const foldersToCheck = [
         '/admin/dashboard',

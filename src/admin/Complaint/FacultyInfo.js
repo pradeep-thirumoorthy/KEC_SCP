@@ -27,7 +27,7 @@ const FacultyInfo = () => {
         axios
             .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", { Complaint_Id: info.Complaint_Id,Faculty: email, mode: 'Accept' })
             .then((response) => {
-                console.log("Accepted complaint successfully!", response.data);
+                //console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
                 setTimeout(() => {
                   navigate('/admin/Activity');
@@ -51,7 +51,7 @@ const FacultyInfo = () => {
     axios
       .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty: email,mode:'Reject'})
       .then((response) => {
-        console.log("Rejected complaint successfully!", response.data);
+        //console.log("Rejected complaint successfully!", response.data);
         togglePopup();
         setTimeout(() => {
           navigate("/admin/Faculty");

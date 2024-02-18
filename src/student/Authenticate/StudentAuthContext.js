@@ -20,7 +20,7 @@ export function StudentAuthProvider({ children }) {
       }
       else{
         setIsStudentAuthenticated(false);
-        console.log("There is no more log");
+        //console.log("There is no more log");
       }
     }
   }, []);

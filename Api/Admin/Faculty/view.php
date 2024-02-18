@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     mysqli_stmt_close($designationStmt);
 
     if ($isHOD === true) {
-        $subjectQuery = "SELECT Department FROM subject WHERE HOD = ?";
+        $subjectQuery = "SELECT Department FROM semester WHERE HOD = ?";
         $subjectStmt = mysqli_prepare($conn, $subjectQuery);
         mysqli_stmt_bind_param($subjectStmt, "s", $email);
         mysqli_stmt_execute($subjectStmt);
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Close the subject statement and connection
         mysqli_stmt_close($subjectStmt);
     } else {
-        $subjectQuery = "SELECT Batch, Department FROM subject WHERE Year_Incharge = ?";
+        $subjectQuery = "SELECT Batch, Department FROM semester WHERE Year_Incharge = ?";
         $subjectStmt = mysqli_prepare($conn, $subjectQuery);
         mysqli_stmt_bind_param($subjectStmt, "s", $email);
         mysqli_stmt_execute($subjectStmt);

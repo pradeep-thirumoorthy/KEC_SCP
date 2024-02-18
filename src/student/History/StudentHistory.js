@@ -22,7 +22,7 @@ const StudentHistory= () => {
     navigate('/student/History/Panel', { state: { info: rowData ,Heading:'History'} });
   };
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -37,8 +37,8 @@ const StudentHistory= () => {
     setFilter(value2);
       }
     }
-    console.log('Value 1:', value1);
-console.log('Value 2:', value2);
+    //console.log('Value 1:', value1);
+//console.log('Value 2:', value2);
     const filteredType = value1;
     if(value1==='Maintenance'||value1==='Academic'||value1==='Lab'||value1==='Courses'||value1==='Faculty'||value1==='Others'){    setFilteredInfo({
         Type: [filteredType],
@@ -90,7 +90,7 @@ console.log('Value 2:', value2);
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-      sorter: (a, b) => a.Type.length - b.Type.length,
+      sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
       sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
@@ -106,7 +106,9 @@ console.log('Value 2:', value2);
     key: 'Details',
     render: (_, record) => (
       <Space size="middle">
-        <Button onClick={() => {handleButtonClick(record.info);console.log(record.info)}}>More details</Button>
+        <Button onClick={() => {handleButtonClick(record.info);
+        //console.log(record.info)
+      }}>More details</Button>
       </Space>
     ),
   });
@@ -139,7 +141,7 @@ console.log('Value 2:', value2);
 // Now, mappedTableData contains the data in the format of Tabledata
   const onChange = (e) => {
     setFilter(e.target.value);
-    console.log(Filter);
+    //console.log(Filter);
   };
   const filterData = () => {
     const apiUrl = 'http://localhost:8000/Student/History/History.php';

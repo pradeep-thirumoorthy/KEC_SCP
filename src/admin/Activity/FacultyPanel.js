@@ -27,13 +27,13 @@ const ActivityFacultyPanel = () => {
   const email = bytes.toString(CryptoJS.enc.Utf8);
 
   const handleUpdate=()=>{
-    console.log(Update)
+    //console.log(Update)
     const confirmed = window.confirm('Are you sure you want to Update for this complaint?');
     if (confirmed) {
     axios
       .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id, mode: 'Update',Message:Update})
       .then((response) => {
-        console.log("Complaint Updation successfully!", response.data);
+        //console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity/Faculty');
       })
       .catch((error) => {
@@ -48,7 +48,7 @@ const ActivityFacultyPanel = () => {
     axios
       .post("http://localhost:8000/Admin/Faculty/ForwardComplaint2.php", {Complaint_Id: info.Complaint_Id,Faculty:email,mode:'Resolve'})
       .then((response) => {
-        console.log("Complaint Updation successfully!", response.data);
+        //console.log("Complaint Updation successfully!", response.data);
         navigate('/admin/Activity/Faculty');
       })
       .catch((error) => {
@@ -64,7 +64,6 @@ const ActivityFacultyPanel = () => {
               {info?<ConfigProvider>
 <Descriptions title="Complaint Data"  bordered column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} labelStyle={{fontStyle:'oblique'}} >
             <Descriptions.Item label="Name">{info.Name}</Descriptions.Item>
-            <Descriptions.Item label="Complaint_Id">{info.Complaint_Id}</Descriptions.Item>
             <Descriptions.Item label="RollNo">{info.Roll_No}</Descriptions.Item>
             <Descriptions.Item label="Type">{info.Type}</Descriptions.Item>
             <Descriptions.Item label="Status">{info.Status}</Descriptions.Item>

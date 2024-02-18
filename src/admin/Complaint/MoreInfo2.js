@@ -37,15 +37,15 @@ const Forward2 = () => {
   .get(apiUrl)
   .then((response) => {
     const responseData = response.data;
-    console.log(responseData); // Check the structure of the response
-    console.log(response);
+    //console.log(responseData); // Check the structure of the response
+    //console.log(response);
     if (responseData.success) {
       const subjectsData = responseData.data; // Accessing the entire 'data' object
       const upstreamData = subjectsData.Upstream; // Accessing 'Upstream' array
       const downstreamData = subjectsData.Downstream; // Accessing 'Downstream' array
 
-      console.log(upstreamData); // Array containing Upstream data
-      console.log(downstreamData);
+      //console.log(upstreamData); // Array containing Upstream data
+      //console.log(downstreamData);
       if (Array.isArray(upstreamData) && upstreamData.length > 0) {
         const processedData = [];
       
@@ -58,7 +58,7 @@ const Forward2 = () => {
           });
         });
       
-        console.log(processedData);
+        //console.log(processedData);
         setUpstream(processedData);
       }
       const subjects = [];
@@ -66,24 +66,24 @@ const Forward2 = () => {
       if (info.Level === 1) {
       
         downstreamData.forEach((data, index) => {
-          console.log('Data:', data);
+          //console.log('Data:', data);
           const subjectData = data;
       
           if (subjectData) {
             subjects.push(subjectData);
           } else {
-            console.log(`No data found for index ${index}`);
+            //console.log(`No data found for index ${index}`);
           }
         });
       
-        console.log('Subjects values:', subjects);
+        //console.log('Subjects values:', subjects);
       }
       
       
 else if(info.Level===2){
   for (let i = 1; i <= 3; i++) {
   const subjectKey = `Advisor${i}`;
-  console.log(subjectKey, downstreamData);
+  //console.log(subjectKey, downstreamData);
   const subjectName = subjectKey;
   const subjectEmail = downstreamData[0][subjectKey];
   subjects.push({ name: subjectName, email: subjectEmail });
@@ -96,7 +96,7 @@ else if(info.Level===3){
 }
 
 
-console.log("Downstream Subjects",subjects);
+//console.log("Downstream Subjects",subjects);
 setDownstream(subjects);
     } else {
       alert("Invalid response from the server.");
@@ -138,7 +138,7 @@ const togglePopup2 = () => {
         }
         else{
           message.warning({ content: response.data.message, key, duration: 2 });
-          console.log(response.data);
+          //console.log(response.data);
         }
         })
         .catch((error) => {
@@ -157,7 +157,7 @@ const togglePopup2 = () => {
         axios
             .post("http://localhost:8000/Admin/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
-                console.log("Accepted complaint successfully!", response.data);
+                //console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
                 setTimeout(() => {
                   navigate('/admin/Activity');
@@ -185,7 +185,7 @@ const togglePopup2 = () => {
     axios
       .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject',statement:Rejectstatement})
       .then((response) => {
-        console.log("Rejected complaint successfully!", response.data);
+        //console.log("Rejected complaint successfully!", response.data);
         togglePopup2();
         setTimeout(() => {
           navigate("/admin/Complaints");
@@ -220,7 +220,7 @@ const togglePopup2 = () => {
       }
     } else {
       if (Downstream.length > 0) {
-        console.log(Downstream.length)
+        //console.log(Downstream.length)
         newOptions.length=0;
         Downstream.forEach((item) => {
           newOptions.push(
@@ -233,7 +233,7 @@ const togglePopup2 = () => {
         newOptions.push(<Option value="" disabled>No Names Available</Option>);
       }
     }
-    console.log(Downstream);
+    //console.log(Downstream);
     setOptions(newOptions);
   }, [upordown, Upstream, Downstream]);
   
@@ -272,7 +272,6 @@ const togglePopup2 = () => {
             <Descriptions.Item label="Class">{info.Class}</Descriptions.Item>
             <Descriptions.Item label="Batch">{info.Batch}</Descriptions.Item>
             <Descriptions.Item label="Date">{info.info1}</Descriptions.Item>
-            <Descriptions.Item label="level">{info.Complaint_Id}</Descriptions.Item>
             {(info.Type === "Maintenance")?<>
             <Descriptions.Item label="Category">{Extra.category}</Descriptions.Item>
             <Descriptions.Item label="Floor">{Extra.Floor}</Descriptions.Item>
@@ -335,7 +334,9 @@ const togglePopup2 = () => {
               onCancel={togglePopup2}
             >
               <div>
-              <Radio.Group onChange={(e) => { setRejectstatement("");setRejectType(e.target.value);console.log(RejectType)}} defaultValue="Default" style={{ marginTop: 16 }}>
+              <Radio.Group onChange={(e) => { setRejectstatement("");setRejectType(e.target.value);
+              //console.log(RejectType)
+            }} defaultValue="Default" style={{ marginTop: 16 }}>
               <Radio.Button defaultChecked value="Default">Default</Radio.Button>
               <Radio.Button value="Own">Own</Radio.Button>
             </Radio.Group>

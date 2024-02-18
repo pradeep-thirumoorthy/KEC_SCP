@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($conn, $query);
     $complaintid=strval($complaintid);
     if ($stmt) {
-        $Subjectquery = "SELECT Advisor1, Advisor2, Advisor3, HOD, Year_incharge FROM subject WHERE Batch = ? AND Class = ?";
+        $Subjectquery = "SELECT Advisor1, Advisor2, Advisor3, HOD, Year_incharge FROM semester WHERE Batch = ? AND Class = ?";
         $Subjectstmt = mysqli_prepare($conn, $Subjectquery); // Use $Subjectquery here
         mysqli_stmt_bind_param($Subjectstmt, "ss", $Batch, $Class);
         mysqli_stmt_execute($Subjectstmt);

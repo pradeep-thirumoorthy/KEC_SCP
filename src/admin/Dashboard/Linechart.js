@@ -15,7 +15,7 @@ const LineChart = () => {
       .get(apiUrl, { params: { email: email } })
       .then((response) => {
         setComplaintData(response.data.data || []);
-        console.log(chartData)
+        //console.log(chartData)
       })
       .catch((error) => {
         console.error('Error fetching data:', error);

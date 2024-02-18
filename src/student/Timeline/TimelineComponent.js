@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Descriptions, Flex, Result, Timeline, Typography } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CarryOutOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined ,SendOutlined,CloseCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import './styles.css';
 import {CaretUpOutlined,CaretDownOutlined} from '@ant-design/icons';
 const TimelineComponent = ({ current,info }) => {
@@ -8,9 +8,9 @@ const TimelineComponent = ({ current,info }) => {
   const [Pending,setPending] = useState(false);
   const [Extra,setExtra]=useState({});
   useEffect(() => {
-    console.log(info)
-    console.log(current);
-    console.log(timelineData)
+    //console.log(info)
+    //console.log(current);
+    //console.log(timelineData)
   if(info){
     if (info.Type === "Maintenance") {
       const parsedExtra = JSON.parse(info.Extra);

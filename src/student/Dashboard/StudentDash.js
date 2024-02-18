@@ -10,8 +10,8 @@ import { geteduEmailFromSession } from '../Emailretrieval';
 
 const StudentDash = () => {
 
-  // console.log(totalSent);
-  // console.log(totalResolved);
+  // //console.log(totalSent);
+  // //console.log(totalResolved);
   const [isLoading, setIsLoading] = useState(true);
   const [studentData, setStudentData] = useState([]);
 
@@ -30,7 +30,7 @@ const StudentDash = () => {
       .then(response => {
         const data = response.data;
         setStudentData(data[0]);
-        console.log(data);
+        //console.log(data);
         setIsLoading(false);
       })
       .catch(error => {

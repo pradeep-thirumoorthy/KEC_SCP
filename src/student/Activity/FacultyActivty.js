@@ -19,7 +19,7 @@ const FacutlyActivity= () => {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -64,7 +64,7 @@ const FacutlyActivity= () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-      sorter: (a, b) => a.Type.length - b.Type.length,
+      sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
       sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
@@ -108,7 +108,7 @@ const FacutlyActivity= () => {
   })).reverse();
   const onChange = (e) => {
     setFilter(e.target.value);
-    console.log(Filter);
+    //console.log(Filter);
   };
   const filterData = () => {
     const apiUrl = 'http://localhost:8000/Student/Activity/FacutlyActivity.php';

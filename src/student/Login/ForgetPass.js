@@ -29,13 +29,13 @@ const ForgetPass = () => {
       })
       .then((response) => {
         setMessage(response.data.message);
-        console.log(response.data.message);
+        //console.log(response.data.message);
         setOtp(response.data.otp);
         setMessageotp('');
         setSendButtonStatus('sent'); // Change button text to 'Sent' after successful response
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         setSendButtonStatus('idle'); // Reset button text to 'Send OTP' on error
       });
   };
@@ -101,7 +101,7 @@ const ForgetPass = () => {
         if (response.data.success) {
             // return navigate('/Complaints');
             
-            console.log(response.data);
+            //console.log(response.data);
             
             Message.success({ content: 'Password is Updated', duration: 2 });
             navigate('/admin/login');

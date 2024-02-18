@@ -42,17 +42,12 @@ const Maintenance = () => {
     }
   };
   const TreeData = MaintenanceData;
-  const roomOptionsByFloor = {
-    'Ground Floor': ['Room 1', 'Room 2', 'Room 3'],
-    'First Floor': ['Room A', 'Room B', 'Room C'],
-    'Second Floor': ['Room X', 'Room Y', 'Room Z'],
-  };
   useEffect(() => {
     axios
       .post('http://localhost:8000/Student/Complaints/FetchInfo.php', `email=${encodeURIComponent(geteduEmailFromSession())}`)
       .then((response) => {
         const data = response.data.student_info;
-        console.log(data);
+        //console.log(data);
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);
@@ -77,7 +72,7 @@ const Maintenance = () => {
       };
 
   }, [Gender]);
-  const [selectedDepartment, setSelectedDepartment] = useState('');
+  // const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedFloor, setSelectedFloor] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
 
@@ -116,7 +111,7 @@ const Maintenance = () => {
           navigate('/student/Activity');
         } else {
           alert('Server error');
-          console.log(response.data);
+          //console.log(response.data);
         }
       })
       .catch((error) => {
@@ -231,7 +226,7 @@ const Maintenance = () => {
         <Col className='mx-5 my-3'  style={{width:'80%'}}>
         <div className='my-2'>
     <Typography className='mx-2'>Gender:</Typography>
-          <Input type='text' style={{ width: '60%' }} value={description_1} onBeforeInput={(e)=>{setDescription_1(Gender)}} disabled/>
+          <Input type='text' style={{ width: '60%' }} value={description_1} onBeforeInput={()=>{setDescription_1(Gender)}} disabled/>
           </div>
         </Col>
         </div></>

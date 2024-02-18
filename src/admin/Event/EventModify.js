@@ -49,7 +49,7 @@ const EventModifier = () => {
           setLimit(parseInt(data.Limits));
           setStatus(data.Status);
           setvisible(data.visible);
-          console.log(data);
+          //console.log(data);
           
           if(data.visible === 'constraint'){
             const constraint=JSON.parse(data.constraints);
@@ -57,7 +57,7 @@ const EventModifier = () => {
             setBatch(constraint[1]);
             setClass(constraint[2]);
           }
-          console.log(data);
+          //console.log(data);
         } else {
           setError('Event data not found');
         }
@@ -93,7 +93,7 @@ const EventModifier = () => {
   };
   const handleSubmit = () => {
     const constraint = JSON.stringify([department,Batch,Class]);
-    console.log(constraint);
+    //console.log(constraint);
     axios.post('http://localhost:8000/Admin/Events/Submitmodify.php', {limit,lastDate,status,EventId,email,visibility,constraint},)
       .then(response => {
         if (response.data.success) {

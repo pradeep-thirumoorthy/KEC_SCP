@@ -73,12 +73,12 @@ const EventFormCreation = () => {
         } else {
             
             setPreviewImage('');
-            console.log('No file selected');
+            //console.log('No file selected');
         }
     };
     
     useEffect(() => {
-        console.log(JSON.stringify(pfile));
+        //console.log(JSON.stringify(pfile));
         if (!generated) {
             generateInput();
         }
@@ -107,7 +107,7 @@ const EventFormCreation = () => {
       };
     const handleSelectChange = (event, inputId) => {
         
-        console.log(JSON.stringify(inputs));
+        //console.log(JSON.stringify(inputs));
 
         const selectedValue = event.target.value;
         setInputs(prevInputs =>
@@ -238,10 +238,10 @@ const EventFormCreation = () => {
             description !== ''
         ) {
             const limit = slimit !== '' ? parseInt(slimit) : 1;
-            console.log(formData);
-            console.log(formData, limit);
+            //console.log(formData);
+            //console.log(formData, limit);
             const formdata = JSON.stringify(formData);
-            console.log(formdata);
+            //console.log(formdata);
             const finformData = new FormData();
             finformData.append('limit', slimit);
             finformData.append('formdata', JSON.stringify(inputs));
@@ -259,7 +259,7 @@ const EventFormCreation = () => {
                 .then((response) => {
                     if (response.data.success) {
                         // Successful response, do whatever you need to do
-                        console.log("Event data inserted successfully");
+                        //console.log("Event data inserted successfully");
                         navigate("/admin/Events");
                     } else {
                         // Show an alert message with the error message

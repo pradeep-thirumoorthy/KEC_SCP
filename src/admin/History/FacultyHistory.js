@@ -2,7 +2,7 @@ import React ,{ useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { Badge, Button, Radio,Table, Typography,message} from 'antd';
+import { Badge, Button, Radio,Table} from 'antd';
 import { getEmailFromSession } from '../EmailRetrieval';
 import * as XLSX from 'xlsx';
 import { useLocation } from 'react-router-dom';
@@ -19,7 +19,7 @@ const FacultyHistory= () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const { FilterState} = location.state || [];
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -79,7 +79,7 @@ const FacultyHistory= () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-      sorter: (a, b) => a.Type.length - b.Type.length,
+      sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
       sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
@@ -109,7 +109,6 @@ const FacultyHistory= () => {
   })
   .map((item,i) => ({
     key: i+1,
-    id:item.Complaint_Id,
     Email: item.email,
     Type: item.Type,
     FacultyName:item.FacultyName,
@@ -119,7 +118,7 @@ const FacultyHistory= () => {
   })).reverse();
   const onChange = (e) => {
     setFilter(e.target.value);
-    console.log(Filter);
+    //console.log(Filter);
   };
   const email = getEmailFromSession();
   const filterData = () => {
@@ -179,7 +178,7 @@ const FacultyHistory= () => {
       const ws = XLSX.utils.json_to_sheet(mappedTableData);
       XLSX.utils.book_append_sheet(wb, ws,'FacultyHistory');
       XLSX.writeFile(wb, 'FacultyHistory.xlsx');
-      console.log("toucjedidnhfew");
+      //console.log("toucjedidnhfew");
         setLoading(false);
       })
       .catch((error) => {
@@ -192,33 +191,13 @@ const FacultyHistory= () => {
     onChange: (skeys, sRows) => {
       
       setSelectedRows(sRows);
-      console.log(selectedRows);
+      //console.log(selectedRows);
     },
-  };
-  const DeleteHistory = () => {
-    // Access the list of selected IDs in selectedRows
-    const selectedIds = selectedRows.map((row) => row.id);
-    console.log('Selected IDs:', selectedIds);
-    const finformData = new FormData();
-            finformData.append('selectedComplaintIds', selectedIds);
-    axios.post('http://localhost:8000/Admin/Faculty/HistoryDelete.php',finformData)
-    .then((response) => {
-      console.log(response.message);
-      message.success({ content: 'Selected Rows are Deleted', duration: 2 });
-      setTimeout(() => {
-        
-      window.location.reload();
-      }, 2000);
-    })
-    .catch((error) => {
-      console.error('Error deleting data:', error);
-    });
   };
       return (
         <>
         <div className='row'>
                 <div className="App">
-      <Typography.Title level={1}>FacultyHistory:</Typography.Title>
       <div className='d-flex justify-content-around'>
         <div>
         <label>Start Date:</label>
@@ -260,9 +239,9 @@ const FacultyHistory= () => {
       )}
       
     </div>
-
-    <Button onClick={()=>{exportHistory()}}>Export</Button>
-    <Button onClick={()=>{DeleteHistory()}}>Delete</Button>    
+      <div>
+    <Button onClick={()=>{exportHistory()}}>Export</Button> 
+    </div>  
     <Table 
     rowSelection={{
       type: 'checkbox',

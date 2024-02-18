@@ -1,16 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Replace with your React app's URL
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'sgp';
-// Disable caching for the login response
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Expires: 0");
 
 
+
+include './../../main.php';
 // Replace these credentials with your actual database credentials
 
 
@@ -40,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Query to fetch admin's Name based on the provided email
-    $query = "SELECT Name FROM admin_info WHERE Email = '$email'";
+    $query = "SELECT * FROM admin_info WHERE Email = '$email'";
     $result = mysqli_query($conn, $query);
 
     if ($result) {

@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 
 
-import { Login,ForgAdmPass,Dash,Complaints,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,PersonalInfo,Eventviewresp,EventModifier,Events, FacultyInfo,checkEmail,Report } from './admin';
+import { Login,ForgAdmPass,Dash,Complaints,Complaintsview,EventFormCreation,Activity,Admincalendar,History,Forward,ActivityPanel,Eventviewresp,EventModifier,Events, FacultyInfo,checkEmail,Report } from './admin';
 
 import {StudentLogin,StudentDash,Complaint,EventForm,ForgetPass,StudentActivityPanel,StudentActivity, Nfcalendar} from './student/index';
 import {Academic,Others,Maintenance,Faculty,Lab,Courses} from "./student/index";
@@ -37,7 +37,7 @@ const App = () => {
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('theme');
     
-    console.log('kdhdbhjdd '+storedDarkMode);
+    //console.log('kdhdbhjdd '+storedDarkMode);
     if (storedDarkMode==='dark') {
       setDarkMode(true);
     }
@@ -52,7 +52,7 @@ const App = () => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 200);
-    console.log("dark : "+darkMode);
+    //console.log("dark : "+darkMode);
     return () => {
       clearTimeout(timer);
     };
@@ -102,7 +102,7 @@ const App = () => {
   };
   const RedirectToStudentLogin = ({ element}) => {
     const { isStudentAuthenticated} = useStudentAuth();
-    console.log(isStudentAuthenticated);
+    //console.log(isStudentAuthenticated);
     if (isStudentAuthenticated) {
       
       return <>{element}</>;
@@ -155,9 +155,8 @@ const App = () => {
                 
                 <Route path="/admin/History" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<History />} data={['History','Here is your complaints arrived']}/>}/>}/>
                 <Route path="/admin/History/Faculty" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<FacultyHistory />} data={['Faculty History','Here is your complaints arrived']}/>}/>}/>
-                <Route path="/admin/History/Reports" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Report />} data={['Report','You can Download the list of complaints']}/>}/>}/>
+                <Route path="/admin/History/Report" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<Report />} data={['Report','You can Download the list of complaints']}/>}/>}/>
                 
-                <Route path="/admin/PersonalInfo" element={isLoading ? <LoadingScreen />:<RedirectToAdmLogin element={<Layout1 element={<PersonalInfo  />} data={['Account','Here is your complaints arrived']}/>}/>}/>
                 
 
                 <Route path="/admin/Faculty" element={isLoading ? <></>:<RedirectToAdmLogin element={<AccessFac element={<Layout1 element={<Facultyview  />} data={['Faculty','Here is your complaints arrived']}/>}/>}/>}/>

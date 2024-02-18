@@ -38,7 +38,7 @@ const Faculty = () => {
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
-        console.log(data);
+        //console.log(data);
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);
@@ -53,13 +53,13 @@ const Faculty = () => {
             const subjectKey = `Subject_${i}`;
             if (data2[subjectKey]) {
               const subjectData = JSON.parse(data2[subjectKey]);
-              console.log('Subject:', subjectData);
+              //console.log('Subject:', subjectData);
               const subjectName = Object.keys(subjectData)[0]; // Extract subject name
               const subjectEmail = subjectData[subjectName]; // Extract subject email
               subjects.push({ name: subjectName, email: subjectEmail });
             }
           }
-          console.log(subjects);
+          //console.log(subjects);
           setSubjectInfo(subjects);
         }
       })
@@ -95,7 +95,7 @@ const Faculty = () => {
           navigate('/student/Activity');
         } else {
           alert('Server error');
-          console.log(response.data);
+          //console.log(response.data);
         }
       })
       .catch((error) => {
@@ -142,7 +142,8 @@ const Faculty = () => {
                     email: value,
                     name: SubjectInfo.find((info) => info.email === value)?.name || '',
                   });
-                  console.log(subject);}
+                  //console.log(subject);
+                }
                   
                 }
               >

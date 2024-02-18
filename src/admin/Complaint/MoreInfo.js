@@ -88,7 +88,7 @@ const Forward = () => {
         axios
             .post("http://localhost:8000/Admin/ForwardComplaint.php", { info: info,Faculty: email, mode: 'Accept' })
             .then((response) => {
-                console.log("Accepted complaint successfully!", response.data);
+                //console.log("Accepted complaint successfully!", response.data);
                 togglePopup();
                 setTimeout(() => {
                   navigate('/admin/Activity');
@@ -112,7 +112,7 @@ const Forward = () => {
     axios
       .post("http://localhost:8000/Admin/ForwardComplaint.php", {info: info,Faculty: email,mode:'Reject'})
       .then((response) => {
-        console.log("Rejected complaint successfully!", response.data);
+        //console.log("Rejected complaint successfully!", response.data);
         togglePopup();
         setTimeout(() => {
           navigate("/admin/Complaints");

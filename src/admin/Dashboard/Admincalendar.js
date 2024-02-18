@@ -25,7 +25,7 @@ const Admincalendar = () => {
       const dateKey = value.format('YYYY-MM-DD');
       const dateEvents = events[dateKey] || [];
       return (
-        <div onClick={() => handleDateClick(value)} className="date-cell" style={{ height: '70px' }}>
+        <div onClick={() => {handleDateClick(value);setCurrentPage(1);}} className="date-cell" style={{ height: '70px' }}>
           {dateEvents.map((item, index) => (
             <Badge key={index} status={item.type} text={item.content} />
           ))}
@@ -143,7 +143,9 @@ const Admincalendar = () => {
                 <List.Item key={index}>
                   <Flex wrap='wrap'>
                   <Badge status={item.type} text={item.content + ' : ' + item.Description} /></Flex>
-                  {(item.info.Status !== 'Resolved' && item.info.Status !=='Rejected')?<Button type="primary" onClick={() => {handleButtonClick(item.info); console.log(item.info);}}>
+                  {(item.info.Status !== 'Resolved' && item.info.Status !=='Rejected')?<Button type="primary" onClick={() => {handleButtonClick(item.info); 
+                  //console.log(item.info);
+                }}>
                     View
                   </Button>:<></>}
                 </List.Item>

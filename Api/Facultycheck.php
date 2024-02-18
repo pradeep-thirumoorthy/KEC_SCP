@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $email = $_GET['email'];
 
     // Query to check if the email exists in HOD or Year_Incharge columns
-    $query = "SELECT COUNT(*) AS email_count FROM subject WHERE HOD = ? OR Year_Incharge = ?";
+    $query = "SELECT COUNT(*) AS email_count FROM semester WHERE HOD = ? OR Year_Incharge = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "ss", $email, $email);
 

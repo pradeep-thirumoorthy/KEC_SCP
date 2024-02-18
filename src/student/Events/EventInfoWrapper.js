@@ -32,7 +32,7 @@ const EventInfoWrapper = () => {
       .then(response => {
         clearTimeout(timeoutId);
         const data = response.data;
-        console.log(data);
+        //console.log(data);
         if (data.success){
           setEventExists(true);
           const parsedFormData = JSON.parse(data.eventInfo.Formdata);
@@ -49,9 +49,9 @@ const EventInfoWrapper = () => {
             return acc;
           }, {});
           setFormDataState(initialFormDataState);
-          console.log(StudentInfo.Name);
-          console.log(data.studentInfo.Name);
-          console.log(formDataState);
+          //console.log(StudentInfo.Name);
+          //console.log(data.studentInfo.Name);
+          //console.log(formDataState);
         } else {
           setEventExists(false);
           setMessage(response.data.message);
@@ -88,9 +88,9 @@ const EventInfoWrapper = () => {
       axios.post('http://localhost:8000/Student/Events/Submit.php', { formdata: JSON.stringify(userInputData), email, eventId })
         .then(response => {
           if (response.data.success) {
-            console.log("Event data inserted successfully");
+            //console.log("Event data inserted successfully");
             navigate("/student/Events");
-            console.log("data"+response.data.message);
+            //console.log("data"+response.data.message);
           } else {
             alert(response.data.message);
             window.location.reload();
@@ -105,7 +105,7 @@ const EventInfoWrapper = () => {
   };
 
   if (!eventExists) {
-    console.log('Event does not exist.');
+    //console.log('Event does not exist.');
     return (
       <div className='m-5'>
       <Card  className='p-5 w-100' bordered hoverable>

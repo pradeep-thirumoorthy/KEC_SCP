@@ -22,7 +22,7 @@ const StudentActivity= () => {
   //   return navigate('/forward');
   // }
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -34,7 +34,7 @@ const StudentActivity= () => {
     if(FilterState){setFilter(FilterState);}
     if(TypeState){
     setFilteredInfo({Type: [TypeState],});}
-    console.log(TypeState,FilterState);
+    //console.log(TypeState,FilterState);
     filterData();
   }, []);
  
@@ -83,7 +83,7 @@ const StudentActivity= () => {
       title: 'Date',
       dataIndex: 'Date',
       key: 'Date',
-      sorter: (a, b) => a.Type.length - b.Type.length,
+      sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
       sortOrder: sortedInfo.columnKey === 'Date' ? sortedInfo.order : null,
     },
   ];
@@ -127,7 +127,7 @@ const StudentActivity= () => {
   })).reverse();
   const onChange = (e) => {
     setFilter(e.target.value);
-    console.log(Filter);
+    //console.log(Filter);
   };
   const filterData = () => {
     const apiUrl = 'http://localhost:8000/Student/Activity/Activity.php';

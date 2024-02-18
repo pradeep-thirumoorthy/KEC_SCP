@@ -41,16 +41,16 @@ const Others = () => {
       .then((response) => {
         const data = response.data.student_info;
         const data2 = response.data.subject_info;
-        console.log(data);
+        //console.log(data);
         if (data) {
           setName(data.Name);
           setRoll(data.Roll_No);
           setDepartment(data.Department);
           setClass(data.Class);
           setBatch(data.Batch);
-          console.log("Data : "+JSON.stringify(data2));
+          //console.log("Data : "+JSON.stringify(data2));
           // Extract and display subject information
-          console.log(data2);
+          //console.log(data2);
           setSubjectInfo(data2);
         }
       })
@@ -64,7 +64,7 @@ const Others = () => {
       return;
     }
     setLoading(true);
-    console.log(subject);
+    //console.log(subject);
     axios
       .post('http://localhost:8000/Student/Complaints/Type/Others.php', {
         name: name,
@@ -87,7 +87,7 @@ const Others = () => {
           navigate('/student/Activity');
         } else {
           alert('Server error');
-          console.log(response.data);
+          //console.log(response.data);
         }
       })
       .catch((error) => {

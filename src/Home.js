@@ -3,8 +3,6 @@ import { Button, Card, Row, Col, ConfigProvider, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Pro from './images/1ec5967d-b9f1-46bc-b0df-af793c5d868d-1532534529493-school-pic.png';
-import { PlayCircleFilled } from '@ant-design/icons';
-import Video from './video/homeBackground.mp4';
 function App() {
   const navigate = useNavigate();
 

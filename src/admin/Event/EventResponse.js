@@ -17,7 +17,7 @@ const Eventviewresp = () => {
   const [selectedOption, setSelectedOption] = useState('List');
   const [Title,getTitle]=useState('');
    useEffect(() => {
-    console.log(EventId);
+    //console.log(EventId);
     const fetchData = async () => {
         try {
           const response = await axios.get(`http://localhost:8000/Admin/Events/EventResponse.php?email=${getEmailFromSession()}&EventId=${EventId}`);
@@ -42,7 +42,7 @@ const Eventviewresp = () => {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+    //console.log('Various parameters', pagination, filters, sorter);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };

@@ -142,7 +142,7 @@ const Nfcalendar = () => {
                     type="primary"
                     onClick={() => {
                       handleButtonClick(item.info);
-                      console.log(item.info);
+                      //console.log(item.info);
                     }}
                   >
                     View
